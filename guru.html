@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>(function(){try{var t=localStorage.getItem("xirpl1-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","light");}})();</script>
+  <title>Daftar Guru — Kelas XI RPL 1</title>
+  <meta name="description" content="Daftar 18 guru pengajar kelas XI RPL 1 beserta mata pelajaran.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="guru">
+
+  <header class="site-header">
+    <div class="navwrap">
+      <a href="index.html" class="brand">
+        <span class="brand-mark">&lt;/&gt;</span>
+        <span>
+          XI RPL 1
+          <small>SMK PGRI 2 ponorogo</small>
+        </span>
+      </a>
+      <nav class="tabbar" id="tabbar">
+        <a class="tab" data-page="beranda" href="index.html"><span class="dot"></span>beranda.html</a>
+        <a class="tab" data-page="siswa" href="siswa.html"><span class="dot"></span>siswa.json</a>
+        <a class="tab" data-page="guru" href="guru.html"><span class="dot"></span>guru.json</a>
+        <a class="tab" data-page="galeri" href="galeri.html"><span class="dot"></span>galeri.png</a>
+        <a class="tab" data-page="video" href="video.html"><span class="dot"></span>video.mp4</a>
+        <a class="tab" data-page="motto" href="motto.html"><span class="dot"></span>motto.txt</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ganti ke tema gelap" aria-pressed="false">
+          <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>
+          <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
+        </button>
+        <button class="menu-toggle" id="menuToggle" aria-label="Buka menu" aria-expanded="false">
+          <i class="hamburger"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="container page-hero">
+      <span class="eyebrow">array(18) guru</span>
+      <h1>Daftar Guru</h1>
+      <p>Guru-guru yang mengajar di kelas XI RPL 1, lengkap dengan mata pelajaran yang diampu.</p>
+    </section>
+
+    <section class="container">
+      <div class="toolbar-row">
+        <div class="search-box">
+          <span>🔍</span>
+          <input type="text" id="guruSearch" placeholder="Cari nama guru atau mata pelajaran...">
+        </div>
+        <span class="count-pill" id="guruCount">18 guru</span>
+      </div>
+      <div class="people-grid" id="guruGrid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-main">
+      <div class="footer-inner">
+        <div class="fcol">
+          <h4>&lt;/&gt; XI RPL 1</h4>
+          <p style="max-width:260px">Website kelas XI Rekayasa Perangkat Lunak 1 — dibangun sebagai proyek kelas untuk menampilkan profil siswa, guru, jadwal, dan dokumentasi kegiatan.</p>
+        </div>
+        <div class="fcol">
+          <h4>Navigasi</h4>
+          <div class="flinks">
+            <a href="index.html">Beranda</a>
+            <a href="siswa.html">Daftar Siswa</a>
+            <a href="guru.html">Daftar Guru</a>
+            <a href="galeri.html">Galeri</a>
+            <a href="video.html">Video</a>
+            <a href="motto.html">Motto</a>
+          </div>
+        </div>
+        <div class="fcol">
+          <h4>Info Kelas</h4>
+          <p id="footerWali">Wali kelas: —</p>
+          <p id="footerJurusan">Jurusan: —</p>
+        </div>
+      </div>
+    </div>
+    <div class="statusbar">
+      <span class="seg">🏫 <b id="statusSchool">—</b></span>
+      <span class="sep">|</span>
+      <span class="seg">👥 <b id="statusSiswa">—</b> siswa</span>
+      <span class="sep">|</span>
+      <span class="seg">🧑‍🏫 <b id="statusGuru">—</b> guru</span>
+      <span class="seg push">UTF-8</span>
+      <span class="sep">|</span>
+      <span class="seg" id="statusYear">© —</span>
+    </div>
+  </footer>
+
+  <div class="modal-backdrop" id="globalModal">
+    <div class="modal-box" id="globalModalBox"></div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
