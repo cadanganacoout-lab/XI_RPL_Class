@@ -99,12 +99,14 @@ function initFooter () {
    Util: avatar placeholder via ui-avatars.com (inisial otomatis)
    -------------------------------------------------------------------- */
 function avatarUrl (nama, bg, color) {
+  const name = nama ? String(nama).trim() : '';
   const b = bg || '3355D8';
   const c = color || 'fff';
-  return `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=${b}&color=${c}&size=256&font-size=0.36&bold=true`;
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=${b}&color=${c}&size=256&font-size=0.36&bold=true`;
 }
 function initials (nama) {
-  return nama.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+  if (!nama) return '';
+  return String(nama).trim().split(/\s+/).filter(Boolean).map(w => (w && w[0]) ? w[0] : '').slice(0,2).join('').toUpperCase();
 }
 
 /* --------------------------------------------------------------------
@@ -112,7 +114,15 @@ function initials (nama) {
    (404 / file belum ada) — tampilan tidak akan pernah rusak/kosong.
    -------------------------------------------------------------------- */
 function imgTag (src, fallback, alt) {
-  return `<img src="${src}" alt="${alt}" loading="lazy" onerror="this.onerror=null;this.src='${fallback}'">`;
+  const safeSrc = src || fallback || '';
+  const safeAlt = alt || '';
+  // create element to avoid attribute-escaping issues and inline JS injection
+  const img = document.createElement('img');
+  img.src = safeSrc;
+  img.alt = String(safeAlt);
+  img.loading = 'lazy';
+  img.onerror = function () { this.onerror = null; this.src = fallback || ''; };
+  return img.outerHTML;
 }
 
 /* --------------------------------------------------------------------
@@ -122,8 +132,10 @@ function imgTag (src, fallback, alt) {
    ke avatar inisial supaya tampilan tidak pernah rusak/kosong.
    -------------------------------------------------------------------- */
 function photoTag (person, bg) {
-  const fallback = avatarUrl(person.nama, bg);
-  return imgTag(person.foto || fallback, fallback, `Foto ${person.nama}`);
+  const name = person && person.nama ? person.nama : '';
+  const fallback = avatarUrl(name, bg);
+  const src = person && person.foto ? person.foto : fallback;
+  return imgTag(src, fallback, `Foto ${name}`);
 }
 
 /* --------------------------------------------------------------------
@@ -345,6 +357,8 @@ function initGaleri () {
    ===================================================================== */
 function initVideo () {
   const grid = document.getElementById('videoGrid');
+  if (!grid) return;
+  const classLabel = (SITE && SITE.className) ? String(SITE.className).split(' ')[0] : '';
   grid.innerHTML = VIDEO.map(v => `
     <div class="panel video-card">
       <div class="video-frame">
@@ -352,7 +366,7 @@ function initVideo () {
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
       <div class="video-info">
-        <div class="video-avatar">${SITE.className.split(' ')[0]}</div>
+        <div class="video-avatar">${classLabel}</div>
         <div>
           <div class="video-title">${v.judul}</div>
           <div class="video-meta">Kelas XI RPL 1 · ${v.deskripsi}</div>
