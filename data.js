@@ -61,7 +61,7 @@ const GURU = [
   {
     "id": "g03",
     "nama": "Linda Savitri, S.Pd",
-    "mapel": "KIdK",
+    "mapel": "Kewirausahaan",
     "foto": "asset/profil/foto_awal/sementara.png"
   },
   {

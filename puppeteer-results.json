@@ -1,0 +1,202 @@
+[
+  {
+    "file": "index.html",
+    "messages": [],
+    "screenshot": "/home/user/programmer/Coding/All Project/backup/new - class/.puppeteer-screenshots/index.html.png"
+  },
+  {
+    "file": "siswa.html",
+    "messages": [],
+    "screenshot": "/home/user/programmer/Coding/All Project/backup/new - class/.puppeteer-screenshots/siswa.html.png"
+  },
+  {
+    "file": "guru.html",
+    "messages": [],
+    "screenshot": "/home/user/programmer/Coding/All Project/backup/new - class/.puppeteer-screenshots/guru.html.png"
+  },
+  {
+    "file": "galeri.html",
+    "messages": [],
+    "screenshot": "/home/user/programmer/Coding/All Project/backup/new - class/.puppeteer-screenshots/galeri.html.png"
+  },
+  {
+    "file": "video.html",
+    "messages": [
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "Error with Permissions-Policy header: Unrecognized feature: 'ch-ua-form-factors'."
+      },
+      {
+        "type": "console.warning",
+        "text": "WARNING: Too many active WebGL contexts. Oldest context will be lost."
+      },
+      {
+        "type": "console.warning",
+        "text": "WARNING: Too many active WebGL contexts. Oldest context will be lost."
+      },
+      {
+        "type": "console.warning",
+        "text": "WARNING: Too many active WebGL contexts. Oldest context will be lost."
+      },
+      {
+        "type": "requestfailed",
+        "url": "https://www.youtube.com/api/stats/qoe?cpn=rjxdOojsbnTT1Ara&el=embedded&ns=yt&fexp=v1%2C24004644%2C494889%2C26564110%2C34656%2C124674%2C117689%2C9252%2C3479%2C13030%2C23206%2C68548%2C1248%2C30906%2C2877%2C12228%2C25059%2C4174%2C30447%2C18705%2C21437%2C4571%2C13015%2C16088%2C9404%2C23826%2C9500%2C1840%2C45715%2C10930%2C2230%2C451%2C35512%2C20588%2C4658%2C25385%2C4270%2C9181%2C15416%2C82%2C29960%2C3228%2C4296%2C367%2C5666%2C1168%2C372%2C7759%2C16452%2C172%2C8868%2C3475%2C27%2C5326%2C9866%2C1596%2C927%2C2249%2C115%2C71%2C87%2C8116%2C3693%2C11592%2C1459%2C756%2C9304%2C7918%2C9718%2C1405%2C9%2C2199%2C3895%2C2457%2C844%2C885%2C1977%2C620%2C285%2C652%2C2%2C7891%2C1295%2C6288%2C3292%2C629%2C536%2C3%2C4%2C8812%2C7632%2C1455%2C8371%2C1961%2C783%2C6034%2C3184%2C12764&cl=951779104&seq=1&event=streamingstats&docid=_37Q372oCN0&cbr=HeadlessChrome&cbrver=115.0.5790.98&c=WEB_EMBEDDED_PLAYER&cver=2.20260724.01.00&cplayer=UNIPLAYER&cos=X11&cplatform=DESKTOP&vps=0.000:N,0.000:ER&cmt=0.000:0.000,0.000:0.000&error=0.000:embedder.identity.missing.referrer::0.000:0;a6s.0&vis=0.000:0&bh=0.000:0.000&qclc=ChByanhkT29qc2JuVFQxQXJhEAE",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "type": "requestfailed",
+        "url": "https://www.youtube.com/api/stats/qoe?cpn=iKvw8uzjH4Jq5ZWK&el=embedded&ns=yt&fexp=v1%2C24004644%2C494889%2C26564110%2C34656%2C124674%2C117689%2C9252%2C3479%2C13030%2C23206%2C100702%2C15105%2C25059%2C4174%2C30447%2C18705%2C21437%2C4571%2C29103%2C6620%2C2784%2C23826%2C9500%2C1840%2C45716%2C13159%2C56551%2C34313%2C9181%2C15416%2C82%2C29960%2C7524%2C367%2C5666%2C1168%2C372%2C7758%2C16453%2C172%2C8868%2C3475%2C27%2C5326%2C11462%2C927%2C2249%2C115%2C72%2C86%2C11809%2C2043%2C11008%2C753%2C11606%2C5264%2C356%2C13330%2C3895%2C4186%2C1977%2C619%2C286%2C652%2C2%2C7891%2C1295%2C6288%2C4457%2C3%2C4%2C16444%2C1454%2C8372%2C1961%2C783%2C21815&cl=951779104&seq=1&event=streamingstats&docid=9ujA_ZNEcRc&cbr=HeadlessChrome&cbrver=115.0.5790.98&c=WEB_EMBEDDED_PLAYER&cver=2.20260724.01.00&cplayer=UNIPLAYER&cos=X11&cplatform=DESKTOP&vps=0.000:N,0.000:ER&cmt=0.000:0.000,0.000:0.000&error=0.000:embedder.identity.missing.referrer::0.000:0;a6s.0&vis=0.000:0&bh=0.000:0.000&qclc=ChBpS3Z3OHV6akg0SnE1WldLEAE",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "type": "requestfailed",
+        "url": "https://www.youtube.com/api/stats/qoe?cpn=9k-lOxu-qmfwfGi_&el=embedded&ns=yt&fexp=v1%2C23848210%2C156434%2C27058999%2C34656%2C124674%2C117689%2C9252%2C3479%2C13030%2C6257%2C16949%2C35405%2C33143%2C32154%2C2877%2C12228%2C25059%2C4174%2C30447%2C18705%2C21437%2C4571%2C5239%2C7777%2C16087%2C6621%2C2783%2C23826%2C9500%2C1840%2C45715%2C13160%2C453%2C35510%2C20588%2C4658%2C25383%2C4272%2C9181%2C15416%2C82%2C29960%2C7525%2C366%2C5666%2C1168%2C372%2C7758%2C16453%2C172%2C8868%2C3475%2C27%2C4737%2C589%2C9866%2C1596%2C928%2C2248%2C115%2C71%2C87%2C8117%2C3692%2C11588%2C1463%2C756%2C17223%2C9716%2C1406%2C2208%2C3895%2C2456%2C846%2C884%2C1977%2C620%2C284%2C653%2C2%2C7891%2C1295%2C6288%2C3292%2C629%2C536%2C4%2C3%2C8812%2C7632%2C1454%2C8372%2C1961%2C783%2C1929%2C19887&cl=951779104&seq=1&event=streamingstats&docid=m8PGMHXMstw&cbr=HeadlessChrome&cbrver=115.0.5790.98&c=WEB_EMBEDDED_PLAYER&cver=2.20260724.01.00&cplayer=UNIPLAYER&cos=X11&cplatform=DESKTOP&vps=0.000:N,0.000:ER&cmt=0.000:0.000,0.000:0.000&error=0.000:embedder.identity.missing.referrer::0.000:0;a6s.0&vis=0.000:0&bh=0.000:0.000&qclc=ChA5ay1sT3h1LXFtZndmR2lfEAE",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "type": "requestfailed",
+        "url": "https://www.youtube.com/api/stats/qoe?cpn=DEbe2Dx5gPT2mBVb&el=embedded&ns=yt&fexp=v1%2C24004644%2C27058999%2C34656%2C124674%2C117689%2C9252%2C3479%2C13030%2C6258%2C16948%2C35402%2C65300%2C2878%2C12227%2C25059%2C4174%2C30446%2C18706%2C21437%2C4571%2C9670%2C3346%2C13110%2C2977%2C6621%2C2783%2C23826%2C9500%2C1840%2C45716%2C7915%2C5244%2C453%2C35510%2C20588%2C4657%2C29656%2C9181%2C15416%2C82%2C29960%2C7525%2C366%2C5666%2C1168%2C372%2C7758%2C16453%2C172%2C8868%2C3475%2C5353%2C9867%2C1595%2C928%2C2248%2C115%2C71%2C87%2C8117%2C3692%2C11592%2C1459%2C753%2C17226%2C9717%2C3613%2C188%2C3708%2C2455%2C846%2C884%2C1977%2C619%2C286%2C652%2C2%2C3472%2C4419%2C1295%2C3445%2C2843%2C1908%2C1384%2C628%2C538%2C3%2C3%2C8811%2C7633%2C1455%2C4312%2C1585%2C2476%2C1959%2C783%2C19237&cl=951779104&seq=1&event=streamingstats&docid=4d_gBm2nfeE&cbr=HeadlessChrome&cbrver=115.0.5790.98&c=WEB_EMBEDDED_PLAYER&cver=2.20260724.01.00&cplayer=UNIPLAYER&cos=X11&cplatform=DESKTOP&vps=0.000:N,0.000:ER&cmt=0.000:0.000,0.000:0.000&error=0.000:embedder.identity.missing.referrer::0.000:0;a6s.0&vis=0.000:0&bh=0.000:0.000&qclc=ChBERWJlMkR4NWdQVDJtQlZiEAE",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "type": "requestfailed",
+        "url": "https://www.youtube.com/api/stats/qoe?cpn=-ZhTpoN9ar6OBVns&el=embedded&ns=yt&fexp=v1%2C24004644%2C27058999%2C34656%2C124674%2C117689%2C9252%2C3479%2C13030%2C23206%2C100702%2C2877%2C12228%2C25059%2C4174%2C30446%2C18706%2C21437%2C4571%2C13016%2C15425%2C662%2C9404%2C23826%2C9500%2C1840%2C45715%2C13160%2C452%2C35511%2C5797%2C14791%2C4659%2C29654%2C9181%2C15416%2C82%2C5367%2C24593%2C7524%2C367%2C5666%2C1168%2C372%2C7759%2C16452%2C172%2C8868%2C3475%2C5353%2C9866%2C1596%2C927%2C2249%2C115%2C71%2C87%2C8116%2C3693%2C11590%2C1352%2C109%2C753%2C14584%2C2641%2C9718%2C1405%2C1303%2C905%2C3896%2C2455%2C845%2C885%2C1977%2C392%2C227%2C286%2C652%2C2%2C7891%2C1295%2C3447%2C2504%2C337%2C3291%2C630%2C537%2C3%2C3%2C8811%2C7633%2C1455%2C4312%2C4061%2C1533%2C426%2C783%2C19238%2C2741&cl=951779104&seq=1&event=streamingstats&docid=1dzLr_jYjSk&cbr=HeadlessChrome&cbrver=115.0.5790.98&c=WEB_EMBEDDED_PLAYER&cver=2.20260724.01.00&cplayer=UNIPLAYER&cos=X11&cplatform=DESKTOP&vps=0.000:N,0.000:ER&cmt=0.000:0.000,0.000:0.000&error=0.000:embedder.identity.missing.referrer::0.000:0;a6s.0&vis=0.000:0&bh=0.000:0.000&qclc=ChAtWmhUcG9OOWFyNk9CVm5zEAE",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "type": "requestfailed",
+        "url": "https://www.youtube.com/api/stats/qoe?cpn=_yLJOT0NaNR6tZGE&el=embedded&ns=yt&fexp=v1%2C24004644%2C494890%2C26564109%2C34656%2C124674%2C117689%2C9252%2C3479%2C13030%2C23206%2C35404%2C65298%2C2877%2C12228%2C25059%2C4174%2C30447%2C18705%2C21437%2C4571%2C13016%2C15426%2C661%2C9404%2C23826%2C9500%2C1840%2C45716%2C13159%2C452%2C35510%2C20589%2C4658%2C29655%2C9181%2C15416%2C82%2C29960%2C7524%2C367%2C5666%2C1168%2C372%2C7758%2C16453%2C172%2C8868%2C3475%2C5353%2C9867%2C1595%2C928%2C2248%2C115%2C72%2C86%2C8116%2C120%2C3573%2C11591%2C1351%2C109%2C753%2C16869%2C357%2C9716%2C3614%2C3895%2C2457%2C845%2C884%2C1977%2C620%2C284%2C653%2C2%2C3471%2C4420%2C1295%2C3443%2C2845%2C2506%2C785%2C629%2C538%2C2%2C4%2C1728%2C7084%2C7632%2C1455%2C4312%2C4059%2C1961%2C783%2C6035%2C9346%2C4421&cl=951779104&seq=1&event=streamingstats&docid=lY4tZ2UVyQ4&cbr=HeadlessChrome&cbrver=115.0.5790.98&c=WEB_EMBEDDED_PLAYER&cver=2.20260724.01.00&cplayer=UNIPLAYER&cos=X11&cplatform=DESKTOP&vps=0.000:N,0.000:ER&cmt=0.000:0.000,0.000:0.000&error=0.000:embedder.identity.missing.referrer::0.000:0;a6s.0&vis=0.000:0&bh=0.000:0.000&qclc=ChBfeUxKT1QwTmFOUjZ0WkdFEAE",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "type": "requestfailed",
+        "url": "https://www.youtube.com/api/stats/qoe?cpn=MmVzpMBx-8A04J9J&el=embedded&ns=yt&fexp=v1%2C24004644%2C494890%2C26564109%2C34656%2C124674%2C117689%2C9252%2C3479%2C13030%2C23206%2C100702%2C2878%2C12227%2C25059%2C4174%2C30446%2C18706%2C21437%2C4571%2C5239%2C7777%2C16087%2C6621%2C2783%2C23826%2C9500%2C1840%2C18113%2C27602%2C13160%2C453%2C35510%2C20588%2C4657%2C25386%2C4270%2C9181%2C15416%2C82%2C2540%2C27420%2C7525%2C366%2C5666%2C1168%2C372%2C7759%2C16452%2C172%2C8868%2C3475%2C5353%2C9866%2C1596%2C928%2C2248%2C115%2C72%2C86%2C8117%2C3692%2C2043%2C9549%2C1459%2C753%2C11607%2C5619%2C9717%2C3613%2C3896%2C2455%2C846%2C884%2C1977%2C620%2C285%2C652%2C2%2C7891%2C1295%2C485%2C5250%2C553%2C3292%2C627%2C538%2C4%2C2%2C8812%2C7633%2C1455%2C8373%2C1959%2C783%2C21979&cl=951779104&seq=1&event=streamingstats&docid=RBJ51JXEsCE&cbr=HeadlessChrome&cbrver=115.0.5790.98&c=WEB_EMBEDDED_PLAYER&cver=2.20260724.01.00&cplayer=UNIPLAYER&cos=X11&cplatform=DESKTOP&vps=0.000:N,0.000:ER&cmt=0.000:0.000,0.000:0.000&error=0.000:embedder.identity.missing.referrer::0.000:0;a6s.0&vis=0.000:0&bh=0.000:0.000&qclc=ChBNbVZ6cE1CeC04QTA0SjlKEAE",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "type": "requestfailed",
+        "url": "https://www.youtube.com/api/stats/qoe?cpn=82noSYWF21sc_575&el=embedded&ns=yt&fexp=v1%2C24004644%2C27058999%2C34656%2C124674%2C117689%2C9252%2C3479%2C13030%2C23206%2C35403%2C33144%2C1249%2C30906%2C2877%2C12228%2C25059%2C4174%2C30446%2C18706%2C21437%2C4571%2C9670%2C3346%2C1191%2C11919%2C2977%2C9404%2C23826%2C9500%2C1840%2C24118%2C21598%2C7915%2C5244%2C453%2C35510%2C20588%2C4659%2C29654%2C9181%2C15416%2C82%2C17381%2C12579%2C7525%2C366%2C5666%2C1168%2C372%2C7759%2C16452%2C172%2C3000%2C5868%2C3475%2C3524%2C1829%2C9867%2C1595%2C928%2C2248%2C115%2C71%2C87%2C8116%2C3693%2C11587%2C1464%2C753%2C17226%2C9717%2C1404%2C1304%2C905%2C3895%2C2457%2C844%2C885%2C1977%2C619%2C286%2C652%2C2%2C7891%2C1295%2C3445%2C2843%2C3292%2C629%2C536%2C4%2C3%2C742%2C8070%2C7632%2C1455%2C8373%2C1529%2C430%2C783%2C2457%2C4715%2C14644%2C164&cl=951779104&seq=1&event=streamingstats&docid=JSjp0qdOrhU&cbr=HeadlessChrome&cbrver=115.0.5790.98&c=WEB_EMBEDDED_PLAYER&cver=2.20260724.01.00&cplayer=UNIPLAYER&cos=X11&cplatform=DESKTOP&vps=0.000:N,0.000:ER&cmt=0.000:0.000,0.000:0.000&error=0.000:embedder.identity.missing.referrer::0.000:0;a6s.0&vis=0.000:0&bh=0.000:0.000&qclc=ChA4Mm5vU1lXRjIxc2NfNTc1EAE",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "type": "requestfailed",
+        "url": "https://www.youtube.com/api/stats/qoe?cpn=2llJffDQx78fihxd&el=embedded&ns=yt&fexp=v1%2C24004644%2C494890%2C26564109%2C34656%2C124674%2C117689%2C9252%2C3479%2C13030%2C23206%2C100702%2C15105%2C25059%2C4174%2C30446%2C18706%2C21437%2C4571%2C24437%2C4666%2C6621%2C2783%2C23826%2C9500%2C1840%2C45716%2C13159%2C56551%2C34313%2C9181%2C15416%2C82%2C29960%2C7524%2C367%2C5666%2C1168%2C372%2C7758%2C16453%2C172%2C8868%2C3475%2C5353%2C11462%2C927%2C2249%2C115%2C71%2C87%2C11809%2C9991%2C3060%2C756%2C11603%2C5619%2C13331%2C3896%2C467%2C3718%2C1977%2C620%2C285%2C652%2C2%2C7891%2C1295%2C6288%2C4457%2C3%2C4%2C15987%2C457%2C1454%2C8372%2C1961%2C783%2C19801%2C2014&cl=951779104&seq=1&event=streamingstats&docid=fomuBMTB5hs&cbr=HeadlessChrome&cbrver=115.0.5790.98&c=WEB_EMBEDDED_PLAYER&cver=2.20260724.01.00&cplayer=UNIPLAYER&cos=X11&cplatform=DESKTOP&vps=0.000:N,0.001:ER&cmt=0.001:0.000,0.001:0.000&error=0.001:embedder.identity.missing.referrer::0.000:0;a6s.0&vis=0.001:0&bh=0.001:0.000&qclc=ChAybGxKZmZEUXg3OGZpaHhkEAE",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "type": "requestfailed",
+        "url": "https://www.youtube.com/api/stats/qoe?cpn=4BSFpS8Mwq4PcmnC&el=embedded&ns=yt&fexp=v1%2C24004644%2C27058999%2C34656%2C124674%2C117689%2C9252%2C3479%2C13030%2C23206%2C35404%2C65298%2C2878%2C12227%2C25059%2C4174%2C30446%2C18706%2C21437%2C4571%2C13016%2C16087%2C9404%2C23826%2C9500%2C1840%2C45716%2C13159%2C451%2C35511%2C20589%2C4659%2C29654%2C9181%2C15416%2C82%2C29960%2C3227%2C4298%2C366%2C5666%2C1168%2C372%2C7759%2C16452%2C172%2C8868%2C3475%2C5353%2C9867%2C1595%2C927%2C2249%2C115%2C72%2C86%2C8117%2C3692%2C6756%2C4831%2C1354%2C110%2C756%2C17223%2C9716%2C1406%2C9%2C2199%2C3895%2C2456%2C846%2C884%2C1977%2C619%2C286%2C652%2C2%2C272%2C7619%2C1295%2C3443%2C2845%2C3291%2C628%2C538%2C3%2C3%2C8813%2C7632%2C1455%2C5897%2C2476%2C1529%2C430%2C783%2C19801%2C2180&cl=951779104&seq=1&event=streamingstats&docid=4Mul3bb4_WI&cbr=HeadlessChrome&cbrver=115.0.5790.98&c=WEB_EMBEDDED_PLAYER&cver=2.20260724.01.00&cplayer=UNIPLAYER&cos=X11&cplatform=DESKTOP&vps=0.000:N,0.000:ER&cmt=0.000:0.000,0.000:0.000&error=0.000:embedder.identity.missing.referrer::0.000:0;a6s.0&vis=0.000:0&bh=0.000:0.000&qclc=ChA0QlNGcFM4TXdxNFBjbW5DEAE",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "type": "requestfailed",
+        "url": "https://www.youtube.com/api/stats/qoe?cpn=rME-cJnzAD1CZptY&el=embedded&ns=yt&fexp=v1%2C24004644%2C27058999%2C34656%2C124674%2C117689%2C9252%2C3479%2C13030%2C23206%2C100702%2C2877%2C12228%2C25059%2C4174%2C30446%2C18706%2C21437%2C4571%2C5239%2C4433%2C3343%2C13110%2C2978%2C6620%2C2784%2C23826%2C9500%2C1840%2C45715%2C13160%2C452%2C35510%2C20589%2C4658%2C29655%2C9181%2C15416%2C82%2C29960%2C3227%2C4298%2C366%2C5666%2C1168%2C372%2C7758%2C16453%2C172%2C3000%2C5868%2C3475%2C5353%2C9867%2C1595%2C928%2C2248%2C115%2C72%2C86%2C8116%2C3693%2C11591%2C1351%2C109%2C753%2C17226%2C9716%2C3614%2C3896%2C2455%2C846%2C884%2C1977%2C619%2C286%2C652%2C2%2C7891%2C1295%2C3445%2C2843%2C3292%2C627%2C539%2C2%2C3%2C8813%2C7632%2C1454%2C5899%2C2473%2C1535%2C426%2C783&cl=951779104&seq=1&event=streamingstats&docid=WTjDbSP8ra4&cbr=HeadlessChrome&cbrver=115.0.5790.98&c=WEB_EMBEDDED_PLAYER&cver=2.20260724.01.00&cplayer=UNIPLAYER&cos=X11&cplatform=DESKTOP&vps=0.000:N,0.000:ER&vis=0.000:0&cmt=0.000:0.000,0.000:0.000&bh=0.000:0.000,0.000:0.000&error=0.000:embedder.identity.missing.referrer::0.000:0;a6s.0&qclc=ChByTUUtY0puekFEMUNacHRZEAE",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "type": "requestfailed",
+        "url": "https://www.youtube.com/api/stats/qoe?cpn=wtbG6k9BS913abWK&el=embedded&ns=yt&fexp=v1%2C24004644%2C27058999%2C34656%2C124674%2C117689%2C9252%2C3479%2C13030%2C6258%2C16948%2C100702%2C2878%2C12227%2C25059%2C4174%2C30447%2C18705%2C21437%2C4571%2C13015%2C15426%2C662%2C9404%2C23826%2C9500%2C1840%2C18113%2C11561%2C10927%2C5114%2C7916%2C5244%2C452%2C35510%2C20589%2C4659%2C29654%2C9181%2C15416%2C82%2C29960%2C7525%2C366%2C5666%2C1168%2C372%2C7758%2C16453%2C172%2C8868%2C3475%2C5353%2C9866%2C1596%2C927%2C2249%2C115%2C71%2C87%2C8116%2C3693%2C11590%2C1351%2C110%2C753%2C11607%2C5618%2C9717%2C1415%2C2199%2C3896%2C2455%2C846%2C884%2C1977%2C619%2C286%2C652%2C2%2C2422%2C1050%2C4419%2C1295%2C6288%2C3291%2C629%2C537%2C3%2C4%2C742%2C8070%2C7174%2C458%2C1455%2C6213%2C2160%2C1959%2C783&cl=951779104&seq=1&event=streamingstats&docid=as5K6CLsZ3U&cbr=HeadlessChrome&cbrver=115.0.5790.98&c=WEB_EMBEDDED_PLAYER&cver=2.20260724.01.00&cplayer=UNIPLAYER&cos=X11&cplatform=DESKTOP&vps=0.000:N,0.000:ER&cmt=0.000:0.000,0.000:0.000&error=0.000:embedder.identity.missing.referrer::0.000:0;a6s.0&vis=0.000:0&bh=0.000:0.000&qclc=ChB3dGJHNms5QlM5MTNhYldLEAE",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "type": "requestfailed",
+        "url": "https://www.youtube.com/api/stats/qoe?cpn=HOVmoZAVk9pVv48f&el=embedded&ns=yt&fexp=v1%2C23853952%2C150692%2C27058999%2C34656%2C124674%2C117689%2C9252%2C3479%2C13030%2C23206%2C100702%2C2878%2C12227%2C25059%2C4174%2C30447%2C18705%2C21437%2C4571%2C5237%2C4434%2C3345%2C11421%2C1688%2C2316%2C662%2C6621%2C897%2C1886%2C23826%2C9500%2C1840%2C45716%2C7915%2C5244%2C451%2C35511%2C20589%2C4658%2C29655%2C9181%2C15416%2C82%2C29960%2C7525%2C366%2C5666%2C1168%2C372%2C7759%2C16452%2C172%2C8868%2C3475%2C5353%2C9867%2C1595%2C928%2C2248%2C115%2C72%2C86%2C8116%2C3693%2C6572%2C5017%2C1462%2C756%2C17223%2C1141%2C8576%2C3613%2C3896%2C468%2C1988%2C845%2C884%2C1977%2C620%2C284%2C653%2C2%2C7891%2C1295%2C5951%2C337%2C3291%2C629%2C537%2C4%2C2%2C8812%2C3238%2C3938%2C457%2C1454%2C5899%2C2473%2C1961%2C783%2C2458%2C12924%2C6433%2C166&cl=951779104&seq=1&event=streamingstats&docid=4rU3nFkvipQ&cbr=HeadlessChrome&cbrver=115.0.5790.98&c=WEB_EMBEDDED_PLAYER&cver=2.20260724.01.00&cplayer=UNIPLAYER&cos=X11&cplatform=DESKTOP&vps=0.000:N,0.000:ER&cmt=0.000:0.000,0.000:0.000&error=0.000:embedder.identity.missing.referrer::0.000:0;a6s.0&vis=0.000:0&bh=0.000:0.000&qclc=ChBIT1Ztb1pBVms5cFZ2NDhmEAE",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "type": "console.warning",
+        "text": "WARNING: Too many active WebGL contexts. Oldest context will be lost."
+      },
+      {
+        "type": "console.warning",
+        "text": "WARNING: Too many active WebGL contexts. Oldest context will be lost."
+      },
+      {
+        "type": "console.warning",
+        "text": "WARNING: Too many active WebGL contexts. Oldest context will be lost."
+      },
+      {
+        "type": "console.warning",
+        "text": "Failed to create WebGPU Context Provider"
+      }
+    ],
+    "screenshot": "/home/user/programmer/Coding/All Project/backup/new - class/.puppeteer-screenshots/video.html.png"
+  },
+  {
+    "file": "motto.html",
+    "messages": [],
+    "screenshot": "/home/user/programmer/Coding/All Project/backup/new - class/.puppeteer-screenshots/motto.html.png"
+  }
+]
