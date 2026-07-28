@@ -175,6 +175,26 @@ function getISOWeek (date) {
   return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
 }
 
+function timeToMinutes (time) {
+  const [h, m] = time.split(':').map(Number);
+  return h * 60 + m;
+}
+
+function getGuruName (parity, hari, mapel, mulai, selesai) {
+  if (parity === 'genap') {
+    if (hari === 'Senin') return 'Andies Pramudiyantoro, S.Kom';
+    if (hari === 'Selasa') return 'Endy Bagus Setyawan R. S.Kom';
+    if (hari === 'Kamis') return 'Hendrik Dwi Yusyanto, S.Kom';
+    if (hari === 'Jumat') return 'Ridwan Mudakir, S.Kom';
+    if (hari === 'Sabtu') return 'Muh. Faqihuddin Assholih, S.Kom';
+    if (hari === 'Rabu') {
+      return timeToMinutes(mulai) < 615 ? 'Endy Bagus Setyawan R. S.Kom' : 'Muh. Faqihuddin Assholih, S.Kom';
+    }
+  }
+  const guruObj = GURU.find(g => g.mapel === mapel);
+  return guruObj ? guruObj.nama : '—';
+}
+
 function initBeranda () {
   const now = new Date();
   const hariIni = HARI_LIST[now.getDay()];
@@ -224,8 +244,7 @@ function initBeranda () {
         if (r.istirahat) {
           return `<div class="sched-row break">${r.label} · ${r.mulai}–${r.selesai}</div>`;
         }
-        const guruObj = GURU.find(g => g.mapel === r.mapel);
-        const guruNama = guruObj ? guruObj.nama : '—';
+        const guruNama = getGuruName(parity, hariIni, r.mapel, r.mulai, r.selesai);
         return `<div class="sched-row">
                    <span class="time">${r.mulai}–${r.selesai}</span>
                    <span>
@@ -245,6 +264,53 @@ function initBeranda () {
       piketList.innerHTML = `<div class="empty-note">Tidak ada jadwal piket hari ini.</div>`;
     } else {
       piketList.innerHTML = PIKET[hariIni].map((nama, i) =>
+        `<div class="piket-chip"><span class="idx">${i+1}</span>${nama}</div>`
+      ).join('');
+    }
+  }
+
+  // jadwal besok
+  const besok = new Date(now);
+  besok.setDate(besok.getDate() + 1);
+  const hariBesok = HARI_LIST[besok.getDay()];
+  const isoWeekBesok = getISOWeek(besok);
+  const parityBesok = (isoWeekBesok % 2 === 1) ? 'genap' : 'ganjil';
+  const isSekolahBesok = HARI_AKTIF.includes(hariBesok);
+
+  const tomorrowBadge = document.getElementById('tomorrowBadge');
+  if (tomorrowBadge) {
+    tomorrowBadge.innerHTML = `<span class="dot"></span>${hariBesok} · minggu ${parityBesok}`;
+  }
+
+  const tomorrowJadwalList = document.getElementById('tomorrowJadwalList');
+  if (tomorrowJadwalList) {
+    if (!isSekolahBesok) {
+      tomorrowJadwalList.innerHTML = `<div class="empty-note">Besok ${hariBesok}, tidak ada jadwal pelajaran. Selamat beristirahat! 🎉</div>`;
+    } else {
+      const rowsBesok = JADWAL[parityBesok][hariBesok] || [];
+      tomorrowJadwalList.innerHTML = rowsBesok.map(r => {
+        if (r.istirahat) {
+          return `<div class="sched-row break">${r.label} · ${r.mulai}–${r.selesai}</div>`;
+        }
+        const guruNama = getGuruName(parityBesok, hariBesok, r.mapel, r.mulai, r.selesai);
+        return `<div class="sched-row">
+                   <span class="time">${r.mulai}–${r.selesai}</span>
+                   <span>
+                     <span class="mapel">${r.mapel}</span><br>
+                     <span class="guru">${guruNama}</span>
+                   </span>
+                   <span class="filetag">#${r.jamKe}</span>
+                 </div>`;
+      }).join('');
+    }
+  }
+
+  const tomorrowPiketList = document.getElementById('tomorrowPiketList');
+  if (tomorrowPiketList) {
+    if (!isSekolahBesok || !PIKET[hariBesok]) {
+      tomorrowPiketList.innerHTML = `<div class="empty-note">Tidak ada jadwal piket besok.</div>`;
+    } else {
+      tomorrowPiketList.innerHTML = PIKET[hariBesok].map((nama, i) =>
         `<div class="piket-chip"><span class="idx">${i+1}</span>${nama}</div>`
       ).join('');
     }
