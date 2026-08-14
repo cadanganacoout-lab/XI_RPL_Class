@@ -174,7 +174,7 @@ const SISWA = [
   {
     "id": "s05",
     "nama": "Amanda Cinthya Kasih",
-    "jabatan": "-",
+    "jabatan": "Seketaris",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/manda.jpeg"
@@ -254,7 +254,7 @@ const SISWA = [
   {
     "id": "s15",
     "nama": "Ficko Adiputra Perdana",
-    "jabatan": "-",
+    "jabatan": "Ketua Kelas",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/foto_awal/sementara.png"
@@ -286,7 +286,7 @@ const SISWA = [
   {
     "id": "s19",
     "nama": "Hedri Setiawan",
-    "jabatan": "-",
+    "jabatan": "Persensi Kelas",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/hendri.jpeg"
@@ -358,7 +358,7 @@ const SISWA = [
   {
     "id": "s28",
     "nama": "Ragil Bagus Nugroho",
-    "jabatan": "-",
+    "jabatan": "Bendahara",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/ragilb.jpeg"
@@ -398,7 +398,7 @@ const SISWA = [
   {
     "id": "s33",
     "nama": "Sultan Pasha Ibrahim Sukarno",
-    "jabatan": "-",
+    "jabatan": "Seketaris",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/foto_awal/sementara.png"
