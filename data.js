@@ -110,13 +110,13 @@ const GURU = [
     "id": "g11",
     "nama": "Andies Pramudiyantoro, S.Kom",
     "mapel": "Pemrograman Perangkat Bergerak",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    "foto": "asset/profil/pak andies.png"
   },
   {
     "id": "g12",
     "nama": "Endy Bagus Setyawan R. S.Kom",
     "mapel": "Administrasi Infrastruktur Jaringan",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    "foto": "asset/profil/pak endy.jpg"
   },
   {
     "id": "g13",
@@ -134,7 +134,7 @@ const GURU = [
     "id": "g15",
     "nama": "Ridwan Mudakir, S.Kom",
     "mapel": "Pemrograman Dasar",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    "foto": "asset/profil/pak ridwan.jpg"
   }
 ];
 
@@ -457,33 +457,51 @@ const JADWAL = {
   "ganjil": {
     "Senin": [
       {
-        "jamKe": 1,
+        "jamKe": 0,
         "mulai": "06:45",
         "selesai": "07:30",
         "mapel": "Upacara Bendera"
       },
       {
-        "jamKe": 2,
+        "jamKe": 1,
         "mulai": "07:30",
-        "selesai": "08:50",
+        "selesai": "08:05",
         "mapel": "Matematika"
       },
       {
-        "jamKe": 3,
-        "mulai": "08:50",
-        "selesai": "10:10",
-        "mapel": "Sejarah Indonesia"
+        "jamKe": 2,
+        "mulai": "08:05",
+        "selesai": "08:40",
+        "mapel": "Matematika"
       },
       {
         "jamKe": 0,
-        "mulai": "10:10",
-        "selesai": "10:35",
+        "mulai": "08:40",
+        "selesai": "09:15",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat I"
+      },
+      {
+        "jamKe": 3,
+        "mulai": "09:15",
+        "selesai": "09:55",
+        "mapel": "Sejarah Indonesia"
       },
       {
         "jamKe": 4,
+        "mulai": "09:55",
+        "selesai": "10:35",
+        "mapel": "Sejarah Indonesia"
+      },
+      {
+        "jamKe": 5,
         "mulai": "10:35",
+        "selesai": "11:15",
+        "mapel": "Kreativitas Inovasi & Kewirausahaan"
+      },
+      {
+        "jamKe": 6,
+        "mulai": "11:15",
         "selesai": "11:55",
         "mapel": "Kreativitas Inovasi & Kewirausahaan"
       },
@@ -492,11 +510,17 @@ const JADWAL = {
         "mulai": "11:55",
         "selesai": "12:40",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat II"
       },
       {
-        "jamKe": 5,
+        "jamKe": 7,
         "mulai": "12:40",
+        "selesai": "13:20",
+        "mapel": "Bahasa Inggris"
+      },
+      {
+        "jamKe": 8,
+        "mulai": "13:20",
         "selesai": "14:00",
         "mapel": "Bahasa Inggris"
       }
@@ -505,25 +529,43 @@ const JADWAL = {
       {
         "jamKe": 1,
         "mulai": "06:45",
-        "selesai": "08:15",
-        "mapel": "Pendidikan Agama"
+        "selesai": "07:30",
+        "mapel": "Pendidikan Agama Budi Pekerti"
       },
       {
         "jamKe": 2,
-        "mulai": "08:15",
-        "selesai": "09:45",
-        "mapel": "Bahasa Indonesia"
+        "mulai": "07:30",
+        "selesai": "08:15",
+        "mapel": "Pendidikan Agama Budi Pekerti"
       },
       {
         "jamKe": 0,
-        "mulai": "09:45",
-        "selesai": "10:15",
+        "mulai": "08:15",
+        "selesai": "08:50",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat I"
       },
       {
         "jamKe": 3,
-        "mulai": "10:15",
+        "mulai": "08:50",
+        "selesai": "09:33",
+        "mapel": "Bahasa Indonesia"
+      },
+      {
+        "jamKe": 4,
+        "mulai": "09:33",
+        "selesai": "10:16",
+        "mapel": "Bahasa Indonesia"
+      },
+      {
+        "jamKe": 5,
+        "mulai": "10:16",
+        "selesai": "11:00",
+        "mapel": "Matematika"
+      },
+      {
+        "jamKe": 6,
+        "mulai": "11:00",
         "selesai": "11:45",
         "mapel": "Matematika"
       },
@@ -532,11 +574,17 @@ const JADWAL = {
         "mulai": "11:45",
         "selesai": "12:30",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat II"
       },
       {
-        "jamKe": 4,
+        "jamKe": 7,
         "mulai": "12:30",
+        "selesai": "13:15",
+        "mapel": "Bahasa Inggris"
+      },
+      {
+        "jamKe": 8,
+        "mulai": "13:15",
         "selesai": "14:00",
         "mapel": "Bahasa Inggris"
       }
@@ -545,25 +593,43 @@ const JADWAL = {
       {
         "jamKe": 1,
         "mulai": "06:45",
-        "selesai": "08:15",
+        "selesai": "07:30",
         "mapel": "Bahasa Indonesia"
       },
       {
         "jamKe": 2,
-        "mulai": "08:15",
-        "selesai": "09:45",
-        "mapel": "Pendidikan Agama"
+        "mulai": "07:30",
+        "selesai": "08:15",
+        "mapel": "Bahasa Indonesia"
       },
       {
         "jamKe": 0,
-        "mulai": "09:45",
-        "selesai": "10:15",
+        "mulai": "08:15",
+        "selesai": "08:50",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat I"
       },
       {
         "jamKe": 3,
-        "mulai": "10:15",
+        "mulai": "08:50",
+        "selesai": "09:33",
+        "mapel": "Pendidikan Agama Budi Pekerti"
+      },
+      {
+        "jamKe": 4,
+        "mulai": "09:33",
+        "selesai": "10:16",
+        "mapel": "Pendidikan Agama Budi Pekerti"
+      },
+      {
+        "jamKe": 5,
+        "mulai": "10:16",
+        "selesai": "11:00",
+        "mapel": "Bahasa Inggris"
+      },
+      {
+        "jamKe": 6,
+        "mulai": "11:00",
         "selesai": "11:45",
         "mapel": "Bahasa Inggris"
       },
@@ -572,11 +638,17 @@ const JADWAL = {
         "mulai": "11:45",
         "selesai": "12:30",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat II"
       },
       {
-        "jamKe": 4,
+        "jamKe": 7,
         "mulai": "12:30",
+        "selesai": "13:15",
+        "mapel": "Bahasa Jawa"
+      },
+      {
+        "jamKe": 8,
+        "mulai": "13:15",
         "selesai": "14:00",
         "mapel": "Bahasa Jawa"
       }
@@ -585,25 +657,43 @@ const JADWAL = {
       {
         "jamKe": 1,
         "mulai": "06:45",
-        "selesai": "08:15",
+        "selesai": "07:30",
         "mapel": "Bahasa Indonesia"
       },
       {
         "jamKe": 2,
-        "mulai": "08:15",
-        "selesai": "09:45",
-        "mapel": "PJOK"
+        "mulai": "07:30",
+        "selesai": "08:15",
+        "mapel": "Bahasa Indonesia"
       },
       {
         "jamKe": 0,
-        "mulai": "09:45",
-        "selesai": "10:15",
+        "mulai": "08:15",
+        "selesai": "08:50",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat I"
       },
       {
         "jamKe": 3,
-        "mulai": "10:15",
+        "mulai": "08:50",
+        "selesai": "09:33",
+        "mapel": "Pendidikan Jasmani Olahraga Kesehatan"
+      },
+      {
+        "jamKe": 4,
+        "mulai": "09:33",
+        "selesai": "10:16",
+        "mapel": "Pendidikan Jasmani Olahraga Kesehatan"
+      },
+      {
+        "jamKe": 5,
+        "mulai": "10:16",
+        "selesai": "11:00",
+        "mapel": "Matematika"
+      },
+      {
+        "jamKe": 6,
+        "mulai": "11:00",
         "selesai": "11:45",
         "mapel": "Matematika"
       },
@@ -612,11 +702,17 @@ const JADWAL = {
         "mulai": "11:45",
         "selesai": "12:30",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat II"
       },
       {
-        "jamKe": 4,
+        "jamKe": 7,
         "mulai": "12:30",
+        "selesai": "13:15",
+        "mapel": "Sejarah Indonesia"
+      },
+      {
+        "jamKe": 8,
+        "mulai": "13:15",
         "selesai": "14:00",
         "mapel": "Sejarah Indonesia"
       }
@@ -625,31 +721,55 @@ const JADWAL = {
       {
         "jamKe": 1,
         "mulai": "06:45",
-        "selesai": "07:45",
+        "selesai": "07:10",
         "mapel": "Pendidikan Pancasila"
       },
       {
         "jamKe": 2,
-        "mulai": "07:45",
-        "selesai": "08:45",
+        "mulai": "07:10",
+        "selesai": "07:35",
+        "mapel": "Pendidikan Pancasila"
+      },
+      {
+        "jamKe": 3,
+        "mulai": "07:35",
+        "selesai": "08:00",
+        "mapel": "Bahasa Jawa"
+      },
+      {
+        "jamKe": 4,
+        "mulai": "08:00",
+        "selesai": "08:25",
         "mapel": "Bahasa Jawa"
       },
       {
         "jamKe": 0,
-        "mulai": "08:45",
+        "mulai": "08:25",
         "selesai": "09:00",
         "istirahat": true,
         "label": "Istirahat"
       },
       {
-        "jamKe": 3,
+        "jamKe": 5,
         "mulai": "09:00",
+        "selesai": "09:30",
+        "mapel": "Kreativitas Inovasi & Kewirausahaan"
+      },
+      {
+        "jamKe": 6,
+        "mulai": "09:30",
         "selesai": "10:00",
         "mapel": "Kreativitas Inovasi & Kewirausahaan"
       },
       {
-        "jamKe": 4,
+        "jamKe": 7,
         "mulai": "10:00",
+        "selesai": "10:30",
+        "mapel": "Bimbingan Konseling"
+      },
+      {
+        "jamKe": 8,
+        "mulai": "10:30",
         "selesai": "11:00",
         "mapel": "Bimbingan Konseling"
       }
@@ -658,12 +778,24 @@ const JADWAL = {
       {
         "jamKe": 1,
         "mulai": "06:45",
-        "selesai": "07:45",
-        "mapel": "PJOK"
+        "selesai": "07:15",
+        "mapel": "Pendidikan Jasmani Olahraga Kesehatan"
       },
       {
         "jamKe": 2,
+        "mulai": "07:15",
+        "selesai": "07:45",
+        "mapel": "Pendidikan Jasmani Olahraga Kesehatan"
+      },
+      {
+        "jamKe": 3,
         "mulai": "07:45",
+        "selesai": "08:15",
+        "mapel": "Pendidikan Pancasila"
+      },
+      {
+        "jamKe": 4,
+        "mulai": "08:15",
         "selesai": "08:45",
         "mapel": "Pendidikan Pancasila"
       },
@@ -675,8 +807,14 @@ const JADWAL = {
         "label": "Istirahat"
       },
       {
-        "jamKe": 3,
+        "jamKe": 5,
         "mulai": "09:00",
+        "selesai": "09:30",
+        "mapel": "Bahasa Inggris"
+      },
+      {
+        "jamKe": 6,
+        "mulai": "09:30",
         "selesai": "10:00",
         "mapel": "Bahasa Inggris"
       }
@@ -693,19 +831,43 @@ const JADWAL = {
       {
         "jamKe": 1,
         "mulai": "07:30",
-        "selesai": "10:10",
+        "selesai": "08:05",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 2,
+        "mulai": "08:05",
+        "selesai": "08:40",
         "mapel": "Konsentrasi Keahlian RPL"
       },
       {
         "jamKe": 0,
-        "mulai": "10:10",
-        "selesai": "10:35",
+        "mulai": "08:40",
+        "selesai": "09:15",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat I"
       },
       {
-        "jamKe": 2,
+        "jamKe": 3,
+        "mulai": "09:15",
+        "selesai": "09:55",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 4,
+        "mulai": "09:55",
+        "selesai": "10:35",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 5,
         "mulai": "10:35",
+        "selesai": "11:15",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 6,
+        "mulai": "11:15",
         "selesai": "11:55",
         "mapel": "Konsentrasi Keahlian RPL"
       },
@@ -714,11 +876,17 @@ const JADWAL = {
         "mulai": "11:55",
         "selesai": "12:40",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat II"
       },
       {
-        "jamKe": 3,
+        "jamKe": 7,
         "mulai": "12:40",
+        "selesai": "13:20",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 8,
+        "mulai": "13:20",
         "selesai": "14:00",
         "mapel": "Konsentrasi Keahlian RPL"
       }
@@ -727,19 +895,43 @@ const JADWAL = {
       {
         "jamKe": 1,
         "mulai": "06:45",
-        "selesai": "09:45",
+        "selesai": "07:30",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 2,
+        "mulai": "07:30",
+        "selesai": "08:15",
         "mapel": "Konsentrasi Keahlian RPL"
       },
       {
         "jamKe": 0,
-        "mulai": "09:45",
-        "selesai": "10:15",
+        "mulai": "08:15",
+        "selesai": "08:50",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat I"
       },
       {
-        "jamKe": 2,
-        "mulai": "10:15",
+        "jamKe": 3,
+        "mulai": "08:50",
+        "selesai": "09:33",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 4,
+        "mulai": "09:33",
+        "selesai": "10:16",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 5,
+        "mulai": "10:16",
+        "selesai": "11:00",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 6,
+        "mulai": "11:00",
         "selesai": "11:45",
         "mapel": "Konsentrasi Keahlian RPL"
       },
@@ -748,11 +940,17 @@ const JADWAL = {
         "mulai": "11:45",
         "selesai": "12:30",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat II"
       },
       {
-        "jamKe": 3,
+        "jamKe": 7,
         "mulai": "12:30",
+        "selesai": "13:15",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 8,
+        "mulai": "13:15",
         "selesai": "14:00",
         "mapel": "Konsentrasi Keahlian RPL"
       }
@@ -761,19 +959,43 @@ const JADWAL = {
       {
         "jamKe": 1,
         "mulai": "06:45",
-        "selesai": "09:45",
+        "selesai": "07:30",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 2,
+        "mulai": "07:30",
+        "selesai": "08:15",
         "mapel": "Konsentrasi Keahlian RPL"
       },
       {
         "jamKe": 0,
-        "mulai": "09:45",
-        "selesai": "10:15",
+        "mulai": "08:15",
+        "selesai": "08:50",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat I"
       },
       {
-        "jamKe": 2,
-        "mulai": "10:15",
+        "jamKe": 3,
+        "mulai": "08:50",
+        "selesai": "09:33",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 4,
+        "mulai": "09:33",
+        "selesai": "10:16",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 5,
+        "mulai": "10:16",
+        "selesai": "11:00",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 6,
+        "mulai": "11:00",
         "selesai": "11:45",
         "mapel": "Konsentrasi Keahlian RPL"
       },
@@ -782,11 +1004,17 @@ const JADWAL = {
         "mulai": "11:45",
         "selesai": "12:30",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat II"
       },
       {
-        "jamKe": 3,
+        "jamKe": 7,
         "mulai": "12:30",
+        "selesai": "13:15",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 8,
+        "mulai": "13:15",
         "selesai": "14:00",
         "mapel": "Konsentrasi Keahlian RPL"
       }
@@ -795,19 +1023,43 @@ const JADWAL = {
       {
         "jamKe": 1,
         "mulai": "06:45",
-        "selesai": "09:45",
+        "selesai": "07:30",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 2,
+        "mulai": "07:30",
+        "selesai": "08:15",
         "mapel": "Konsentrasi Keahlian RPL"
       },
       {
         "jamKe": 0,
-        "mulai": "09:45",
-        "selesai": "10:15",
+        "mulai": "08:15",
+        "selesai": "08:50",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat I"
       },
       {
-        "jamKe": 2,
-        "mulai": "10:15",
+        "jamKe": 3,
+        "mulai": "08:50",
+        "selesai": "09:33",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 4,
+        "mulai": "09:33",
+        "selesai": "10:16",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 5,
+        "mulai": "10:16",
+        "selesai": "11:00",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 6,
+        "mulai": "11:00",
         "selesai": "11:45",
         "mapel": "Konsentrasi Keahlian RPL"
       },
@@ -816,11 +1068,17 @@ const JADWAL = {
         "mulai": "11:45",
         "selesai": "12:30",
         "istirahat": true,
-        "label": "Istirahat"
+        "label": "Istirahat II"
       },
       {
-        "jamKe": 3,
+        "jamKe": 7,
         "mulai": "12:30",
+        "selesai": "13:15",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 8,
+        "mulai": "13:15",
         "selesai": "14:00",
         "mapel": "Konsentrasi Keahlian RPL"
       }
@@ -829,8 +1087,83 @@ const JADWAL = {
       {
         "jamKe": 1,
         "mulai": "06:45",
-        "selesai": "08:45",
+        "selesai": "07:10",
         "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 2,
+        "mulai": "07:10",
+        "selesai": "07:35",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 3,
+        "mulai": "07:35",
+        "selesai": "08:00",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 4,
+        "mulai": "08:00",
+        "selesai": "08:25",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 0,
+        "mulai": "08:25",
+        "selesai": "09:00",
+        "istirahat": true,
+        "label": "Istirahat"
+      },
+      {
+        "jamKe": 5,
+        "mulai": "09:00",
+        "selesai": "09:30",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 6,
+        "mulai": "09:30",
+        "selesai": "10:00",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 7,
+        "mulai": "10:00",
+        "selesai": "10:30",
+        "mapel": "Konsentrasi Keahlian RPL"
+      },
+      {
+        "jamKe": 8,
+        "mulai": "10:30",
+        "selesai": "11:00",
+        "mapel": "Konsentrasi Keahlian RPL"
+      }
+    ],
+    "Sabtu": [
+      {
+        "jamKe": 1,
+        "mulai": "06:45",
+        "selesai": "07:15",
+        "mapel": "Mata Pelajaran Pilihan RPL"
+      },
+      {
+        "jamKe": 2,
+        "mulai": "07:15",
+        "selesai": "07:45",
+        "mapel": "Mata Pelajaran Pilihan RPL"
+      },
+      {
+        "jamKe": 3,
+        "mulai": "07:45",
+        "selesai": "08:15",
+        "mapel": "Mata Pelajaran Pilihan RPL"
+      },
+      {
+        "jamKe": 4,
+        "mulai": "08:15",
+        "selesai": "08:45",
+        "mapel": "Mata Pelajaran Pilihan RPL"
       },
       {
         "jamKe": 0,
@@ -840,16 +1173,14 @@ const JADWAL = {
         "label": "Istirahat"
       },
       {
-        "jamKe": 2,
+        "jamKe": 5,
         "mulai": "09:00",
-        "selesai": "11:00",
-        "mapel": "Konsentrasi Keahlian RPL"
-      }
-    ],
-    "Sabtu": [
+        "selesai": "09:30",
+        "mapel": "Mata Pelajaran Pilihan RPL"
+      },
       {
-        "jamKe": 1,
-        "mulai": "06:45",
+        "jamKe": 6,
+        "mulai": "09:30",
         "selesai": "10:00",
         "mapel": "Mata Pelajaran Pilihan RPL"
       }
@@ -861,206 +1192,242 @@ const GALERI = [
   {
     "id": "p01",
     "seed": "kelasrpl-1",
-    "caption": "Kegiatan praktik pemrograman web",
+    "caption": "Kunjungan Industri, Tour Tempat Wisata. ",
     "foto": "asset/galeri/1.webp"
   },
   {
     "id": "p02",
     "seed": "kelasrpl-2",
-    "caption": "Presentasi proyek akhir semester",
+    "caption": "Kunjungan ke Gamelab Indonesia",
     "foto": "asset/galeri/2.webp"
   },
   {
     "id": "p03",
     "seed": "kelasrpl-3",
-    "caption": "Kunjungan industri ke perusahaan IT",
+    "caption": "Kerumah Wali Kelas XI RPL 1",
     "foto": "asset/galeri/3.webp"
   },
   {
     "id": "p04",
     "seed": "kelasrpl-4",
-    "caption": "Lomba coding antar kelas",
+    "caption": "Bintalsik",
     "foto": "asset/galeri/4.webp"
   },
   {
     "id": "p05",
     "seed": "kelasrpl-5",
-    "caption": "Kerja kelompok basis data",
+    "caption": "Mujahadah dan Doa Bersama",
     "foto": "asset/galeri/5.webp"
   },
   {
     "id": "p06",
     "seed": "kelasrpl-6",
-    "caption": "Workshop UI/UX design",
+    "caption": "Bintalsik",
     "foto": "asset/galeri/6.webp"
   },
   {
     "id": "p07",
     "seed": "kelasrpl-7",
-    "caption": "Praktik jaringan komputer",
+    "caption": "Aststragraphia Kelas X RPL",
     "foto": "asset/galeri/7.webp"
   },
   {
     "id": "p08",
     "seed": "kelasrpl-8",
-    "caption": "Kegiatan classmeeting",
+    "caption": "Foto bersama di lapangan",
     "foto": "asset/galeri/8.webp"
   },
   {
     "id": "p09",
     "seed": "kelasrpl-9",
-    "caption": "Study tour ke pusat teknologi",
+    "caption": "Bintalsik",
     "foto": "asset/galeri/9.webp"
   },
   {
     "id": "p10",
     "seed": "kelasrpl-10",
-    "caption": "Pentas seni kelas XI RPL 1",
+    "caption": "With The Only One Pak Endy",
     "foto": "asset/galeri/10.webp"
   },
   {
     "id": "p11",
     "seed": "kelasrpl-11",
-    "caption": "Kegiatan bakti sosial",
+    "caption": "Foto bersama",
     "foto": "asset/galeri/11.webp"
   },
   {
     "id": "p12",
     "seed": "kelasrpl-12",
-    "caption": "Perayaan hari kemerdekaan",
+    "caption": "Mujahadah dan Doa Bersama",
     "foto": "asset/galeri/12.webp"
   },
   {
     "id": "p13",
     "seed": "kelasrpl-13",
-    "caption": "Praktikum desain multimedia",
+    "caption": "Pondok Putri",
     "foto": "asset/galeri/13.webp"
   },
   {
     "id": "p14",
     "seed": "kelasrpl-14",
-    "caption": "Sesi mentoring proyek",
+    "caption": "Orang-oraang Tantrum",
     "foto": "asset/galeri/14.webp"
   },
   {
     "id": "p15",
     "seed": "kelasrpl-15",
-    "caption": "Kegiatan upacara bendera",
+    "caption": "MPLS",
     "foto": "asset/galeri/15.webp"
   },
   {
     "id": "p16",
     "seed": "kelasrpl-16",
-    "caption": "Field trip laboratorium komputer",
+    "caption": "Buka Bersama Kelas X RPL",
     "foto": "asset/galeri/16.webp"
   },
   {
     "id": "p17",
     "seed": "kelasrpl-17",
-    "caption": "Diskusi kelompok proyek akhir",
+    "caption": "Pondok Putra",
     "foto": "asset/galeri/17.webp"
   },
   {
     "id": "p18",
     "seed": "kelasrpl-18",
-    "caption": "Kegiatan ekstrakurikuler robotik",
+    "caption": "Lebaran di rumah wali kelas",
     "foto": "asset/galeri/18.webp"
   },
   {
     "id": "p19",
     "seed": "kelasrpl-19",
-    "caption": "Sesi foto bersama wali kelas",
+    "caption": "Lebaran di rumah wali kelas",
     "foto": "asset/galeri/19.webp"
   },
   {
     "id": "p20",
     "seed": "kelasrpl-20",
-    "caption": "Kegiatan Jumat bersih",
+    "caption": "Lebaran di rumah wali kelas",
     "foto": "asset/galeri/20.webp"
   },
   {
     "id": "p21",
     "seed": "kelasrpl-21",
-    "caption": "Latihan presentasi proyek",
+    "caption": "Lebaran di rumah wali kelas",
     "foto": "asset/galeri/21.webp"
   },
   {
     "id": "p22",
     "seed": "kelasrpl-22",
-    "caption": "Kunjungan ke expo teknologi",
+    "caption": "Orang-orang Stress",
     "foto": "asset/galeri/22.webp"
   },
   {
     "id": "p23",
     "seed": "kelasrpl-23",
-    "caption": "Kegiatan olahraga bersama",
+    "caption": "Takbir Keliling",
     "foto": "asset/galeri/23.webp"
   },
   {
     "id": "p24",
     "seed": "kelasrpl-24",
-    "caption": "Praktik instalasi jaringan",
+    "caption": "Takbir Keliling",
     "foto": "asset/galeri/24.webp"
   },
   {
     "id": "p25",
     "seed": "kelasrpl-25",
-    "caption": "Sesi sharing alumni RPL",
+    "caption": "Takbir Keliling",
     "foto": "asset/galeri/25.webp"
   },
   {
     "id": "p26",
     "seed": "kelasrpl-26",
-    "caption": "Kegiatan seminar motivasi",
+    "caption": "Takbir Keliling",
     "foto": "asset/galeri/26.webp"
   },
   {
     "id": "p27",
     "seed": "kelasrpl-27",
-    "caption": "Praktik pemrograman mobile",
+    "caption": "With Bu emma",
     "foto": "asset/galeri/27.webp"
   },
   {
     "id": "p28",
     "seed": "kelasrpl-28",
-    "caption": "Dokumentasi hari pertama sekolah",
+    "caption": "The RPL Boys",
     "foto": "asset/galeri/28.webp"
   },
   {
     "id": "p29",
     "seed": "kelasrpl-29",
-    "caption": "Kegiatan class meeting semester genap",
+    "caption": "With Bu emma",
     "foto": "asset/galeri/29.webp"
   },
   {
     "id": "p30",
     "seed": "kelasrpl-30",
-    "caption": "Momen kelulusan tingkat X",
+    "caption": "Fotbar",
     "foto": "asset/galeri/30.webp"
   },
   {
     "id": "p31",
     "seed": "kelasrpl-31",
-    "caption": "Kegiatan ekstrakurikuler baru",
+    "caption": "Renang",
     "foto": "asset/galeri/31.webp"
   },
   {
     "id": "p32",
     "seed": "kelasrpl-32",
-    "caption": "Kunjungan perusahaan teknologi",
+    "caption": "Fotbar",
     "foto": "asset/galeri/32.webp"
   },
   {
     "id": "p33",
     "seed": "kelasrpl-33",
-    "caption": "Workshop coding bersama alumni",
+    "caption": "Renang",
     "foto": "asset/galeri/33.webp"
   },
   {
     "id": "p34",
     "seed": "kelasrpl-34",
-    "caption": "Kegiatan akhir tahun ajaran",
+    "caption": "Renang",
     "foto": "asset/galeri/34.webp"
+  },
+  {
+    "id": "p35",
+    "seed": "kelasrpl-35",
+    "caption": "Pematerian oleh PT-astragraphia",
+    "foto": "asset/galeri/35.webp"
+  },
+  {
+    "id": "p36",
+    "seed": "kelasrpl-36",
+    "caption": "Pematerian oleh PT-astragraphia",
+    "foto": "asset/galeri/36.webp"
+  },
+  {
+    "id": "p37",
+    "seed": "kelasrpl-37",
+    "caption": "Pematerian oleh PT-astragraphia",
+    "foto": "asset/galeri/37.webp"
+  },
+  {
+    "id": "p38",
+    "seed": "kelasrpl-38",
+    "caption": "Pematerian oleh PT-astragraphia",
+    "foto": "asset/galeri/38.webp"
+  },
+  {
+    "id": "p39",
+    "seed": "kelasrpl-39",
+    "caption": "Pematerian oleh PT-astragraphia",
+    "foto": "asset/galeri/39.webp"
+  },
+  {
+    "id": "p40",
+    "seed": "kelasrpl-40",
+    "caption": "Pematerian oleh PT-astragraphia",
+    "foto": "asset/galeri/40.webp"
   }
 ];
 
