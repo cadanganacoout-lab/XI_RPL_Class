@@ -1,4 +1,4 @@
-const SITE = {
+﻿const SITE = {
   "schoolName": "SMK PGRI 2 PONOROGO",
   "schoolShort": "STERIDA",
   "className": "XI RPL 1",
@@ -136,7 +136,7 @@ const SISWA = [
   {
     "id": "s01",
     "nama": "Affandi Fathufrahman",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "Basket",
     "catatan": "-",
     "foto": "asset/profil/foto_awal/sementara.png"
@@ -144,7 +144,7 @@ const SISWA = [
   {
     "id": "s02",
     "nama": "Ahmad Barak Neilfadli Hardiansyah",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "",
     "catatan": "-",
     "foto": "asset/profil/foto_awal/sementara.png"
@@ -152,7 +152,7 @@ const SISWA = [
   {
     "id": "s03",
     "nama": "Alecia Poppy Shakira Ayu Kirana",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/foto_awal/sementara.png"
@@ -160,7 +160,7 @@ const SISWA = [
   {
     "id": "s04",
     "nama": "Alexa Aditya Cindra Dewi",
-    "jabatan": "-",
+    "jabatan": "Seketaris",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/foto_awal/sementara.png"
@@ -168,7 +168,7 @@ const SISWA = [
   {
     "id": "s05",
     "nama": "Amanda Cinthya Kasih",
-    "jabatan": "Seketaris",
+    "jabatan": "Seketaris dan presensi",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/manda.jpeg"
@@ -176,7 +176,7 @@ const SISWA = [
   {
     "id": "s06",
     "nama": "Ardila Wahyuning Putri",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/foto_awal/sementara.png"
@@ -184,7 +184,7 @@ const SISWA = [
   {
     "id": "s07",
     "nama": "Aretha Maulina Noviatin",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/aretha.jpeg"
@@ -192,7 +192,7 @@ const SISWA = [
   {
     "id": "s08",
     "nama": "Atha Tandagra Suryansyah",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/foto_awal/sementara.png"
@@ -200,15 +200,15 @@ const SISWA = [
   {
     "id": "s09",
     "nama": "Bagas Ardiansyah",
-    "jabatan": "-",
-    "hobi": "-",
-    "catatan": "-",
+    "jabatan": "Siswa",
+    "hobi": "PENCOLI KAREKTER ANIME",
+    "catatan": "HATI-HATI DIA PENCABUL ANAK DIBAWAH UMUR, SUDAH ADA KORBAN",
     "foto": "asset/profil/bagas.jpeg"
   },
   {
     "id": "s10",
     "nama": "Candy Al Azka",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/foto_awal/sementara.png"
@@ -216,7 +216,7 @@ const SISWA = [
   {
     "id": "s11",
     "nama": "Celsia Ramadhani",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/foto_awal/sementara.png"
@@ -224,7 +224,7 @@ const SISWA = [
   {
     "id": "s12",
     "nama": "Dimas Riang Ilham Saputra",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/dimas.jpeg"
@@ -232,7 +232,7 @@ const SISWA = [
   {
     "id": "s13",
     "nama": "Diva Ayu Permata",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/diva.jpeg"
@@ -240,7 +240,7 @@ const SISWA = [
   {
     "id": "s14",
     "nama": "Ena Zivana Idelia Gita",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/ena.jpeg"
@@ -256,7 +256,7 @@ const SISWA = [
   {
     "id": "s16",
     "nama": "Gayuh Gita Yulia Natasya",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/gita.jpeg"
@@ -264,7 +264,7 @@ const SISWA = [
   {
     "id": "s17",
     "nama": "Gilang Nur Maulida Faid",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/gilang.jpg"
@@ -272,7 +272,7 @@ const SISWA = [
   {
     "id": "s18",
     "nama": "Helcia Andika Putri",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/helcia.jpeg"
@@ -288,7 +288,7 @@ const SISWA = [
   {
     "id": "s20",
     "nama": "Ilham Rofig Ananda Barocta",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/rofig.jpeg"
@@ -296,7 +296,7 @@ const SISWA = [
   {
     "id": "s21",
     "nama": "Julian Tri Pratama",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/julian.jpeg"
@@ -304,7 +304,7 @@ const SISWA = [
   {
     "id": "s22",
     "nama": "Kenza Pratama",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/kenza.jpeg"
@@ -312,7 +312,7 @@ const SISWA = [
   {
     "id": "s23",
     "nama": "Khaula Nendra Sukma Athafarel",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/foto_awal/sementara.png"
@@ -320,7 +320,7 @@ const SISWA = [
   {
     "id": "s24",
     "nama": "Meta Evilya Giovany",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/foto_awal/sementara.png"
@@ -328,7 +328,7 @@ const SISWA = [
   {
     "id": "s25",
     "nama": "Muhamad Akbar Fikriansyah",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/akbar.jpeg"
@@ -336,7 +336,7 @@ const SISWA = [
   {
     "id": "s26",
     "nama": "Nabila' Atha Nur Al Fiyah",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/nabila.jpeg"
@@ -344,7 +344,7 @@ const SISWA = [
   {
     "id": "s27",
     "nama": "Nurul Safika",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/narji.jpg"
@@ -360,7 +360,7 @@ const SISWA = [
   {
     "id": "s29",
     "nama": "Ragil Satria Risdiyanto",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/foto_awal/sementara.png"
@@ -368,7 +368,7 @@ const SISWA = [
   {
     "id": "s30",
     "nama": "Relyta Triya Ayu Lestari",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "- mencatat rangkuman pelajaran.",
     "foto": "asset/profil/foto_awal/sementara.png"
@@ -376,7 +376,7 @@ const SISWA = [
   {
     "id": "s31",
     "nama": "Rifky Aditya Saputra",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/rifki.jpeg"
@@ -384,7 +384,7 @@ const SISWA = [
   {
     "id": "s32",
     "nama": "Satria Pradika Bayu Pratama",
-    "jabatan": "-",
+    "jabatan": "Siswa",
     "hobi": "-",
     "catatan": "-",
     "foto": "asset/profil/foto_awal/sementara.png"
@@ -1430,7 +1430,7 @@ const VIDEO = [
     "id": "v01",
     "youtubeId": "m8PGMHXMstw",
     "judul": "TUGAS IPAS, PODCAST REMAJA STERIDA-KELOMPOK 2",
-    "deskripsi": "Terima kasih telah menonton. Jangan lupa untuk memberikan dukungan dan masukan yang membangun. Selamat menyaksikan! 🎙️"
+    "deskripsi": "Terima kasih telah menonton. Jangan lupa untuk memberikan dukungan dan masukan yang membangun. Selamat menyaksikan! ðŸŽ™ï¸"
   },
   {
     "id": "v02",
@@ -1448,7 +1448,7 @@ const VIDEO = [
     "id": "v04",
     "youtubeId": "9ujA_ZNEcRc",
     "judul": "TUGAS IPAS, PODCAST REMAJA STERIDA-KELOMPOK 1",
-    "deskripsi": "Terima kasih telah menonton. Jangan lupa untuk memberikan dukungan dan masukan yang membangun. Selamat menyaksikan! 🎙️"
+    "deskripsi": "Terima kasih telah menonton. Jangan lupa untuk memberikan dukungan dan masukan yang membangun. Selamat menyaksikan! ðŸŽ™ï¸"
   },
   {
     "id": "v05",
@@ -1472,7 +1472,7 @@ const VIDEO = [
     "id": "v08",
     "youtubeId": "meDKTZ1YdEo&t=7s",
     "judul": "TUGAS IPAS, PODCAST REMAJA STERIDA-KELOMPOK 4",
-    "deskripsi": "Terima kasih telah menonton. Jangan lupa untuk memberikan dukungan dan masukan yang membangun. Selamat menyaksikan! 🎙️"
+    "deskripsi": "Terima kasih telah menonton. Jangan lupa untuk memberikan dukungan dan masukan yang membangun. Selamat menyaksikan! ðŸŽ™ï¸"
   },
   {
     "id": "v09",
@@ -1513,31 +1513,31 @@ const VIDEO = [
   {
     "id": "v15",
     "youtubeId": "_37Q372oCN0",
-    "judul": "TUGAS SENAM IRAMA PJOK, —KELOMPOK 3—",
+    "judul": "TUGAS SENAM IRAMA PJOK, â€”KELOMPOK 3â€”",
     "deskripsi": "-"
   },
   {
     "id": "v16",
     "youtubeId": "4d_gBm2nfeE",
-    "judul": "TUGAS SENAM IRAMA PJOK, —KELOMPOK 1—",
+    "judul": "TUGAS SENAM IRAMA PJOK, â€”KELOMPOK 1â€”",
     "deskripsi": "-"
   },
   {
     "id": "v16",
     "youtubeId": "lY4tZ2UVyQ4",
-    "judul": "TUGAS SENAM IRAMA PJOK, —KELOMPOK 5—",
+    "judul": "TUGAS SENAM IRAMA PJOK, â€”KELOMPOK 5â€”",
     "deskripsi": "-"
   },
   {
     "id": "v16",
     "youtubeId": "WTjDbSP8ra4",
-    "judul": "TUGAS SENAM IRAMA PJOK, —KELOMPOK 2—",
+    "judul": "TUGAS SENAM IRAMA PJOK, â€”KELOMPOK 2â€”",
     "deskripsi": "-"
   },
   {
     "id": "v16",
     "youtubeId": "TWaH1cEmxS4&t=16s",
-    "judul": "TUGAS SENAM IRAMA PJOK, —KELOMPOK 4—",
+    "judul": "TUGAS SENAM IRAMA PJOK, â€”KELOMPOK 4â€”",
     "deskripsi": "-"
   }
   
@@ -1677,3 +1677,4 @@ const MOTTO = [
     "motto": "Kelas XI RPL 1, belajar bersama menuju hebat."
   }
 ];
+
