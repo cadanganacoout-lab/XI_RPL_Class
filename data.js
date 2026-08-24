@@ -1,9 +1,3 @@
-// =====================================================================
-// data.js — SEMUA DATA DUMMY DI FILE INI.
-// Ganti isi array/objek di bawah dengan data asli kelas Anda.
-// Struktur (nama field) JANGAN diubah, cukup ganti isinya saja.
-// =====================================================================
-
 const SITE = {
   "schoolName": "SMK PGRI 2 PONOROGO",
   "schoolShort": "STERIDA",
