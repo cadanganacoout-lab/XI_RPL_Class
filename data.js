@@ -201,8 +201,8 @@ const SISWA = [
     "id": "s09",
     "nama": "Bagas Ardiansyah",
     "jabatan": "Siswa",
-    "hobi": "PENCOLI KAREKTER ANIME",
-    "catatan": "HATI-HATI DIA PENCABUL ANAK DIBAWAH UMUR, SUDAH ADA KORBAN",
+    "hobi": "PENCOLI KARAKTER ANIME",
+    "catatan": "-",
     "foto": "asset/profil/bagas.jpeg"
   },
   {
@@ -445,6 +445,21 @@ const PIKET = {
     "Ilham Rofig Ananda Barocta",
     "Khaula Nendra Sukma Athafarel"
   ]
+};
+
+const GURU_JADWAL = {
+  "genap": {
+    "Senin": "Andies Pramudiyantoro, S.Kom",
+    "Selasa": "Endy Bagus Setyawan R. S.Kom",
+    "Rabu": {
+      "sebelum": "Endy Bagus Setyawan R. S.Kom",
+      "mulai": "10:15",
+      "sesudah": "Muh. Faqihuddin Assholih, S.Kom"
+    },
+    "Kamis": "Hendrik Dwi Yusyanto, S.Kom",
+    "Jumat": "Ridwan Mudakir, S.Kom",
+    "Sabtu": "Muh. Faqihuddin Assholih, S.Kom"
+  }
 };
 
 const JADWAL = {
@@ -1390,37 +1405,37 @@ const GALERI = [
   {
     "id": "p35",
     "seed": "kelasrpl-35",
-    "caption": "Pematerian oleh PT-astragraphia",
+    "caption": "Dokumentasi kegiatan bersama PT Astragraphia - foto 1",
     "foto": "asset/galeri/35.webp"
   },
   {
     "id": "p36",
     "seed": "kelasrpl-36",
-    "caption": "Pematerian oleh PT-astragraphia",
+    "caption": "Dokumentasi kegiatan bersama PT Astragraphia - foto 2",
     "foto": "asset/galeri/36.webp"
   },
   {
     "id": "p37",
     "seed": "kelasrpl-37",
-    "caption": "Pematerian oleh PT-astragraphia",
+    "caption": "Dokumentasi kegiatan bersama PT Astragraphia - foto 3",
     "foto": "asset/galeri/37.webp"
   },
   {
     "id": "p38",
     "seed": "kelasrpl-38",
-    "caption": "Pematerian oleh PT-astragraphia",
+    "caption": "Dokumentasi kegiatan bersama PT Astragraphia - foto 4",
     "foto": "asset/galeri/38.webp"
   },
   {
     "id": "p39",
     "seed": "kelasrpl-39",
-    "caption": "Pematerian oleh PT-astragraphia",
+    "caption": "Dokumentasi kegiatan bersama PT Astragraphia - foto 5",
     "foto": "asset/galeri/39.webp"
   },
   {
     "id": "p40",
     "seed": "kelasrpl-40",
-    "caption": "Pematerian oleh PT-astragraphia",
+    "caption": "Dokumentasi kegiatan bersama PT Astragraphia - foto 6",
     "foto": "asset/galeri/40.webp"
   }
 ];
@@ -1430,7 +1445,7 @@ const VIDEO = [
     "id": "v01",
     "youtubeId": "m8PGMHXMstw",
     "judul": "TUGAS IPAS, PODCAST REMAJA STERIDA-KELOMPOK 2",
-    "deskripsi": "Terima kasih telah menonton. Jangan lupa untuk memberikan dukungan dan masukan yang membangun. Selamat menyaksikan! ðŸŽ™ï¸"
+    "deskripsi": "Terima kasih telah menonton. Jangan lupa memberikan dukungan dan masukan yang membangun. Selamat menyaksikan! 🎙️"
   },
   {
     "id": "v02",
@@ -1448,11 +1463,11 @@ const VIDEO = [
     "id": "v04",
     "youtubeId": "9ujA_ZNEcRc",
     "judul": "TUGAS IPAS, PODCAST REMAJA STERIDA-KELOMPOK 1",
-    "deskripsi": "Terima kasih telah menonton. Jangan lupa untuk memberikan dukungan dan masukan yang membangun. Selamat menyaksikan! ðŸŽ™ï¸"
+    "deskripsi": "Terima kasih telah menonton. Jangan lupa memberikan dukungan dan masukan yang membangun. Selamat menyaksikan! 🎙️"
   },
   {
     "id": "v05",
-    "youtubeId": "Vk_uDWUSOuo&t=31s",
+    "youtubeId": "Vk_uDWUSOuo",
     "judul": "TUGAS IPAS, PODCAST REMAJA STERIDA-KELOMPOK 6",
     "deskripsi": "Podcast ini dibuat sebagai bagian dari tugas kelompok untuk melatih kemampuan komunikasi, kerja sama tim, serta pemahaman materi. Semoga pembahasan yang kami sajikan dapat memberikan manfaat dan menambah pengetahuan bagi para penonton."
   },
@@ -1464,37 +1479,37 @@ const VIDEO = [
   },
   {
     "id": "v07",
-    "youtubeId": "mdycE2tlPX4&t=117s",
+    "youtubeId": "mdycE2tlPX4",
     "judul": "TUGAS IPAS, PODCAST REMAJA STERIDA-KELOMPOK 8",
     "deskripsi": "Podcast ini dibuat sebagai bagian dari tugas kelompok untuk melatih kemampuan komunikasi, kerja sama tim, serta pemahaman materi. Semoga pembahasan yang kami sajikan dapat memberikan manfaat dan menambah pengetahuan bagi para penonton."
   },
   {
     "id": "v08",
-    "youtubeId": "meDKTZ1YdEo&t=7s",
+    "youtubeId": "meDKTZ1YdEo",
     "judul": "TUGAS IPAS, PODCAST REMAJA STERIDA-KELOMPOK 4",
-    "deskripsi": "Terima kasih telah menonton. Jangan lupa untuk memberikan dukungan dan masukan yang membangun. Selamat menyaksikan! ðŸŽ™ï¸"
+    "deskripsi": "Terima kasih telah menonton. Jangan lupa memberikan dukungan dan masukan yang membangun. Selamat menyaksikan! 🎙️"
   },
   {
     "id": "v09",
     "youtubeId": "JSjp0qdOrhU",
     "judul": "TUGAS INFORMATIKA, KOKURIKULER ECOPRINT-KELOMPOK 6",
-    "deskripsi": "-"
+    "deskripsi": "Dokumentasi tugas ecoprint kelompok 6 dalam kegiatan kokurikuler Informatika."
   },
   {
     "id": "v10",
     "youtubeId": "1dzLr_jYjSk",
     "judul": "TUGAS INFORMATIKA, KOKURIKULER ECOPRINT-KELOMPOK 4",
-    "deskripsi": "-"
+    "deskripsi": "Dokumentasi tugas ecoprint kelompok 4 dalam kegiatan kokurikuler Informatika."
   },
   {
     "id": "v11",
-    "youtubeId": "eZfZ70p2d40&t=109s",
+    "youtubeId": "eZfZ70p2d40",
     "judul": "TUGAS INFORMATIKA, KOKURIKULER ECOPRINT-KELOMPOK 2",
     "deskripsi": "Ecoprint adalah teknik mencetak motif pada kain dengan memanfaatkan bahan-bahan alami seperti daun, bunga, batang, atau bagian tumbuhan lainnya. Proses ini dilakukan dengan cara menempelkan bahan alami ke permukaan kain, kemudian ditekan atau dipukul, dikukus, atau direbus agar warna dan bentuk alaminya berpindah ke kain."
   },
   {
     "id": "v12",
-    "youtubeId": "PjFZoJ6tjcE&t=79s",
+    "youtubeId": "PjFZoJ6tjcE",
     "judul": "TUGAS INFORMATIKA, KOKURIKULER ECOPRINT-KELOMPOK 3",
     "deskripsi": "Ecoprint termasuk dalam kerajinan ramah lingkungan karena tidak menggunakan bahan kimia berbahaya, melainkan memanfaatkan pigmen alami dari tumbuhan. Setiap hasil ecoprint bersifat unik karena bentuk, warna, dan susunan daun tidak pernah sama."
   },
@@ -1508,37 +1523,37 @@ const VIDEO = [
     "id": "v14",
     "youtubeId": "as5K6CLsZ3U",
     "judul": "TUGAS INFORMATIKA, KOKURIKULER ECOPRINT-KELOMPOK 1",
-    "deskripsi": "-"
+    "deskripsi": "Dokumentasi tugas ecoprint kelompok 1 dalam kegiatan kokurikuler Informatika."
   },
   {
-    "id": "v15",
+    "id": "v16",
     "youtubeId": "_37Q372oCN0",
-    "judul": "TUGAS SENAM IRAMA PJOK, â€”KELOMPOK 3â€”",
-    "deskripsi": "-"
+    "judul": "TUGAS SENAM IRAMA PJOK, -KELOMPOK 3-",
+    "deskripsi": "Dokumentasi tugas senam irama PJOK kelompok 3."
   },
   {
-    "id": "v16",
+    "id": "v17",
     "youtubeId": "4d_gBm2nfeE",
-    "judul": "TUGAS SENAM IRAMA PJOK, â€”KELOMPOK 1â€”",
-    "deskripsi": "-"
+    "judul": "TUGAS SENAM IRAMA PJOK, -KELOMPOK 1-",
+    "deskripsi": "Dokumentasi tugas senam irama PJOK kelompok 1."
   },
   {
-    "id": "v16",
+    "id": "v18",
     "youtubeId": "lY4tZ2UVyQ4",
-    "judul": "TUGAS SENAM IRAMA PJOK, â€”KELOMPOK 5â€”",
-    "deskripsi": "-"
+    "judul": "TUGAS SENAM IRAMA PJOK, -KELOMPOK 5-",
+    "deskripsi": "Dokumentasi tugas senam irama PJOK kelompok 5."
   },
   {
-    "id": "v16",
+    "id": "v19",
     "youtubeId": "WTjDbSP8ra4",
-    "judul": "TUGAS SENAM IRAMA PJOK, â€”KELOMPOK 2â€”",
-    "deskripsi": "-"
+    "judul": "TUGAS SENAM IRAMA PJOK, -KELOMPOK 2-",
+    "deskripsi": "Dokumentasi tugas senam irama PJOK kelompok 2."
   },
   {
-    "id": "v16",
-    "youtubeId": "TWaH1cEmxS4&t=16s",
-    "judul": "TUGAS SENAM IRAMA PJOK, â€”KELOMPOK 4â€”",
-    "deskripsi": "-"
+    "id": "v20",
+    "youtubeId": "TWaH1cEmxS4",
+    "judul": "TUGAS SENAM IRAMA PJOK, -KELOMPOK 4-",
+    "deskripsi": "Dokumentasi tugas senam irama PJOK kelompok 4."
   }
   
 ];
@@ -1677,4 +1692,3 @@ const MOTTO = [
     "motto": "Kelas XI RPL 1, belajar bersama menuju hebat."
   }
 ];
-

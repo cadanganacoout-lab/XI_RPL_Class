@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initFooter();
   initModal();
+  validateData();
 
   const page = document.body.dataset.page;
   if (page === 'beranda') initBeranda();
@@ -134,8 +135,33 @@ function imgTag (src, fallback, alt) {
 function photoTag (person, bg) {
   const name = person && person.nama ? person.nama : '';
   const fallback = avatarUrl(name, bg);
-  const src = person && person.foto ? person.foto : fallback;
+  const src = person && person.foto && !person.foto.endsWith('/sementara.png')
+    ? person.foto
+    : fallback;
   return imgTag(src, fallback, `Foto ${name}`);
+}
+
+function validateData () {
+  const checks = [
+    ['siswa', SISWA, SITE.totalStudents],
+    ['guru', GURU, SITE.totalTeachers],
+    ['galeri', GALERI, 40],
+    ['video', VIDEO, 19]
+  ];
+  checks.forEach(([label, items, expected]) => {
+    if (items.length !== expected) {
+      console.warn(`[data] Jumlah ${label} (${items.length}) tidak sesuai target (${expected}).`);
+    }
+    const ids = items.map(item => item.id).filter(Boolean);
+    if (new Set(ids).size !== ids.length) {
+      console.error(`[data] ID ${label} harus unik.`);
+    }
+  });
+  VIDEO.forEach(video => {
+    if (!/^[\w-]{11}$/.test(video.youtubeId)) {
+      console.error(`[data] YouTube ID tidak valid untuk ${video.id}.`);
+    }
+  });
 }
 
 /* --------------------------------------------------------------------
@@ -181,17 +207,20 @@ function timeToMinutes (time) {
 }
 
 function getGuruName (parity, hari, mapel, mulai, selesai) {
-  if (parity === 'genap') {
-    if (hari === 'Senin') return 'Andies Pramudiyantoro, S.Kom';
-    if (hari === 'Selasa') return 'Endy Bagus Setyawan R. S.Kom';
-    if (hari === 'Kamis') return 'Hendrik Dwi Yusyanto, S.Kom';
-    if (hari === 'Jumat') return 'Ridwan Mudakir, S.Kom';
-    if (hari === 'Sabtu') return 'Muh. Faqihuddin Assholih, S.Kom';
-    if (hari === 'Rabu') {
-      return timeToMinutes(mulai) < 615 ? 'Endy Bagus Setyawan R. S.Kom' : 'Muh. Faqihuddin Assholih, S.Kom';
-    }
+  const jadwalGuru = GURU_JADWAL[parity] && GURU_JADWAL[parity][hari];
+  if (jadwalGuru) {
+    if (typeof jadwalGuru === 'string') return jadwalGuru;
+    return timeToMinutes(mulai) < timeToMinutes(jadwalGuru.mulai)
+      ? jadwalGuru.sebelum
+      : jadwalGuru.sesudah;
   }
-  const guruObj = GURU.find(g => g.mapel === mapel);
+
+  const aliases = {
+    'Pendidikan Agama Budi Pekerti': 'Pendidikan Agama',
+    'Pendidikan Jasmani Olahraga Kesehatan': 'PJOK',
+    'Kreativitas Inovasi & Kewirausahaan': 'Kewirausahaan'
+  };
+  const guruObj = GURU.find(g => g.mapel === (aliases[mapel] || mapel));
   return guruObj ? guruObj.nama : '—';
 }
 
