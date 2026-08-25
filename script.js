@@ -365,6 +365,9 @@ function initSiswa () {
             <div class="row"><b>Hobi</b><span>${s.hobi}</span></div>
             <div class="row"><b>Catatan</b><span>${s.catatan}</span></div>
           </div>
+          ${/^https?:\/\/[^\s"'<>]+$/i.test((s.portfolio || '').trim())
+            ? `<a class="portfolio-link" href="${s.portfolio.trim()}" target="_blank" rel="noopener noreferrer">Lihat Portofolio ↗</a>`
+            : '<span class="portfolio-link portfolio-link--disabled" aria-disabled="true">Portofolio belum tersedia</span>'}
         </div>
       </div>
     `).join('');

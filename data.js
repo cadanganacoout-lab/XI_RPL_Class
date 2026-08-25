@@ -30,6 +30,7 @@ const HARI_LIST = [
   "Jumat",
   "Sabtu"
 ];
+
 const HARI_AKTIF = [
   "Senin",
   "Selasa",
@@ -264,10 +265,11 @@ const SISWA = [
   {
     "id": "s17",
     "nama": "Gilang Nur Maulida Faid",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/gilang.jpg"
+    "jabatan": "Siswa (Admin Website)",
+    "hobi": "Belajar Hal Baru",
+    "catatan": "Saya suka Membaca hal-hal baru.",
+    "foto": "asset/profil/gilang.jpg",
+    "portfolio": "https://tentangsayaaaa.vercel.app/"
   },
   {
     "id": "s18",
