@@ -721,38 +721,81 @@ body, .panel, .site-header, .site-footer, .tab, .theme-toggle, .menu-toggle,
    RESPONSIVE
    ===================================================================== */
 @media (max-width: 900px){
-  .hero-beranda{ grid-template-columns: 1fr; }
-  .grid-2{ grid-template-columns: 1fr; }
   .stat-row{ grid-template-columns: 1fr 1fr 1fr; gap:10px; }
-  .footer-inner{ flex-direction:column; gap: 22px; }
 }
 
 @media (max-width: 720px){
-  .menu-toggle{ display:flex; }
-  .tabbar{
-    position: fixed;
-    top: 62px; left:0; right:0;
-    background: var(--panel);
-    border-bottom: 1px solid var(--border);
-    flex-direction: column;
-    gap:0;
-    max-height: 0;
-    overflow:hidden;
-    transition: max-height .2s ease;
-    box-shadow: 0 12px 24px -12px rgba(20,24,38,.2);
-  }
-  .tabbar.open{ max-height: 340px; overflow-y:auto; }
-  .tab{ height:auto; padding: 13px 20px; border-bottom:1px solid var(--border); border-left:3px solid transparent; }
-  .tab.active{ border-left-color: var(--accent-blue); border-bottom-color: var(--border); }
-  .stat-row{ grid-template-columns: 1fr; }
-  .statusbar{ font-size:11px; }
-  .motto-stage{ height: 780px; }
+  .container{ padding-left:14px; padding-right:14px; }
+  .navwrap{ padding-left:14px; padding-right:14px; gap:14px; }
+  .brand{ gap:8px; font-size:13px; }
+  .brand-mark{ width:28px; height:28px; font-size:10px; }
+  .brand small{ font-size:9.5px; }
+  .tab{ padding-left:10px; padding-right:10px; font-size:12px; }
+  .hero-beranda{ gap:18px; }
+  .grid-2{ gap:14px; }
+  .stat-card{ padding:12px; }
+  .stat-card .num{ font-size:24px; }
+  .page-hero{ padding:30px 0 22px; }
+  .page-hero h1{ font-size:clamp(25px, 5vw, 32px); }
+  .page-hero p{ font-size:13.5px; line-height:1.55; }
+  .toolbar-row{ gap:10px; margin-bottom:16px; }
+  .search-box{ flex:1; min-width:0; padding:8px 10px; font-size:12px; }
+  .search-box input{ font-size:12px; min-width:0; }
+  .count-pill{ padding:6px 9px; font-size:11px; }
+  .people-grid{ grid-template-columns:repeat(4, minmax(0, 1fr)); gap:10px; }
+  .people-body{ padding:11px 12px 12px; }
+  .role-tag{ font-size:10px; margin-bottom:5px; }
+  .people-name{ font-size:14px; line-height:1.3; margin-bottom:7px; }
+  .people-meta{ gap:4px; }
+  .people-meta .row{ gap:5px; font-size:11.5px; line-height:1.4; }
+  .people-meta .row b{ min-width:43px; font-size:9.5px; }
+  .portfolio-link{ margin-top:10px; padding:6px 8px; font-size:10px; }
+  .video-grid{ grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; }
+  .video-info{ padding:10px 11px 12px; gap:8px; }
+  .video-title{ font-size:12px; }
+  .video-meta{ font-size:10.5px; }
+  .gallery-grid{ grid-template-rows:repeat(3, 145px); grid-auto-columns:160px; gap:10px; }
+  .motto-stage{ height:455px; }
 }
 
 @media (max-width: 520px){
-  .people-grid{ grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap:12px; }
-  .video-grid{ grid-template-columns: 1fr; }
-  .gallery-grid{ grid-template-rows: repeat(3, 130px); grid-auto-columns: 150px; }
+  .navwrap{ height:56px; padding-left:14px; padding-right:14px; gap:10px; }
+  .theme-toggle, .menu-toggle{ width:36px; height:36px; }
+  .menu-toggle{ display:flex; }
+  .tabbar{
+    position:fixed;
+    top:56px; left:0; right:0;
+    background:var(--panel);
+    border-bottom:1px solid var(--border);
+    flex-direction:column;
+    gap:0;
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .2s ease;
+    box-shadow:0 12px 24px -12px rgba(20,24,38,.2);
+  }
+  .tabbar.open{ max-height:340px; overflow-y:auto; }
+  .tab{ height:auto; padding:12px 16px; border-bottom:1px solid var(--border); border-left:3px solid transparent; font-size:12px; }
+  .tab.active{ border-left-color:var(--accent-blue); border-bottom-color:var(--border); }
+  .hero-beranda{ grid-template-columns:1fr; }
+  .grid-2{ grid-template-columns:1fr; }
+  .stat-row{ grid-template-columns:1fr; }
+  .footer-inner{ flex-direction:column; gap:18px; }
+  .footer-main{ padding:24px 14px 18px; }
+  .footer-slogan{ margin-bottom:20px; }
+  .statusbar{ font-size:11px; }
+  .people-grid{ grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; }
+  .video-grid{ grid-template-columns:1fr; }
+  .gallery-grid{ grid-template-rows:repeat(3, 130px); grid-auto-columns:150px; }
+  .motto-stage{ height:620px; }
+}
+
+@media (max-width: 380px){
+  .brand small{ display:none; }
+  .people-photo{ aspect-ratio:1/0.86; }
+  .people-name{ font-size:13px; }
+  .people-meta .row{ display:block; }
+  .people-meta .row b{ display:block; margin-bottom:1px; }
 }
 
 @media (prefers-reduced-motion: reduce){
