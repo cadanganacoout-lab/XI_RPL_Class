@@ -675,7 +675,13 @@ body, .panel, .site-header, .site-footer, .tab, .theme-toggle, .menu-toggle,
   display:block; color: var(--accent-blue); font-size:11px; margin-bottom:4px;
   font-family: var(--font-body); font-weight:700;
 }
-.motto-bubble .txt{ display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.motto-bubble .txt{
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
 @keyframes drift{
   from{ transform: translate(0,0) rotate(var(--r1,-2deg)); }
   to{ transform: translate(var(--dx,24px), var(--dy,18px)) rotate(var(--r2,2deg)); }

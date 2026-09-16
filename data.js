@@ -291,8 +291,8 @@ const SISWA = [
     "id": "s20",
     "nama": "Ilham Rofig Ananda Barocta",
     "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
+    "hobi": "GAME, GAUSAH DITANYA",
+    "catatan": "ORANG GANGGUAN JIWA YANG LEPAS",
     "foto": "asset/profil/rofig.jpeg"
   },
   {
@@ -403,51 +403,71 @@ const SISWA = [
 
 const PIKET = {
   "Senin": [
-    "Alexa Aditya Cindra Dewi",
-    "Aretha Maulina Noviatin",
-    "Atha Tandagra Suryansyah",
-    "Gilang Nur Maulida Faid",
-    "Nurul Safika"
+    "Tidak Ada Jadwal Piket, Dikarenakan Kelas XI RPL Sedang PKL"
   ],
   "Selasa": [
-    "Relyta Triya Ayu Lestari",
-    "Celsia Ramadhani",
-    "Ragil Satria Risdiyanto",
-    "Julian Tri Pratama",
-    "Satria Pradika Bayu Pratama",
-    "Rifky Aditya Saputra"
+    "Tidak Ada Jadwal Piket, Dikarenakan Kelas XI RPL Sedang PKL"
   ],
   "Rabu": [
-    "Alecia Poppy Shakira Ayu Kirana",
-    "Diva Ayu Permata",
-    "Meta Evilya Giovany",
-    "Muhamad Akbar Fikriansyah",
-    "Dimas Riang Ilham Saputra",
-    "Ragil Bagus Nugroho"
+    "Tidak Ada Jadwal Piket, Dikarenakan Kelas XI RPL Sedang PKL"
   ],
   "Kamis": [
-    "Gayuh Gita Yulia Natasya",
-    "Helcia Andika Putri",
-    "Hedri Setiawan",
-    "Sultan Pasha Ibrahim Sukarno",
-    "Kenza Pratama"
+    "Tidak Ada Jadwal Piket, Dikarenakan Kelas XI RPL Sedang  PKL"
   ],
   "Jumat": [
-    "Ardila Wahyuning Putri",
-    "Candy Al Azka",
-    "Ahmad Barak Neilfadli Hardiansyah",
-    "Bagas Ardiansyah",
-    "Ficko Adiputra Perdana"
+    "Tidak Ada Jadwal Piket, Dikarenakan Kelas XI RPL Sedang PKL"
   ],
   "Sabtu": [
-    "Amanda Cinthya Kasih",
-    "Ena Zivana Idelia Gita",
-    "Nabila' Atha Nur Al Fiyah",
-    "Affandi Fathufrahman",
-    "Ilham Rofig Ananda Barocta",
-    "Khaula Nendra Sukma Athafarel"
+    "Tidak Ada Jadwal Piket, Dikarenakan Kelas XI RPL Sedang PKL"
   ]
 };
+// const PIKET = {
+//   "Senin": [
+//     "Alexa Aditya Cindra Dewi",
+//     "Aretha Maulina Noviatin",
+//     "Atha Tandagra Suryansyah",
+//     "Gilang Nur Maulida Faid",
+//     "Nurul Safika"
+//   ],
+//   "Selasa": [
+//     "Relyta Triya Ayu Lestari",
+//     "Celsia Ramadhani",
+//     "Ragil Satria Risdiyanto",
+//     "Julian Tri Pratama",
+//     "Satria Pradika Bayu Pratama",
+//     "Rifky Aditya Saputra"
+//   ],
+//   "Rabu": [
+//     "Alecia Poppy Shakira Ayu Kirana",
+//     "Diva Ayu Permata",
+//     "Meta Evilya Giovany",
+//     "Muhamad Akbar Fikriansyah",
+//     "Dimas Riang Ilham Saputra",
+//     "Ragil Bagus Nugroho"
+//   ],
+//   "Kamis": [
+//     "Gayuh Gita Yulia Natasya",
+//     "Helcia Andika Putri",
+//     "Hedri Setiawan",
+//     "Sultan Pasha Ibrahim Sukarno",
+//     "Kenza Pratama"
+//   ],
+//   "Jumat": [
+//     "Ardila Wahyuning Putri",
+//     "Candy Al Azka",
+//     "Ahmad Barak Neilfadli Hardiansyah",
+//     "Bagas Ardiansyah",
+//     "Ficko Adiputra Perdana"
+//   ],
+//   "Sabtu": [
+//     "Amanda Cinthya Kasih",
+//     "Ena Zivana Idelia Gita",
+//     "Nabila' Atha Nur Al Fiyah",
+//     "Affandi Fathufrahman",
+//     "Ilham Rofig Ananda Barocta",
+//     "Khaula Nendra Sukma Athafarel"
+//   ]
+// };
 
 const GURU_JADWAL = {
   "genap": {
@@ -464,7 +484,7 @@ const GURU_JADWAL = {
   }
 };
 
-const JADWAL = {
+const JADWAL_LAMA = {
   "ganjil": {
     "Senin": [
       {
@@ -1199,6 +1219,25 @@ const JADWAL = {
   }
 };
 
+const JADWAL = {
+  "ganjil": {
+    "Senin": ["Tidak Ada Jadwal Pelajaran, Dikarenakan Kelas XI RPL Sedang PKL"],
+    "Selasa": ["Tidak Ada Jadwal Pelajaran, Dikarenakan Kelas XI RPL Sedang PKL"],
+    "Rabu": ["Tidak Ada Jadwal Pelajaran, Dikarenakan Kelas XI RPL Sedang PKL"],
+    "Kamis": ["Tidak Ada Jadwal Pelajaran, Dikarenakan Kelas XI RPL Sedang PKL"],
+    "Jumat": ["Tidak Ada Jadwal Pelajaran, Dikarenakan Kelas XI RPL Sedang PKL"],
+    "Sabtu": ["Tidak Ada Jadwal Pelajaran, Dikarenakan Kelas XI RPL Sedang PKL"]
+  },
+  "genap": {
+    "Senin": ["Tidak Ada Jadwal Pelajaran, Dikarenakan Kelas XI RPL Sedang PKL"],
+    "Selasa": ["Tidak Ada Jadwal Pelajaran, Dikarenakan Kelas XI RPL Sedang PKL"],
+    "Rabu": ["Tidak Ada Jadwal Pelajaran, Dikarenakan Kelas XI RPL Sedang PKL"],
+    "Kamis": ["Tidak Ada Jadwal Pelajaran, Dikarenakan Kelas XI RPL Sedang PKL"],
+    "Jumat": ["Tidak Ada Jadwal Pelajaran, Dikarenakan Kelas XI RPL Sedang PKL"],
+    "Sabtu": ["Tidak Ada Jadwal Pelajaran, Dikarenakan Kelas XI RPL Sedang PKL"]
+  }
+};
+
 const GALERI = [
   {
     "id": "p01",
@@ -1439,6 +1478,48 @@ const GALERI = [
     "seed": "kelasrpl-40",
     "caption": "Dokumentasi kegiatan bersama PT Astragraphia - foto 6",
     "foto": "asset/galeri/40.webp"
+  },
+  {
+    "id": "p42",
+    "seed": "kelasrpl-42",
+    "caption": "Dokumentasi foto 42",
+    "foto": "asset/galeri/42.webp"
+  },
+  {
+    "id": "p43",
+    "seed": "kelasrpl-43",
+    "caption": "Dokumentasi foto 43",
+    "foto": "asset/galeri/43.webp"
+  },
+  {
+    "id": "p44",
+    "seed": "kelasrpl-44",
+    "caption": "Dokumentasi foto 44",
+    "foto": "asset/galeri/44.webp"
+  },
+  {
+    "id": "p45",
+    "seed": "kelasrpl-45",
+    "caption": "Dokumentasi foto 45",
+    "foto": "asset/galeri/45.webp"
+  },
+  {
+    "id": "p46",
+    "seed": "kelasrpl-46",
+    "caption": "Dokumentasi foto 46",
+    "foto": "asset/galeri/46.webp"
+  },
+  {
+    "id": "p47",
+    "seed": "kelasrpl-47",
+    "caption": "Dokumentasi foto 47",
+    "foto": "asset/galeri/47.webp"
+  },
+  {
+    "id": "p48",
+    "seed": "kelasrpl-48",
+    "caption": "Dokumentasi foto 48",
+    "foto": "asset/galeri/48.webp"
   }
 ];
 

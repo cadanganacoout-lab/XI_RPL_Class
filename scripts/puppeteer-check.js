@@ -2,12 +2,15 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 
+const ROOT_DIR = path.resolve(__dirname, '..');
+const REPORT_DIR = path.join(ROOT_DIR, 'reports');
+const SCREENSHOT_DIR = path.join(REPORT_DIR, 'screenshots');
 const pages = ['index.html','siswa.html','guru.html','galeri.html','video.html','motto.html'];
 const results = [];
 (async () => {
   const browser = await puppeteer.launch({args: ['--no-sandbox','--disable-setuid-sandbox']});
   for (const p of pages) {
-    const file = path.resolve(p);
+    const file = path.join(ROOT_DIR, p);
     if (!fs.existsSync(file)) continue;
     const page = await browser.newPage();
     const messages = [];
@@ -28,7 +31,7 @@ const results = [];
       // wait a bit for any async runtime actions
       await page.waitForTimeout(500);
       // take a small screenshot for reference
-      const ssPath = path.resolve('.puppeteer-screenshots', p + '.png');
+      const ssPath = path.join(SCREENSHOT_DIR, p + '.png');
       fs.mkdirSync(path.dirname(ssPath), {recursive:true});
       await page.screenshot({path:ssPath, fullPage:false});
       results.push({file:p, messages, screenshot:ssPath});
@@ -38,6 +41,7 @@ const results = [];
     await page.close();
   }
   await browser.close();
-  fs.writeFileSync('puppeteer-results.json', JSON.stringify(results, null, 2));
-  console.log('Done. Results written to puppeteer-results.json');
+  fs.mkdirSync(REPORT_DIR, {recursive: true});
+  fs.writeFileSync(path.join(REPORT_DIR, 'puppeteer-results.json'), JSON.stringify(results, null, 2));
+  console.log('Done. Results written to reports/puppeteer-results.json');
 })();

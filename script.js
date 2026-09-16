@@ -270,6 +270,9 @@ function initBeranda () {
     } else {
       const rows = JADWAL[parity][hariIni] || [];
       jadwalList.innerHTML = rows.map(r => {
+        if (typeof r === 'string') {
+          return `<div class="empty-note">${r}</div>`;
+        }
         if (r.istirahat) {
           return `<div class="sched-row break">${r.label} · ${r.mulai}–${r.selesai}</div>`;
         }
@@ -318,6 +321,9 @@ function initBeranda () {
     } else {
       const rowsBesok = JADWAL[parityBesok][hariBesok] || [];
       tomorrowJadwalList.innerHTML = rowsBesok.map(r => {
+        if (typeof r === 'string') {
+          return `<div class="empty-note">${r}</div>`;
+        }
         if (r.istirahat) {
           return `<div class="sched-row break">${r.label} · ${r.mulai}–${r.selesai}</div>`;
         }

@@ -2,13 +2,42 @@ const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const path = require('path');
 
-const htmlFiles = ['index.html','siswa.html','guru.html','galeri.html','video.html','motto.html'];
+const ROOT_DIR = path.resolve(__dirname, '..');
+const REPORT_DIR = path.join(ROOT_DIR, 'reports');
+const pageIds = {
+  'index.html': [
+    'themeToggle', 'menuToggle', 'tabbar', 'terminalBody', 'marqueeTrack',
+    'jadwalList', 'piketList', 'statSiswaHero', 'statGuruHero', 'todayBadge',
+    'globalModal', 'globalModalBox'
+  ],
+  'siswa.html': [
+    'themeToggle', 'menuToggle', 'tabbar', 'siswaSearch', 'siswaGrid',
+    'siswaCount', 'globalModal', 'globalModalBox'
+  ],
+  'guru.html': [
+    'themeToggle', 'menuToggle', 'tabbar', 'guruSearch', 'guruGrid',
+    'guruCount', 'globalModal', 'globalModalBox'
+  ],
+  'galeri.html': [
+    'themeToggle', 'menuToggle', 'tabbar', 'galeriGrid',
+    'globalModal', 'globalModalBox'
+  ],
+  'video.html': [
+    'themeToggle', 'menuToggle', 'tabbar', 'videoGrid',
+    'globalModal', 'globalModalBox'
+  ],
+  'motto.html': [
+    'themeToggle', 'menuToggle', 'tabbar', 'mottoStage',
+    'globalModal', 'globalModalBox'
+  ]
+};
+const htmlFiles = Object.keys(pageIds);
 const results = [];
 
 async function run() {
   for (const file of htmlFiles) {
-    if (!fs.existsSync(file)) continue;
-    const abs = path.resolve(file);
+    const abs = path.join(ROOT_DIR, file);
+    if (!fs.existsSync(abs)) continue;
     const msgs = [];
     const dom = await JSDOM.fromFile(abs, {
       runScripts: 'dangerously',
@@ -40,14 +69,8 @@ async function run() {
     // wait for resources to load or timeout
     await new Promise(resolve => setTimeout(resolve, 800));
 
-    // collect any DOM queries in script.js that may have returned null earlier
-    // (not exhaustive) Check known ids from script.js
-    const ids = [
-      'themeToggle','menuToggle','tabbar','terminalBody','marqueeTrack','jadwalList','piketList',
-      'statSiswaHero','statGuruHero','siswaSearch','siswaGrid','siswaCount','guruSearch','guruGrid','guruCount',
-      'galeriGrid','videoGrid','mottoStage','globalModal','globalModalBox','todayBadge'
-    ];
-    const missingIds = ids.filter(id => dom.window.document.getElementById(id) === null);
+    const missingIds = pageIds[file]
+      .filter(id => dom.window.document.getElementById(id) === null);
 
     results.push({file, msgs, missingIds});
 
@@ -55,6 +78,8 @@ async function run() {
     dom.window.close && dom.window.close();
   }
 
+  fs.mkdirSync(REPORT_DIR, {recursive: true});
+  fs.writeFileSync(path.join(REPORT_DIR, 'runtime-output.json'), JSON.stringify(results, null, 2));
   console.log(JSON.stringify(results, null, 2));
 }
 

@@ -1,0 +1,13 @@
+node_modules/
+
+# Generated browser-check artifacts
+reports/screenshots/
+reports/*.log
+reports/*run*.json
+
+# Local editor and OS files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+reports/*.json
