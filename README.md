@@ -7,19 +7,23 @@ Website statis untuk kelas XI RPL 1 SMK PGRI 2 Ponorogo. Situs dapat dibuka lang
 ```text
 .
 ├── asset/              # Logo, foto profil, dan foto galeri
+├── css/                # Gaya situs
+├── js/                 # Data, logika aplikasi, dan konfigurasi Supabase
 ├── docs/               # Referensi jadwal dan manifest foto
 ├── scripts/            # Pemeriksaan runtime dan browser
 ├── reports/            # Hasil pemeriksaan lokal (tidak untuk deployment)
-├── data.js             # Satu-satunya sumber data konten
-├── script.js           # Logika dan rendering halaman
-├── style.css           # Gaya bersama seluruh halaman
+├── supabase/           # SQL schema dan kebijakan akses komentar
 └── *.html              # Halaman situs
 ```
 
 ## Maintenance
 
-- Ubah data siswa, guru, jadwal, galeri, video, atau motto hanya di `data.js`.
-- Simpan aset baru di subfolder yang sesuai di `asset/` dan sesuaikan field `foto` di `data.js`.
+- Ubah data siswa, guru, jadwal, galeri, atau video hanya di `js/data.js`.
+- Komentar pengunjung disimpan di Supabase PostgreSQL dan disiarkan melalui Supabase Realtime. Halaman Komentar menampilkan diskusi dengan pemuatan komentar sebelumnya; Beranda menampilkan tiga komentar terbaru.
+- Untuk mengaktifkan komentar bersama, jalankan `supabase/comments.sql` di SQL Editor project Supabase, lalu isi URL project dan publishable/anon key pada `js/supabase-config.js`.
+- Publishable/anon key memang digunakan di browser; kebijakan Row Level Security pada SQL membatasi akses. Jangan pernah masukkan `service_role` key ke situs.
+- Hubungkan repository GitHub ini ke Vercel dan deploy dari root project. Komentar anonim bersifat publik; pengunjung dapat membaca dan menambahkan komentar, tetapi hanya pemilik project yang dapat menghapusnya dari Supabase Dashboard. Form membatasi 500 karakter; untuk mencegah spam lebih lanjut, tambahkan CAPTCHA/rate limiting sebelum situs dibuka luas.
+- Simpan aset baru di subfolder yang sesuai di `asset/` dan sesuaikan field `foto` di `js/data.js`.
 - Gunakan `docs/foto-manifest.md` untuk mencatat pemetaan foto profil.
 - Jalankan `npm run check` setelah perubahan untuk memeriksa semua halaman.
 

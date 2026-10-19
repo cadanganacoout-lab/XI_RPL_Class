@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script>(function(){try{var t=localStorage.getItem("xirpl1-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","light");}})();</script>
+  <script>(function () { try { var t = localStorage.getItem("xirpl1-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); document.documentElement.setAttribute("data-theme", t); } catch (e) { document.documentElement.setAttribute("data-theme", "light"); } })();</script>
   <title>Beranda — Kelas XI RPL 1</title>
   <meta name="description" content="Beranda kelas XI RPL 1: jadwal pelajaran, piket harian, dan info kelas.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body data-page="beranda">
 
   <header class="site-header">
@@ -26,12 +28,21 @@
         <a class="tab" data-page="guru" href="guru.html"><span class="dot"></span>Guru</a>
         <a class="tab" data-page="galeri" href="galeri.html"><span class="dot"></span>Galeri</a>
         <a class="tab" data-page="video" href="video.html"><span class="dot"></span>Video</a>
-        <a class="tab" data-page="motto" href="motto.html"><span class="dot"></span>Motto</a>
+        <a class="tab" data-page="komentar" href="komentar.html"><span class="dot"></span>Komentar</a>
       </nav>
       <div class="nav-actions">
-        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ganti ke tema gelap" aria-pressed="false">
-          <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>
-          <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ganti ke tema gelap"
+          aria-pressed="false">
+          <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4.5" />
+            <path
+              d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7" />
+          </svg>
+          <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z" />
+          </svg>
         </button>
         <button class="menu-toggle" id="menuToggle" aria-label="Buka menu" aria-expanded="false">
           <i class="hamburger"></i>
@@ -55,7 +66,8 @@
         </div>
         <span class="eyebrow">kelas.status === "aktif"</span>
         <h1>Selamat datang di ruang kelas <span class="accent">XI RPL 1</span></h1>
-        <p>Portal informasi kelas Rekayasa Perangkat Lunak — jadwal pelajaran, daftar piket, profil siswa &amp; guru, sampai dokumentasi kegiatan, semua ada di sini.</p>
+        <p>Portal informasi kelas Rekayasa Perangkat Lunak — jadwal pelajaran, daftar piket, profil siswa &amp; guru,
+          sampai dokumentasi kegiatan, semua ada di sini.</p>
       </div>
 
       <div class="terminal" aria-hidden="true">
@@ -103,6 +115,17 @@
       </div>
     </section>
 
+    <section class="container">
+      <div class="panel recent-comments-panel">
+        <div class="panel-head">
+          <h3>Komentar Terbaru</h3>
+          <span class="filetag" id="homeCommentsStatus">Memuat komentar...</span>
+          <a class="filetag" href="komentar.html">Lihat semua &amp; tulis komentar</a>
+        </div>
+        <div class="comments-list" id="homeCommentsList" aria-live="polite"></div>
+      </div>
+    </section>
+
     <section class="container grid-2">
       <div class="panel">
         <div class="panel-head">
@@ -128,7 +151,8 @@
       <div class="footer-inner">
         <div class="fcol">
           <h4>&lt;/&gt; XI RPL 1</h4>
-          <p style="max-width:260px">Website kelas XI Rekayasa Perangkat Lunak 1 — dibangun sebagai proyek kelas untuk menampilkan profil siswa, guru, jadwal, dan dokumentasi kegiatan.</p>
+          <p style="max-width:260px">Website kelas XI Rekayasa Perangkat Lunak 1 — dibangun sebagai proyek kelas untuk
+            menampilkan profil siswa, guru, jadwal, dan dokumentasi kegiatan.</p>
         </div>
         <div class="fcol">
           <h4>Navigasi</h4>
@@ -138,7 +162,7 @@
             <a href="guru.html">Daftar Guru</a>
             <a href="galeri.html">Galeri</a>
             <a href="video.html">Video</a>
-            <a href="motto.html">Motto</a>
+            <a href="komentar.html">Komentar</a>
           </div>
         </div>
         <div class="fcol">
@@ -164,7 +188,10 @@
     <div class="modal-box" id="globalModalBox"></div>
   </div>
 
-  <script src="data.js"></script>
-  <script src="script.js"></script>
+  <script src="js/data.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/app.js"></script>
 </body>
+
 </html>

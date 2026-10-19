@@ -8,7 +8,7 @@ const pageIds = {
   'index.html': [
     'themeToggle', 'menuToggle', 'tabbar', 'terminalBody', 'marqueeTrack',
     'jadwalList', 'piketList', 'statSiswaHero', 'statGuruHero', 'todayBadge',
-    'globalModal', 'globalModalBox'
+    'globalModal', 'globalModalBox', 'homeCommentsList', 'homeCommentsStatus'
   ],
   'siswa.html': [
     'themeToggle', 'menuToggle', 'tabbar', 'siswaSearch', 'siswaGrid',
@@ -26,8 +26,9 @@ const pageIds = {
     'themeToggle', 'menuToggle', 'tabbar', 'videoGrid',
     'globalModal', 'globalModalBox'
   ],
-  'motto.html': [
-    'themeToggle', 'menuToggle', 'tabbar', 'mottoStage',
+  'komentar.html': [
+    'themeToggle', 'menuToggle', 'tabbar', 'commentForm', 'commentInput',
+    'commentsList', 'commentNotice', 'commentConnectionStatus', 'loadOlderComments',
     'globalModal', 'globalModalBox'
   ]
 };

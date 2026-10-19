@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>(function(){try{var t=localStorage.getItem("xirpl1-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","light");}})();</script>
-  <title>Motto Siswa — Kelas XI RPL 1</title>
-  <meta name="description" content="Motto dari setiap siswa kelas XI RPL 1.">
+  <title>Komentar — Kelas XI RPL 1</title>
+  <meta name="description" content="Ruang diskusi anonim kelas XI RPL 1, dengan komentar yang dibagikan secara realtime.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body data-page="motto">
+<body data-page="komentar">
 
   <header class="site-header">
     <div class="navwrap">
@@ -26,7 +26,7 @@
         <a class="tab" data-page="guru" href="guru.html"><span class="dot"></span>Guru</a>
         <a class="tab" data-page="galeri" href="galeri.html"><span class="dot"></span>Galeri</a>
         <a class="tab" data-page="video" href="video.html"><span class="dot"></span>Video</a>
-        <a class="tab" data-page="motto" href="motto.html"><span class="dot"></span>Motto</a>
+        <a class="tab" data-page="komentar" href="komentar.html"><span class="dot"></span>Komentar</a>
       </nav>
       <div class="nav-actions">
         <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ganti ke tema gelap" aria-pressed="false">
@@ -42,14 +42,34 @@
 
   <main>
     <section class="container page-hero">
-      <span class="eyebrow">array(33) motto</span>
-      <h1>Motto Siswa</h1>
-      <p>Motto dari setiap siswa kelas XI RPL 1, melayang bebas di bawah ini. Ketuk salah satu untuk membacanya lebih jelas.</p>
+      <span class="eyebrow">komentar anonim()</span>
+      <h1>Komentar Pengunjung</h1>
+      <p>Ruang diskusi anonim kelas XI RPL 1. Komentar disimpan online dan dapat dilihat pengunjung lain; jangan bagikan informasi pribadi.</p>
     </section>
 
     <section class="container">
-      <div class="motto-stage" id="mottoStage"></div>
-      <p class="motto-hint">💬 ketuk salah satu kartu untuk membaca motto secara penuh</p>
+      <div class="comments-layout">
+        <form class="panel comment-form" id="commentForm">
+          <label for="commentInput">Tulis komentar</label>
+          <textarea id="commentInput" name="comment" maxlength="500" rows="5" required
+            placeholder="Tulis pesan yang sopan untuk kelas..."></textarea>
+          <div class="comment-form-footer">
+            <span id="commentCounter">0/500</span>
+            <button class="comment-submit" type="submit">Kirim anonim</button>
+          </div>
+          <p class="comment-notice" id="commentNotice" role="status" aria-live="polite"></p>
+        </form>
+        <div class="panel comments-panel">
+          <div class="panel-head">
+            <h3>Semua Komentar</h3>
+            <span class="filetag" id="commentConnectionStatus">Menghubungkan...</span>
+          </div>
+          <div class="comments-list" id="commentsList" aria-live="polite"></div>
+          <div class="comments-pagination">
+            <button class="comment-submit" id="loadOlderComments" type="button" hidden>Muat komentar sebelumnya</button>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -69,7 +89,7 @@
             <a href="guru.html">Daftar Guru</a>
             <a href="galeri.html">Galeri</a>
             <a href="video.html">Video</a>
-            <a href="motto.html">Motto</a>
+            <a href="komentar.html">Komentar</a>
           </div>
         </div>
         <div class="fcol">
@@ -95,7 +115,9 @@
     <div class="modal-box" id="globalModalBox"></div>
   </div>
 
-  <script src="data.js"></script>
-  <script src="script.js"></script>
+  <script src="js/data.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

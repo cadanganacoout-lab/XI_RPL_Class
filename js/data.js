@@ -135,270 +135,273 @@ const GURU = [
 
 const SISWA = [
   {
-    "id": "s01",
-    "nama": "Affandi Fathufrahman",
-    "jabatan": "Siswa",
-    "hobi": "Basket",
-    "catatan": "-",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    id: "s01",
+    nama: "Affandi Fathufrahman",
+    jabatan: "Siswa",
+    hobi: "Basket",
+    catatan: "-",
+    foto: "asset/profil/foto_awal/sementara.png",
   },
   {
-    "id": "s02",
-    "nama": "Ahmad Barak Neilfadli Hardiansyah",
-    "jabatan": "Siswa",
-    "hobi": "",
-    "catatan": "-",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    id: "s02",
+    nama: "Ahmad Barak Neilfadli Hardiansyah",
+    jabatan: "Siswa",
+    hobi: "",
+    catatan: "-",
+    foto: "asset/profil/foto_awal/sementara.png",
   },
   {
-    "id": "s03",
-    "nama": "Alecia Poppy Shakira Ayu Kirana",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    id: "s03",
+    nama: "Alecia Poppy Shakira Ayu Kirana",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/foto_awal/sementara.png",
   },
   {
-    "id": "s04",
-    "nama": "Alexa Aditya Cindra Dewi",
-    "jabatan": "Seketaris",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    id: "s04",
+    nama: "Alexa Aditya Cindra Dewi",
+    jabatan: "Seketaris",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/foto_awal/sementara.png",
   },
   {
-    "id": "s05",
-    "nama": "Amanda Cinthya Kasih",
-    "jabatan": "Seketaris dan presensi",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/manda.jpeg"
+    id: "s05",
+    nama: "Amanda Cinthya Kasih",
+    jabatan: "Seketaris dan presensi",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/manda.jpeg",
   },
   {
-    "id": "s06",
-    "nama": "Ardila Wahyuning Putri",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    id: "s06",
+    nama: "Ardila Wahyuning Putri",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/foto_awal/sementara.png",
   },
   {
-    "id": "s07",
-    "nama": "Aretha Maulina Noviatin",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/aretha.jpeg"
+    id: "s07",
+    nama: "Aretha Maulina Noviatin",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/aretha.jpeg",
   },
   {
-    "id": "s08",
-    "nama": "Atha Tandagra Suryansyah",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    id: "s08",
+    nama: "Atha Tandagra Suryansyah",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/foto_awal/sementara.png",
   },
   {
-    "id": "s09",
-    "nama": "Bagas Ardiansyah",
-    "jabatan": "Siswa",
-    "hobi": "PENCOLI KARAKTER ANIME",
-    "catatan": "-",
-    "foto": "asset/profil/bagas.jpeg"
+    id: "s09",
+    nama: "Bagas Ardiansyah",
+    jabatan: "Siswa",
+    hobi: "PENCOLI KARAKTER ANIME",
+    catatan: "-",
+    foto: "asset/profil/bagas.jpeg",
   },
   {
-    "id": "s10",
-    "nama": "Candy Al Azka",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    id: "s10",
+    nama: "Candy Al Azka",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/foto_awal/sementara.png",
   },
   {
-    "id": "s11",
-    "nama": "Celsia Ramadhani",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    id: "s11",
+    nama: "Celsia Ramadhani",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/foto_awal/sementara.png",
   },
   {
-    "id": "s12",
-    "nama": "Dimas Riang Ilham Saputra",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/dimas.jpeg"
+    id: "s12",
+    nama: "Dimas Riang Ilham Saputra",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/dimas.jpeg",
   },
   {
-    "id": "s13",
-    "nama": "Diva Ayu Permata",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/diva.jpeg"
+    id: "s13",
+    nama: "Diva Ayu Permata",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/diva.jpeg",
   },
   {
-    "id": "s14",
-    "nama": "Ena Zivana Idelia Gita",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/ena.jpeg"
+    id: "s14",
+    nama: "Ena Zivana Idelia Gita",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/ena.jpeg",
   },
   {
-    "id": "s15",
-    "nama": "Ficko Adiputra Perdana",
-    "jabatan": "Ketua Kelas",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    id: "s15",
+    nama: "Ficko Adiputra Perdana",
+    jabatan: "Ketua Kelas",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/foto_awal/sementara.png",
   },
   {
-    "id": "s16",
-    "nama": "Gayuh Gita Yulia Natasya",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/gita.jpeg"
+    id: "s16",
+    nama: "Gayuh Gita Yulia Natasya",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/gita.jpeg",
   },
   {
-    "id": "s17",
-    "nama": "Gilang Nur Maulida Faid",
-    "jabatan": "Siswa (Admin Website)",
-    "hobi": "Belajar Hal Baru",
-    "catatan": "Saya suka Membaca hal-hal baru.",
-    "foto": "asset/profil/gilang.jpg",
-    "portfolio": "https://tentangsayaaaa.vercel.app/"
+    id: "s17",
+    nama: "Gilang Nur Maulida Faid",
+    jabatan: "Siswa (Admin Website)",
+    hobi: "Belajar Hal Baru",
+    catatan: "Saya suka Membaca hal-hal baru.",
+    foto: "asset/profil/gilang.jpg",
+    portfolio: "https://gilangfaid.vercel.app/",
   },
   {
-    "id": "s18",
-    "nama": "Helcia Andika Putri",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/helcia.jpeg"
+    id: "s18",
+    nama: "Helcia Andika Putri",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/helcia.jpeg",
   },
   {
-    "id": "s19",
-    "nama": "Hedri Setiawan",
-    "jabatan": "Persensi Kelas",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/hendri.jpeg"
+    id: "s19",
+    nama: "Hedri Setiawan",
+    jabatan: "Persensi Kelas",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/hendri.jpeg",
+    portfolio: "https://portofoliohendri-chi.vercel.app/",
   },
   {
-    "id": "s20",
-    "nama": "Ilham Rofig Ananda Barocta",
-    "jabatan": "Siswa",
-    "hobi": "GAME, GAUSAH DITANYA",
-    "catatan": "ORANG GANGGUAN JIWA YANG LEPAS",
-    "foto": "asset/profil/rofig.jpeg"
+    id: "s20",
+    nama: "Ilham Rofig Ananda Barocta",
+    jabatan: "Siswa",
+    hobi: "GAME, GAUSAH DITANYA",
+    catatan: "ORANG GANGGUAN JIWA YANG LEPAS",
+    foto: "asset/profil/rofig.jpeg",
   },
   {
-    "id": "s21",
-    "nama": "Julian Tri Pratama",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/julian.jpeg"
+    id: "s21",
+    nama: "Julian Tri Pratama",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/julian.jpeg",
   },
   {
-    "id": "s22",
-    "nama": "Kenza Pratama",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/kenza.jpeg"
+    id: "s22",
+    nama: "Kenza Pratama",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/kenza.jpeg",
   },
   {
-    "id": "s23",
-    "nama": "Khaula Nendra Sukma Athafarel",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    id: "s23",
+    nama: "Khaula Nendra Sukma Athafarel",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/foto_awal/sementara.png",
   },
   {
-    "id": "s24",
-    "nama": "Meta Evilya Giovany",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    id: "s24",
+    nama: "Meta Evilya Giovany",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/foto_awal/sementara.png",
   },
   {
-    "id": "s25",
-    "nama": "Muhamad Akbar Fikriansyah",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/akbar.jpeg"
+    id: "s25",
+    nama: "Muhamad Akbar Fikriansyah",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/akbar.jpeg",
+    portfolio: "https://portfolio-ruby-pi-2zvompmf7f.vercel.app/",
   },
   {
-    "id": "s26",
-    "nama": "Nabila' Atha Nur Al Fiyah",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/nabila.jpeg"
+    id: "s26",
+    nama: "Nabila' Atha Nur Al Fiyah",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/nabila.jpeg",
   },
   {
-    "id": "s27",
-    "nama": "Nurul Safika",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/narji.jpg"
+    id: "s27",
+    nama: "Nurul Safika",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/narji.jpg",
   },
   {
-    "id": "s28",
-    "nama": "Ragil Bagus Nugroho",
-    "jabatan": "Bendahara",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/ragilb.jpeg"
+    id: "s28",
+    nama: "Ragil Bagus Nugroho",
+    jabatan: "Bendahara",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/ragilb.jpeg",
   },
   {
-    "id": "s29",
-    "nama": "Ragil Satria Risdiyanto",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    id: "s29",
+    nama: "Ragil Satria Risdiyanto",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/foto_awal/sementara.png",
   },
   {
-    "id": "s30",
-    "nama": "Relyta Triya Ayu Lestari",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "- mencatat rangkuman pelajaran.",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    id: "s30",
+    nama: "Relyta Triya Ayu Lestari",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "- mencatat rangkuman pelajaran.",
+    foto: "asset/profil/foto_awal/sementara.png",
   },
   {
-    "id": "s31",
-    "nama": "Rifky Aditya Saputra",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/rifki.jpeg"
+    id: "s31",
+    nama: "Rifky Aditya Saputra",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/rifki.jpeg",
+    portfolio: "https://adittt-magangjogja.github.io/meee/",
   },
   {
-    "id": "s32",
-    "nama": "Satria Pradika Bayu Pratama",
-    "jabatan": "Siswa",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/foto_awal/sementara.png"
+    id: "s32",
+    nama: "Satria Pradika Bayu Pratama",
+    jabatan: "Siswa",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/foto_awal/sementara.png",
   },
   {
-    "id": "s33",
-    "nama": "Sultan Pasha Ibrahim Sukarno",
-    "jabatan": "Seketaris",
-    "hobi": "-",
-    "catatan": "-",
-    "foto": "asset/profil/foto_awal/sementara.png"
-  }
+    id: "s33",
+    nama: "Sultan Pasha Ibrahim Sukarno",
+    jabatan: "Seketaris",
+    hobi: "-",
+    catatan: "-",
+    foto: "asset/profil/foto_awal/sementara.png",
+  },
 ];
 
 const PIKET = {
@@ -1639,139 +1642,4 @@ const VIDEO = [
     "deskripsi": "Dokumentasi tugas senam irama PJOK kelompok 4."
   }
   
-];
-
-const MOTTO = [
-  {
-    "nama": "Affandi Fathufrahman",
-    "motto": "Belajar hari ini, berkarya esok hari."
-  },
-  {
-    "nama": "Ahmad Barak Neilfadli Hardiansyah",
-    "motto": "Error bukan akhir, tapi awal dari solusi."
-  },
-  {
-    "nama": "Alecia Poppy Shakira Ayu Kirana",
-    "motto": "Konsisten itu lebih penting dari cepat."
-  },
-  {
-    "nama": "Alexa Aditya Cindra Dewi",
-    "motto": "Kode boleh rumit, semangat harus tetap jernih."
-  },
-  {
-    "nama": "Amanda Cinthya Kasih",
-    "motto": "Gagal compile bukan berarti gagal total."
-  },
-  {
-    "nama": "Ardila Wahyuning Putri",
-    "motto": "Setiap baris kode adalah langkah kecil menuju mimpi besar."
-  },
-  {
-    "nama": "Aretha Maulina Noviatin",
-    "motto": "Jangan takut salah, takutlah tidak pernah mencoba."
-  },
-  {
-    "nama": "Atha Tandagra Suryansyah",
-    "motto": "Logika kuat, hasil pun kuat."
-  },
-  {
-    "nama": "Bagas Ardiansyah",
-    "motto": "Belajar dari bug, tumbuh jadi tangguh."
-  },
-  {
-    "nama": "Candy Al Azka",
-    "motto": "Ide sekecil apapun layak dicoba jadi kode."
-  },
-  {
-    "nama": "Celsia Ramadhani",
-    "motto": "Fokus pada progres, bukan kesempurnaan."
-  },
-  {
-    "nama": "Dimas Riang Ilham Saputra",
-    "motto": "Coding itu seni menyelesaikan masalah."
-  },
-  {
-    "nama": "Diva Ayu Permata",
-    "motto": "Hari ini belajar, besok jadi ahli."
-  },
-  {
-    "nama": "Ena Zivana Idelia Gita",
-    "motto": "Kesabaran adalah compiler terbaik untuk mimpi."
-  },
-  {
-    "nama": "Ficko Adiputra Perdana",
-    "motto": "Satu fitur selesai, satu langkah lebih dekat."
-  },
-  {
-    "nama": "Gayuh Gita Yulia Natasya",
-    "motto": "Semangat belajar tidak pernah out of scope."
-  },
-  {
-    "nama": "Gilang Nur Maulida Faid",
-    "motto": "Ilmu RPL bekal masa depan yang nyata."
-  },
-  {
-    "nama": "Helcia Andika Putri",
-    "motto": "Jangan copy paste hidup, tulis sendiri ceritamu."
-  },
-  {
-    "nama": "Hedri Setiawan",
-    "motto": "Berani mencoba, berani memperbaiki."
-  },
-  {
-    "nama": "Ilham Rofig Ananda Barocta",
-    "motto": "Kegagalan hanyalah warning, bukan error fatal."
-  },
-  {
-    "nama": "Julian Tri Pratama",
-    "motto": "Terus belajar walau signal lemah, semangat tetap kuat."
-  },
-  {
-    "nama": "Kenza Pratama",
-    "motto": "Detail kecil menentukan kualitas besar."
-  },
-  {
-    "nama": "Khaula Nendra Sukma Athafarel",
-    "motto": "Kolaborasi adalah kunci proyek yang sukses."
-  },
-  {
-    "nama": "Meta Evilya Giovany",
-    "motto": "Mimpi besar dimulai dari baris kode pertama."
-  },
-  {
-    "nama": "Muhamad Akbar Fikriansyah",
-    "motto": "Jangan pernah berhenti nge-push diri sendiri."
-  },
-  {
-    "nama": "Nabila' Atha Nur Al Fiyah",
-    "motto": "Belajar itu proses looping tanpa henti."
-  },
-  {
-    "nama": "Nurul Safika",
-    "motto": "Kesalahan hari ini, pelajaran untuk versi diri yang baru."
-  },
-  {
-    "nama": "Ragil Bagus Nugroho",
-    "motto": "Semangat belajar adalah variabel yang harus selalu di-update."
-  },
-  {
-    "nama": "Ragil Satria Risdiyanto",
-    "motto": "Rajin praktik, teori pun jadi nyata."
-  },
-  {
-    "nama": "Relyta Triya Ayu Lestari",
-    "motto": "Ilmu yang dibagikan tidak pernah berkurang."
-  },
-  {
-    "nama": "Rifky Aditya Saputra",
-    "motto": "Konsisten kecil lebih baik dari niat besar tanpa aksi."
-  },
-  {
-    "nama": "Satria Pradika Bayu Pratama",
-    "motto": "Cintai proses, hasil akan mengikuti."
-  },
-  {
-    "nama": "Sultan Pasha Ibrahim Sukarno",
-    "motto": "Kelas XI RPL 1, belajar bersama menuju hebat."
-  }
 ];

@@ -5,8 +5,8 @@
 - Gunakan nama file lowercase dan kebab-case jika menambahkan foto baru.
 - Simpan foto siswa/guru di `asset/profil/`.
 - Simpan foto kegiatan di `asset/galeri/`.
-- Field `foto` pada `data.js` adalah sumber kebenaran untuk setiap mapping.
-- Data tanpa foto asli menggunakan avatar inisial otomatis dari `script.js`.
+- Field `foto` pada `js/data.js` adalah sumber kebenaran untuk setiap mapping.
+- Data tanpa foto asli menggunakan avatar inisial otomatis dari `js/app.js`.
 
 ## Foto Siswa
 
