@@ -554,8 +554,6 @@ function initVideo() {
    ===================================================================== */
 const MAX_COMMENT_LENGTH = 500;
 const COMMENTS_PAGE_SIZE = 50;
-const COMMENT_SELECT =
-  "id, content, parent_id, created_at, parent:comments!comments_parent_id_fkey(content)";
 
 function createCommentsClient() {
   const config = window.SUPABASE_CONFIG;
@@ -648,6 +646,29 @@ function showCommentError(container, message) {
   container.append(error);
 }
 
+async function addParentContent(client, comments) {
+  const parentIds = [
+    ...new Set(
+      comments
+        .filter((comment) => comment.parent_id)
+        .map((comment) => comment.parent_id),
+    ),
+  ];
+  if (!parentIds.length) return comments;
+
+  const { data, error } = await client
+    .from("comments")
+    .select("id, content")
+    .in("id", parentIds);
+  if (error) throw error;
+
+  const contentById = new Map((data || []).map((comment) => [comment.id, comment.content]));
+  return comments.map((comment) => ({
+    ...comment,
+    parentContent: contentById.get(comment.parent_id) || null,
+  }));
+}
+
 function addCommentToList(container, comment, limit, onReply) {
   if (
     !container ||
@@ -695,12 +716,13 @@ function connectCommentFeed({ list, status, limit, showOlder, onReply }) {
     status.textContent = "Menghubungkan ke ruang diskusi...";
     const { data, error } = await client
       .from("comments")
-      .select(COMMENT_SELECT)
+      .select("id, content, parent_id, created_at")
       .order("id", { ascending: false })
       .limit(pageSize);
     if (error) throw error;
-    renderComments(list, data || [], onReply);
-    oldestLoaded = data && data.length ? data[data.length - 1] : null;
+    const comments = await addParentContent(client, data || []);
+    renderComments(list, comments, onReply);
+    oldestLoaded = comments.length ? comments[comments.length - 1] : null;
     if (showOlder) showOlder.hidden = !data || data.length < pageSize;
     status.textContent = "Terhubung · komentar anonim";
   }
@@ -713,13 +735,14 @@ function connectCommentFeed({ list, status, limit, showOlder, onReply }) {
     try {
       const { data, error } = await client
         .from("comments")
-        .select(COMMENT_SELECT)
+        .select("id, content, parent_id, created_at")
         .lt("id", oldestLoaded.id)
         .order("id", { ascending: false })
         .limit(pageSize);
       if (error) throw error;
-      (data || []).forEach((comment) => list.append(makeCommentCard(comment, onReply)));
-      oldestLoaded = data && data.length ? data[data.length - 1] : null;
+      const comments = await addParentContent(client, data || []);
+      comments.forEach((comment) => list.append(makeCommentCard(comment, onReply)));
+      oldestLoaded = comments.length ? comments[comments.length - 1] : null;
       if (showOlder) showOlder.hidden = !data || data.length < pageSize;
       status.textContent = "Terhubung · komentar anonim";
     } catch (error) {
