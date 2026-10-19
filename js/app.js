@@ -574,15 +574,21 @@ function createCommentsClient() {
   return window.supabase.createClient(config.url, config.anonKey);
 }
 
-function makeCommentCard(comment) {
+function makeCommentCard(comment, onReply) {
   const card = document.createElement("article");
-  card.className = "comment-card";
+  card.className = comment.parent_id ? "comment-card comment-reply" : "comment-card";
   card.dataset.commentId = comment.id;
 
   const header = document.createElement("div");
   header.className = "comment-card-head";
   const author = document.createElement("strong");
   author.textContent = "Anonim";
+  if (comment.parent_id) {
+    const replyLabel = document.createElement("span");
+    replyLabel.className = "comment-reply-label";
+    replyLabel.textContent = `↳ Balasan untuk komentar #${comment.parent_id}`;
+    author.append(" ", replyLabel);
+  }
   const time = document.createElement("time");
   const createdAt = new Date(comment.created_at);
   time.dateTime = comment.created_at;
@@ -593,17 +599,29 @@ function makeCommentCard(comment) {
         timeStyle: "short",
       });
 
+  const actions = document.createElement("div");
+  actions.className = "comment-actions";
+  if (onReply) {
+    const replyButton = document.createElement("button");
+    replyButton.className = "comment-reply-button";
+    replyButton.type = "button";
+    replyButton.textContent = "Balas";
+    replyButton.addEventListener("click", () => onReply(comment));
+    actions.append(replyButton);
+  }
+  actions.append(time);
+
   const text = document.createElement("p");
   text.className = "comment-text";
   text.textContent = comment.content;
-  header.append(author, time);
+  header.append(author, actions);
   card.append(header, text);
   return card;
 }
 
-function renderComments(container, comments) {
+function renderComments(container, comments, onReply) {
   if (!container) return;
-  container.replaceChildren(...comments.map(makeCommentCard));
+  container.replaceChildren(...comments.map((comment) => makeCommentCard(comment, onReply)));
   if (!comments.length) {
     const empty = document.createElement("p");
     empty.className = "comments-empty";
@@ -620,7 +638,7 @@ function showCommentError(container, message) {
   container.append(error);
 }
 
-function addCommentToList(container, comment, limit) {
+function addCommentToList(container, comment, limit, onReply) {
   if (
     !container ||
     Array.from(container.querySelectorAll(".comment-card")).some(
@@ -629,7 +647,7 @@ function addCommentToList(container, comment, limit) {
   ) return;
   const empty = container.querySelector(".comments-empty");
   if (empty) empty.remove();
-  const card = makeCommentCard(comment);
+  const card = makeCommentCard(comment, onReply);
   card.dataset.commentId = comment.id;
   container.prepend(card);
   if (limit) {
@@ -639,7 +657,7 @@ function addCommentToList(container, comment, limit) {
   }
 }
 
-function connectCommentFeed({ list, status, limit, showOlder }) {
+function connectCommentFeed({ list, status, limit, showOlder, onReply }) {
   let client;
   try {
     client = createCommentsClient();
@@ -667,11 +685,11 @@ function connectCommentFeed({ list, status, limit, showOlder }) {
     status.textContent = "Menghubungkan ke ruang diskusi...";
     const { data, error } = await client
       .from("comments")
-      .select("id, content, created_at")
+      .select("id, content, parent_id, created_at")
       .order("id", { ascending: false })
       .limit(pageSize);
     if (error) throw error;
-    renderComments(list, data || []);
+    renderComments(list, data || [], onReply);
     oldestLoaded = data && data.length ? data[data.length - 1] : null;
     if (showOlder) showOlder.hidden = !data || data.length < pageSize;
     status.textContent = "Terhubung · komentar anonim";
@@ -685,12 +703,12 @@ function connectCommentFeed({ list, status, limit, showOlder }) {
     try {
       const { data, error } = await client
         .from("comments")
-        .select("id, content, created_at")
+        .select("id, content, parent_id, created_at")
         .lt("id", oldestLoaded.id)
         .order("id", { ascending: false })
         .limit(pageSize);
       if (error) throw error;
-      (data || []).forEach((comment) => list.append(makeCommentCard(comment)));
+      (data || []).forEach((comment) => list.append(makeCommentCard(comment, onReply)));
       oldestLoaded = data && data.length ? data[data.length - 1] : null;
       if (showOlder) showOlder.hidden = !data || data.length < pageSize;
       status.textContent = "Terhubung · komentar anonim";
@@ -713,7 +731,7 @@ function connectCommentFeed({ list, status, limit, showOlder }) {
     .on(
       "postgres_changes",
       { event: "INSERT", schema: "public", table: "comments" },
-      ({ new: comment }) => addCommentToList(list, comment, limit),
+      ({ new: comment }) => addCommentToList(list, comment, limit, onReply),
     )
     .subscribe((state) => {
       if (state === "SUBSCRIBED") status.textContent = "Terhubung · komentar anonim";
@@ -739,15 +757,51 @@ function initKomentar() {
   const list = document.getElementById("commentsList");
   const status = document.getElementById("commentConnectionStatus");
   const showOlder = document.getElementById("loadOlderComments");
-  if (!form || !input || !counter || !notice || !list || !status) return;
+  const replyingTo = document.getElementById("replyingTo");
+  const replyingToText = document.getElementById("replyingToText");
+  const cancelReply = document.getElementById("cancelReply");
+  const submitButton = document.getElementById("commentSubmit");
+  if (
+    !form ||
+    !input ||
+    !counter ||
+    !notice ||
+    !list ||
+    !status ||
+    !replyingTo ||
+    !replyingToText ||
+    !cancelReply ||
+    !submitButton
+  ) return;
 
-  const feed = connectCommentFeed({ list, status, showOlder });
+  let replyToId = null;
+  function setReplyTarget(comment) {
+    replyToId = comment.parent_id || comment.id;
+    replyingToText.textContent = `Membalas komentar #${replyToId}`;
+    replyingTo.hidden = false;
+    submitButton.textContent = "Kirim balasan";
+    input.focus();
+  }
+  function clearReplyTarget() {
+    replyToId = null;
+    replyingTo.hidden = true;
+    replyingToText.textContent = "";
+    submitButton.textContent = "Kirim anonim";
+  }
+
+  const feed = connectCommentFeed({
+    list,
+    status,
+    showOlder,
+    onReply: setReplyTarget,
+  });
   if (!feed) {
-    form.querySelector("button[type='submit']").disabled = true;
+    submitButton.disabled = true;
     notice.textContent = "Komentar online akan aktif setelah konfigurasi Supabase.";
     return;
   }
 
+  cancelReply.addEventListener("click", clearReplyTarget);
   input.addEventListener("input", () => {
     counter.textContent = `${input.value.length}/${MAX_COMMENT_LENGTH}`;
   });
@@ -765,18 +819,23 @@ function initKomentar() {
     }
 
     try {
-      const button = form.querySelector("button[type='submit']");
-      button.disabled = true;
+      submitButton.disabled = true;
       notice.textContent = "Mengirim komentar...";
-      const { error } = await feed.client.from("comments").insert({ content: text });
+      const isReply = replyToId !== null;
+      const comment = { content: text };
+      if (isReply) comment.parent_id = replyToId;
+      const { error } = await feed.client.from("comments").insert(comment);
       if (error) throw error;
       input.value = "";
       counter.textContent = `0/${MAX_COMMENT_LENGTH}`;
-      notice.textContent = "Komentar terkirim ke ruang diskusi.";
+      clearReplyTarget();
+      notice.textContent = isReply
+        ? "Balasan terkirim ke ruang diskusi."
+        : "Komentar terkirim ke ruang diskusi.";
     } catch (error) {
       notice.textContent = `Komentar gagal dikirim: ${error.message}`;
     } finally {
-      form.querySelector("button[type='submit']").disabled = false;
+      submitButton.disabled = false;
     }
   });
 }

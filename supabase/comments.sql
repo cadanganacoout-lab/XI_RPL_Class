@@ -1,13 +1,18 @@
 create table if not exists public.comments (
   id bigint generated always as identity primary key,
   content text not null check (char_length(trim(content)) between 1 and 500),
+  parent_id bigint references public.comments(id) on delete cascade,
   created_at timestamptz not null default now()
 );
+
+alter table public.comments
+  add column if not exists parent_id bigint references public.comments(id) on delete cascade;
 
 alter table public.comments enable row level security;
 
 revoke all on public.comments from anon, authenticated;
-grant select, insert on public.comments to anon, authenticated;
+grant select on public.comments to anon, authenticated;
+grant insert (content, parent_id) on public.comments to anon, authenticated;
 
 drop policy if exists "Comments are visible to everyone" on public.comments;
 create policy "Comments are visible to everyone"

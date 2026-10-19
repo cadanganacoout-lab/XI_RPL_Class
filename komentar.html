@@ -51,11 +51,15 @@
       <div class="comments-layout">
         <form class="panel comment-form" id="commentForm">
           <label for="commentInput">Tulis komentar</label>
+          <div class="replying-to" id="replyingTo" hidden>
+            <span id="replyingToText"></span>
+            <button class="reply-cancel" id="cancelReply" type="button">Batal</button>
+          </div>
           <textarea id="commentInput" name="comment" maxlength="500" rows="5" required
             placeholder="Tulis pesan yang sopan untuk kelas..."></textarea>
           <div class="comment-form-footer">
             <span id="commentCounter">0/500</span>
-            <button class="comment-submit" type="submit">Kirim anonim</button>
+            <button class="comment-submit" id="commentSubmit" type="submit">Kirim anonim</button>
           </div>
           <p class="comment-notice" id="commentNotice" role="status" aria-live="polite"></p>
         </form>
