@@ -29,6 +29,7 @@ const pageIds = {
   'komentar.html': [
     'themeToggle', 'menuToggle', 'tabbar', 'commentForm', 'commentInput',
     'commentsList', 'commentNotice', 'commentConnectionStatus', 'loadOlderComments',
+    'discussionScroll',
     'replyingTo', 'replyingToText', 'cancelReply', 'commentSubmit',
     'globalModal', 'globalModalBox'
   ]

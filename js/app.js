@@ -711,6 +711,7 @@ function connectCommentFeed({ list, status, limit, showOlder, onReply }) {
   const pageSize = limit || COMMENTS_PAGE_SIZE;
   let oldestLoaded = null;
   let loadingOlder = false;
+  let hasOlder = false;
 
   async function loadLatest() {
     status.textContent = "Menghubungkan ke ruang diskusi...";
@@ -723,12 +724,13 @@ function connectCommentFeed({ list, status, limit, showOlder, onReply }) {
     const comments = await addParentContent(client, data || []);
     renderComments(list, comments, onReply);
     oldestLoaded = comments.length ? comments[comments.length - 1] : null;
+    hasOlder = Boolean(data && data.length === pageSize);
     if (showOlder) showOlder.hidden = !data || data.length < pageSize;
     status.textContent = "Terhubung · komentar anonim";
   }
 
   async function loadOlder() {
-    if (!oldestLoaded || loadingOlder) return;
+    if (!oldestLoaded || loadingOlder || !hasOlder) return;
     loadingOlder = true;
     showOlder.disabled = true;
     status.textContent = "Memuat komentar sebelumnya...";
@@ -743,6 +745,7 @@ function connectCommentFeed({ list, status, limit, showOlder, onReply }) {
       const comments = await addParentContent(client, data || []);
       comments.forEach((comment) => list.append(makeCommentCard(comment, onReply)));
       oldestLoaded = comments.length ? comments[comments.length - 1] : null;
+      hasOlder = Boolean(data && data.length === pageSize);
       if (showOlder) showOlder.hidden = !data || data.length < pageSize;
       status.textContent = "Terhubung · komentar anonim";
     } catch (error) {
@@ -754,6 +757,14 @@ function connectCommentFeed({ list, status, limit, showOlder, onReply }) {
   }
 
   if (showOlder) showOlder.addEventListener("click", loadOlder);
+  if (!limit && list.parentElement) {
+    const scrollArea = list.parentElement;
+    scrollArea.addEventListener("scroll", () => {
+      const nearBottom =
+        scrollArea.scrollTop + scrollArea.clientHeight >= scrollArea.scrollHeight - 100;
+      if (nearBottom && hasOlder) loadOlder();
+    });
+  }
   loadLatest().catch((error) => {
     status.textContent = `Gagal memuat komentar: ${error.message}`;
     showCommentError(list, "Komentar gagal dimuat. Periksa koneksi lalu muat ulang halaman.");

@@ -51,12 +51,7 @@
   },
   {
     "file": "komentar.html",
-    "msgs": [
-      {
-        "type": "warn",
-        "text": "[data] Jumlah galeri (47) tidak sesuai target (40)."
-      }
-    ],
+    "msgs": [],
     "missingIds": []
   }
 ]

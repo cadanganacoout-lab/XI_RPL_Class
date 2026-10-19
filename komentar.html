@@ -43,8 +43,8 @@
   <main>
     <section class="container page-hero">
       <span class="eyebrow">komentar anonim()</span>
-      <h1>Komentar Pengunjung</h1>
-      <p>Ruang diskusi anonim kelas XI RPL 1. Komentar disimpan online dan dapat dilihat pengunjung lain; jangan bagikan informasi pribadi.</p>
+      <h1>Ruang Diskusi</h1>
+      <p>Diskusi anonim kelas XI RPL 1. Komentar terbaru tampil lebih dulu; gulir ke bawah untuk memuat komentar lama. Jangan bagikan informasi pribadi.</p>
     </section>
 
     <section class="container">
@@ -68,9 +68,11 @@
             <h3>Semua Komentar</h3>
             <span class="filetag" id="commentConnectionStatus">Menghubungkan...</span>
           </div>
-          <div class="comments-list" id="commentsList" aria-live="polite"></div>
-          <div class="comments-pagination">
-            <button class="comment-submit" id="loadOlderComments" type="button" hidden>Muat komentar sebelumnya</button>
+          <div class="discussion-scroll" id="discussionScroll" aria-label="Daftar komentar">
+            <div class="comments-list" id="commentsList" aria-live="polite"></div>
+            <div class="comments-pagination">
+              <button class="comment-submit" id="loadOlderComments" type="button" hidden>Muat komentar sebelumnya</button>
+            </div>
           </div>
         </div>
       </div>
