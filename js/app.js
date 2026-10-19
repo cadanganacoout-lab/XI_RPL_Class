@@ -554,6 +554,8 @@ function initVideo() {
    ===================================================================== */
 const MAX_COMMENT_LENGTH = 500;
 const COMMENTS_PAGE_SIZE = 50;
+const COMMENT_SELECT =
+  "id, content, parent_id, created_at, parent:comments!comments_parent_id_fkey(content)";
 
 function createCommentsClient() {
   const config = window.SUPABASE_CONFIG;
@@ -583,12 +585,6 @@ function makeCommentCard(comment, onReply) {
   header.className = "comment-card-head";
   const author = document.createElement("strong");
   author.textContent = "Anonim";
-  if (comment.parent_id) {
-    const replyLabel = document.createElement("span");
-    replyLabel.className = "comment-reply-label";
-    replyLabel.textContent = `↳ Balasan untuk komentar #${comment.parent_id}`;
-    author.append(" ", replyLabel);
-  }
   const time = document.createElement("time");
   const createdAt = new Date(comment.created_at);
   time.dateTime = comment.created_at;
@@ -616,6 +612,20 @@ function makeCommentCard(comment, onReply) {
   text.textContent = comment.content;
   header.append(author, actions);
   card.append(header, text);
+  if (comment.parent_id) {
+    const replyContext = document.createElement("blockquote");
+    replyContext.className = "comment-reply-context";
+    const replyLabel = document.createElement("span");
+    replyLabel.className = "comment-reply-label";
+    replyLabel.textContent = "Membalas:";
+    const parentText = document.createElement("span");
+    parentText.textContent =
+      comment.parent?.content ||
+      comment.parentContent ||
+      "Komentar asal tidak tersedia.";
+    replyContext.append(replyLabel, parentText);
+    card.insertBefore(replyContext, text);
+  }
   return card;
 }
 
@@ -685,7 +695,7 @@ function connectCommentFeed({ list, status, limit, showOlder, onReply }) {
     status.textContent = "Menghubungkan ke ruang diskusi...";
     const { data, error } = await client
       .from("comments")
-      .select("id, content, parent_id, created_at")
+      .select(COMMENT_SELECT)
       .order("id", { ascending: false })
       .limit(pageSize);
     if (error) throw error;
@@ -703,7 +713,7 @@ function connectCommentFeed({ list, status, limit, showOlder, onReply }) {
     try {
       const { data, error } = await client
         .from("comments")
-        .select("id, content, parent_id, created_at")
+        .select(COMMENT_SELECT)
         .lt("id", oldestLoaded.id)
         .order("id", { ascending: false })
         .limit(pageSize);
@@ -731,7 +741,21 @@ function connectCommentFeed({ list, status, limit, showOlder, onReply }) {
     .on(
       "postgres_changes",
       { event: "INSERT", schema: "public", table: "comments" },
-      ({ new: comment }) => addCommentToList(list, comment, limit, onReply),
+      async ({ new: comment }) => {
+        if (comment.parent_id) {
+          const { data, error } = await client
+            .from("comments")
+            .select("content")
+            .eq("id", comment.parent_id)
+            .maybeSingle();
+          if (error) {
+            status.textContent = `Balasan masuk, tetapi komentar asal gagal dimuat: ${error.message}`;
+          } else {
+            comment.parentContent = data?.content;
+          }
+        }
+        addCommentToList(list, comment, limit, onReply);
+      },
     )
     .subscribe((state) => {
       if (state === "SUBSCRIBED") status.textContent = "Terhubung · komentar anonim";

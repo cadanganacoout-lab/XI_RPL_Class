@@ -710,7 +710,19 @@ body, .panel, .site-header, .site-footer, .tab, .theme-toggle, .menu-toggle,
 .comment-card-head strong{ color:var(--accent-blue); }
 .comment-card-head time{ color:var(--muted); font-size:11px; }
 .comment-reply{ margin-left:22px; padding-left:12px; border-left:2px solid var(--accent-blue-border); }
-.comment-reply-label{ color:var(--muted); font-family:var(--font-body); font-size:11px; font-weight:500; }
+.comment-reply-context{
+  display:grid;
+  gap:3px;
+  margin:8px 0 0;
+  padding:8px 10px;
+  border-left:2px solid var(--accent-blue-border);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  background:var(--panel-alt);
+  color:var(--ink-soft);
+  font-size:12px;
+  overflow-wrap:anywhere;
+}
+.comment-reply-label{ color:var(--muted); font-family:var(--font-body); font-size:11px; font-weight:600; }
 .comment-actions{ display:flex; align-items:center; gap:12px; flex:none; }
 .comment-reply-button, .reply-cancel{
   border:0;

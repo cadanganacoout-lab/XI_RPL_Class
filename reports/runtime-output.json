@@ -1,32 +1,62 @@
 [
   {
     "file": "index.html",
-    "msgs": [],
+    "msgs": [
+      {
+        "type": "warn",
+        "text": "[data] Jumlah galeri (47) tidak sesuai target (40)."
+      }
+    ],
     "missingIds": []
   },
   {
     "file": "siswa.html",
-    "msgs": [],
+    "msgs": [
+      {
+        "type": "warn",
+        "text": "[data] Jumlah galeri (47) tidak sesuai target (40)."
+      }
+    ],
     "missingIds": []
   },
   {
     "file": "guru.html",
-    "msgs": [],
+    "msgs": [
+      {
+        "type": "warn",
+        "text": "[data] Jumlah galeri (47) tidak sesuai target (40)."
+      }
+    ],
     "missingIds": []
   },
   {
     "file": "galeri.html",
-    "msgs": [],
+    "msgs": [
+      {
+        "type": "warn",
+        "text": "[data] Jumlah galeri (47) tidak sesuai target (40)."
+      }
+    ],
     "missingIds": []
   },
   {
     "file": "video.html",
-    "msgs": [],
+    "msgs": [
+      {
+        "type": "warn",
+        "text": "[data] Jumlah galeri (47) tidak sesuai target (40)."
+      }
+    ],
     "missingIds": []
   },
   {
-    "file": "motto.html",
-    "msgs": [],
+    "file": "komentar.html",
+    "msgs": [
+      {
+        "type": "warn",
+        "text": "[data] Jumlah galeri (47) tidak sesuai target (40)."
+      }
+    ],
     "missingIds": []
   }
 ]
