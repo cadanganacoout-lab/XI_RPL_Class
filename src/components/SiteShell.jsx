@@ -63,7 +63,7 @@ export function SiteHeader({ activePage }) {
         <a href="#/beranda" className="brand">
           <span className="brand-mark" aria-hidden="true">&lt;/&gt;</span>
           <span>
-            XI RPL 1
+            XI RPL
             <small>SMK PGRI 2 Ponorogo</small>
           </span>
         </a>

@@ -82,7 +82,7 @@ export function TeachersPage() {
           <span className="route-label">/guru</span>
           <h1>Daftar Guru</h1>
           <p>
-            Guru-guru yang mengajar di kelas XI RPL 1, lengkap dengan mata pelajaran
+            Guru-guru yang mengajar di kelas XI RPL, lengkap dengan mata pelajaran
             yang diampu.
           </p>
       </section>

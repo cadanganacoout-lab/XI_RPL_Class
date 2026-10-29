@@ -1,6 +1,6 @@
-# Website Kelas XI RPL 1
+# Website Kelas XI RPL
 
-Website untuk kelas XI RPL 1 SMK PGRI 2 Ponorogo. Jalankan lokal dengan Vite atau build ke situs statis untuk deployment.
+Website untuk kelas XI RPL SMK PGRI 2 Ponorogo. Jalankan lokal dengan Vite atau build ke situs statis untuk deployment.
 
 ## Struktur Folder
 
@@ -38,7 +38,8 @@ Buka `http://localhost:5173/` melalui Vite untuk menjalankan situs. Beranda dan 
 - Komentar pengunjung disimpan di Supabase PostgreSQL dan disiarkan melalui Supabase Realtime. Halaman Ruang Diskusi memakai panel gulir dengan pemuatan bertahap komentar lama; Beranda menampilkan tiga komentar terbaru.
 - Untuk mengaktifkan komentar bersama, jalankan `supabase/comments.sql` di SQL Editor project Supabase, lalu isi URL project dan publishable/anon key pada `js/supabase-config.js`. Jika tabel sudah dibuat dengan versi SQL sebelumnya, jalankan ulang file SQL yang sudah diperbarui untuk menambahkan dukungan balasan.
 - Publishable/anon key memang digunakan di browser; kebijakan Row Level Security pada SQL membatasi akses. Jangan pernah masukkan `service_role` key ke situs.
-- Hubungkan repository GitHub ini ke Vercel dan deploy dari root project. Komentar anonim bersifat publik; pengunjung dapat membaca dan menambahkan komentar, tetapi hanya pemilik project yang dapat menghapusnya dari Supabase Dashboard. Form membatasi 500 karakter; untuk mencegah spam lebih lanjut, tambahkan CAPTCHA/rate limiting sebelum situs dibuka luas.
+- **Deploy ke Vercel:** impor repository GitHub ini di Vercel, gunakan root directory `.` dan biarkan konfigurasi proyek menentukan instalasi `npm ci`, build `npm run build`, serta output `dist`. Setelah deploy pertama, setiap push ke branch yang terhubung akan memicu deployment baru. Situs memakai navigasi hash, jadi tidak memerlukan rewrite rute.
+- Komentar anonim bersifat publik; pengunjung dapat membaca dan menambahkan komentar, tetapi hanya pemilik project yang dapat menghapusnya dari Supabase Dashboard. Form membatasi 500 karakter; untuk mencegah spam lebih lanjut, tambahkan CAPTCHA/rate limiting sebelum situs dibuka luas.
 - Simpan aset baru di subfolder yang sesuai di `asset/` dan sesuaikan field `foto` di `js/data.js`.
 - Gunakan `docs/foto-manifest.md` untuk mencatat pemetaan foto profil.
 - Jalankan `npm run check` setelah perubahan untuk memeriksa seluruh rute React.

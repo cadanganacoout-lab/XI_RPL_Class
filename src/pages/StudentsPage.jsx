@@ -89,7 +89,7 @@ export function StudentsPage() {
           <span className="route-label">/siswa</span>
           <h1>Daftar Siswa</h1>
           <p>
-            Seluruh siswa aktif kelas XI RPL 1. Ketuk kolom pencarian untuk menemukan siswa
+            Seluruh siswa aktif kelas XI RPL. Ketuk kolom pencarian untuk menemukan siswa
             berdasarkan nama atau jabatan.
           </p>
       </section>

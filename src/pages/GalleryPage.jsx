@@ -23,7 +23,7 @@ export function GalleryPage() {
           <span className="route-label">/galeri</span>
           <h1>Galeri Kegiatan</h1>
           <p>
-            Dokumentasi kegiatan kelas XI RPL 1. Telusuri galeri dari atas ke bawah;
+            Dokumentasi kegiatan kelas XI RPL. Telusuri galeri dari atas ke bawah;
             ketuk foto untuk memperbesar.
           </p>
       </section>

@@ -1,7 +1,7 @@
 ﻿const SITE = {
   "schoolName": "SMK PGRI 2 PONOROGO",
   "schoolShort": "STERIDA",
-  "className": "XI RPL 1",
+  "className": "XI RPL",
   "majorName": "Rekayasa Perangkat Lunak",
   "totalStudents": 33,
   "totalTeachers": 15,
@@ -1257,7 +1257,7 @@ const GALERI = [
   {
     "id": "p03",
     "seed": "kelasrpl-3",
-    "caption": "Kerumah Wali Kelas XI RPL 1",
+    "caption": "Kerumah Wali Kelas XI RPL",
     "foto": "asset/galeri/3.webp"
   },
   {

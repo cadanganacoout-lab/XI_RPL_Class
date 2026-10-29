@@ -10,7 +10,7 @@ export function VideosPage() {
           <span className="route-label">/video</span>
           <h1>Video Kegiatan</h1>
           <p>
-            Dokumentasi dan materi belajar kelas XI RPL 1. Jika pemutar tidak tersedia,
+            Dokumentasi dan materi belajar kelas XI RPL. Jika pemutar tidak tersedia,
             video tetap dapat dibuka langsung di YouTube.
           </p>
       </section>
@@ -39,7 +39,7 @@ export function VideosPage() {
                   <div>
                     <div className="video-title">{video.judul}</div>
                     <div className="video-meta">
-                      Kelas XI RPL 1 · {video.deskripsi}
+                      Kelas XI RPL · {video.deskripsi}
                     </div>
                     <a
                       className="video-external-link"
