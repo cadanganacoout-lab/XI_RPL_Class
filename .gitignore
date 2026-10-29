@@ -1,4 +1,20 @@
 node_modules/
+.agents/
+skills-lock.json
+docs/
+
+# Build output and local deployment metadata
+dist/
+.vercel/
+
+# Local environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Local logs
+*.log
+npm-debug.log*
 
 # Generated browser-check artifacts
 reports/screenshots/

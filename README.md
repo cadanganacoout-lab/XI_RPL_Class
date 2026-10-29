@@ -1,6 +1,6 @@
 # Website Kelas XI RPL 1
 
-Website statis untuk kelas XI RPL 1 SMK PGRI 2 Ponorogo. Situs dapat dibuka langsung melalui `index.html` atau dipublikasikan ke hosting statis.
+Website untuk kelas XI RPL 1 SMK PGRI 2 Ponorogo. Jalankan lokal dengan Vite atau build ke situs statis untuk deployment.
 
 ## Struktur Folder
 
@@ -8,13 +8,29 @@ Website statis untuk kelas XI RPL 1 SMK PGRI 2 Ponorogo. Situs dapat dibuka lang
 .
 ├── asset/              # Logo, foto profil, dan foto galeri
 ├── css/                # Gaya situs
-├── js/                 # Data, logika aplikasi, dan konfigurasi Supabase
+├── js/                 # Sumber data dan konfigurasi Supabase
+├── src/                # Halaman React, komponen bersama, dan adapter data
+│   ├── components/     # Header/footer bersama
+│   ├── data/           # Adapter ke sumber data js/data.js
+│   └── pages/          # Implementasi halaman React
 ├── docs/               # Referensi jadwal dan manifest foto
 ├── scripts/            # Pemeriksaan runtime dan browser
 ├── reports/            # Hasil pemeriksaan lokal (tidak untuk deployment)
 ├── supabase/           # SQL schema dan kebijakan akses komentar
-└── *.html              # Halaman situs
+├── index.html           # Satu-satunya HTML entry point
+└── vite.config.js       # Konfigurasi build statis
 ```
+
+## Aplikasi React
+
+Semua halaman menggunakan React melalui satu entry `index.html`. Navigasi memakai hash (`#/siswa`, `#/guru`, `#/galeri`, `#/video`, `#/komentar`) agar bisa digunakan pada hosting statis tanpa konfigurasi rewrite. Tampilan mengikuti desain saat ini; redesign pada `docs/DESIGN-SYSTEM.md` belum diterapkan. Header/footer bersama berada di `src/components/SiteShell.jsx`, sedangkan data tetap bersumber dari `js/data.js`.
+
+```bash
+npm install
+npm run dev
+```
+
+Buka `http://localhost:5173/` melalui Vite untuk menjalankan situs. Beranda dan ruang diskusi memakai konfigurasi Supabase dari `js/supabase-config.js`. `npm run build` menyiapkan `dist/index.html` beserta stylesheet, data, konfigurasi komentar, dan aset gambar yang dibutuhkan.
 
 ## Maintenance
 
@@ -25,7 +41,7 @@ Website statis untuk kelas XI RPL 1 SMK PGRI 2 Ponorogo. Situs dapat dibuka lang
 - Hubungkan repository GitHub ini ke Vercel dan deploy dari root project. Komentar anonim bersifat publik; pengunjung dapat membaca dan menambahkan komentar, tetapi hanya pemilik project yang dapat menghapusnya dari Supabase Dashboard. Form membatasi 500 karakter; untuk mencegah spam lebih lanjut, tambahkan CAPTCHA/rate limiting sebelum situs dibuka luas.
 - Simpan aset baru di subfolder yang sesuai di `asset/` dan sesuaikan field `foto` di `js/data.js`.
 - Gunakan `docs/foto-manifest.md` untuk mencatat pemetaan foto profil.
-- Jalankan `npm run check` setelah perubahan untuk memeriksa semua halaman.
+- Jalankan `npm run check` setelah perubahan untuk memeriksa seluruh rute React.
 
 ## Pemeriksaan
 

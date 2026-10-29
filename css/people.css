@@ -1,0 +1,198 @@
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-auto-rows: minmax(300px, 1fr);
+  padding-bottom: 54px;
+}
+
+.people-card {
+  --card-hover-accent: var(--color-accent);
+  --card-hover-glow: rgb(110 168 255 / 9%);
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex-direction: column;
+  padding: 0 18px 18px;
+  background: var(--gradient-glass), var(--gradient-surface);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  backdrop-filter: blur(12px) saturate(120%);
+  transition: background-color 160ms ease-out, box-shadow 160ms ease-out;
+}
+
+.people-card:nth-child(6n + 1) {
+  --card-hover-accent: #6ea8ff;
+  --card-hover-glow: rgb(110 168 255 / 10%);
+}
+
+.people-card:nth-child(6n + 2) {
+  --card-hover-accent: #60c6b0;
+  --card-hover-glow: rgb(96 198 176 / 10%);
+}
+
+.people-card:nth-child(6n + 3) {
+  --card-hover-accent: #b18aff;
+  --card-hover-glow: rgb(177 138 255 / 10%);
+}
+
+.people-card:nth-child(6n + 4) {
+  --card-hover-accent: #efb45e;
+  --card-hover-glow: rgb(239 180 94 / 10%);
+}
+
+.people-card:nth-child(6n + 5) {
+  --card-hover-accent: #f08a9d;
+  --card-hover-glow: rgb(240 138 157 / 10%);
+}
+
+.people-card:nth-child(6n) {
+  --card-hover-accent: #84bd76;
+  --card-hover-glow: rgb(132 189 118 / 10%);
+}
+
+[data-theme="light"] .people-card:nth-child(6n + 1) {
+  --card-hover-accent: #1d5fd1;
+  --card-hover-glow: rgb(29 95 209 / 8%);
+}
+
+[data-theme="light"] .people-card:nth-child(6n + 2) {
+  --card-hover-accent: #087e72;
+  --card-hover-glow: rgb(8 126 114 / 8%);
+}
+
+[data-theme="light"] .people-card:nth-child(6n + 3) {
+  --card-hover-accent: #7040c8;
+  --card-hover-glow: rgb(112 64 200 / 8%);
+}
+
+[data-theme="light"] .people-card:nth-child(6n + 4) {
+  --card-hover-accent: #9a6200;
+  --card-hover-glow: rgb(154 98 0 / 8%);
+}
+
+[data-theme="light"] .people-card:nth-child(6n + 5) {
+  --card-hover-accent: #bd4058;
+  --card-hover-glow: rgb(189 64 88 / 8%);
+}
+
+[data-theme="light"] .people-card:nth-child(6n) {
+  --card-hover-accent: #38752d;
+  --card-hover-glow: rgb(56 117 45 / 8%);
+}
+
+.people-card:hover,
+.people-card:focus-within {
+  background: var(--gradient-glass), var(--gradient-surface-raised);
+  box-shadow:
+    inset 0 2px 0 var(--card-hover-accent),
+    inset 0 0 36px var(--card-hover-glow),
+    0 0 0 1px var(--card-hover-accent);
+}
+
+.people-card-meta {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-inline: -18px;
+  padding-inline: 18px;
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+.card-number,
+.role-tag {
+  color: var(--color-text-muted);
+  font: 500 0.6875rem/1.2 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.card-number {
+  color: var(--color-accent);
+}
+
+.people-main {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 14px;
+  padding-block: 18px 14px;
+}
+
+.people-photo {
+  width: 72px;
+  height: 72px;
+  flex: none;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface-muted);
+}
+
+.people-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 160ms ease-out;
+}
+
+.people-card:hover .people-photo img,
+.people-card:focus-within .people-photo img {
+  transform: scale(1.04);
+}
+
+.people-name {
+  min-width: 0;
+  color: var(--color-text-primary);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.people-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.people-meta {
+  display: grid;
+  gap: 8px;
+  color: var(--color-text-secondary);
+}
+
+.people-meta .row {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 8px;
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+.people-meta .row b {
+  color: var(--color-text-muted);
+  font: 500 0.625rem/1.6 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.portfolio-link {
+  align-self: stretch;
+  margin-top: auto;
+  padding-inline: 12px;
+}
+
+.portfolio-link:disabled {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  letter-spacing: 0.04em;
+}
+
+.portfolio-link:disabled:hover {
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+}

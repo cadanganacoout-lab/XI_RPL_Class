@@ -1,0 +1,229 @@
+.comments-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 18px;
+  margin-bottom: 40px;
+}
+
+.comment-form {
+  padding: 20px;
+}
+
+.comment-form label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.comment-form textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 12px;
+  resize: vertical;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  background: var(--color-surface-muted);
+  color: var(--color-text-primary);
+}
+
+.comment-form textarea:focus-visible {
+  outline-offset: 0;
+}
+
+.comment-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  color: var(--color-text-muted);
+  font: 500 0.6875rem/1.2 var(--font-mono);
+}
+
+.comment-notice {
+  min-height: 1.5em;
+  margin-top: 10px;
+  color: var(--color-success);
+  font-size: 0.75rem;
+}
+
+.comments-panel {
+  overflow: hidden;
+}
+
+.comments-panel .panel-head {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  flex-wrap: wrap;
+  background: var(--color-surface);
+}
+
+.comments-panel .filetag {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.discussion-scroll {
+  height: min(62vh, 680px);
+  min-height: 320px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+}
+
+.comments-list {
+  padding: 14px;
+}
+
+.comment-card {
+  padding: 16px 12px;
+  border-bottom: 1px solid var(--color-border-strong);
+  background: linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--color-surface-raised) 78%, transparent),
+    transparent 82%
+  );
+}
+
+.comment-card:first-child {
+  padding-top: 12px;
+}
+
+.comment-card:last-child {
+  padding-bottom: 12px;
+  border-bottom: 0;
+}
+
+.comment-card + .comment-card {
+  margin-top: 4px;
+}
+
+.comment-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.75rem;
+}
+
+.comment-card-head strong {
+  color: var(--color-text-primary);
+}
+
+.comment-card-head time {
+  color: var(--color-text-muted);
+  font-size: 0.6875rem;
+}
+
+.comment-actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 12px;
+}
+
+.comment-reply-button,
+.reply-cancel {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.comment-reply-button:hover,
+.reply-cancel:hover {
+  text-decoration: underline;
+}
+
+.comment-reply {
+  margin-left: 18px;
+  padding-left: 12px;
+  border-left: 2px solid var(--color-border-strong);
+}
+
+.comment-reply-context {
+  display: grid;
+  gap: 3px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-left: 1px solid var(--color-border);
+  background: var(--color-surface-muted);
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.comment-reply-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--color-text-muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.reply-indicator {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  color: var(--color-accent);
+}
+
+.replying-to {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border-left: 2px solid var(--color-accent);
+  background: var(--color-surface-muted);
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+}
+
+.replying-to-label {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 7px;
+}
+
+.comment-text {
+  margin-top: 7px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.comments-empty {
+  margin: 0;
+  padding: 8px 0;
+  color: var(--color-text-muted);
+}
+
+.comments-pagination {
+  display: flex;
+  justify-content: center;
+  padding: 0 14px 14px;
+}
+
+.recent-comments-panel {
+  margin-bottom: 40px;
+}
+
+.recent-comments-panel .panel-head {
+  gap: 12px;
+}
+
+.recent-comments-panel .filetag {
+  white-space: nowrap;
+}
