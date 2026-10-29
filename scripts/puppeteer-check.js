@@ -56,6 +56,40 @@ const results = [];
         const url = `http://127.0.0.1:${address.port}/index.html#/${route}`;
         await page.goto(url, {waitUntil: 'networkidle2', timeout: 30000});
         await page.waitForTimeout(500);
+        const mobileHoverTargets = {
+          beranda: '.hero-cta',
+          siswa: '.people-card',
+          guru: '.people-card',
+          galeri: '.gallery-item',
+          video: '.video-card',
+          komentar: '.hero-cta'
+        };
+        const mobilePage = await browser.newPage();
+        try {
+          await mobilePage.setViewport({width: 390, height: 844, isMobile: true, hasTouch: true});
+          await mobilePage.goto(url, {waitUntil: 'networkidle2', timeout: 30000});
+          assert.equal(
+            await mobilePage.evaluate(() => matchMedia('(hover: hover) and (pointer: fine)').matches),
+            false,
+            'Touch emulation should not qualify for desktop hover effects.'
+          );
+          const hoverElement = await mobilePage.$(mobileHoverTargets[route]);
+          assert.ok(hoverElement, `${route} has a visible hover-test target.`);
+          const visualState = element => mobilePage.evaluate(node => {
+            const style = getComputedStyle(node);
+            return [style.backgroundColor, style.color, style.borderColor, style.boxShadow, style.transform];
+          }, element);
+          const beforeHover = await visualState(hoverElement);
+          await hoverElement.hover();
+          await mobilePage.waitForTimeout(200);
+          assert.deepEqual(
+            await visualState(hoverElement),
+            beforeHover,
+            `${route} should not retain desktop hover highlighting on touch.`
+          );
+        } finally {
+          await mobilePage.close();
+        }
         {
           const navigationRoute = route === 'komentar' ? 'beranda' : route;
           assert.equal(await page.$eval('.tab.active', tab => tab.dataset.page), navigationRoute);
@@ -116,8 +150,21 @@ const results = [];
           } else if (route === 'beranda') {
             assert.ok(await page.$('.hero-beranda'), 'Home page renders the class hero.');
             assert.equal((await page.$$('.stat-card')).length, 3);
-            assert.equal((await page.$$('.sched-list')).length, 2);
-            assert.equal((await page.$$('.piket-list')).length, 2);
+            assert.ok(await page.$('.agenda-card--schedule'), 'Home page renders the schedule dashboard.');
+            assert.ok(await page.$('.agenda-card--duty'), 'Home page renders the duty dashboard.');
+            assert.equal((await page.$$('.agenda-day-button')).length, 2);
+            const currentDay = await page.$eval('.agenda-card--duty .agenda-eyebrow', node => node.textContent);
+            await page.click('.agenda-day-button:nth-child(2)');
+            assert.equal(
+              await page.$eval('.agenda-day-button:nth-child(2)', button => button.getAttribute('aria-pressed')),
+              'true'
+            );
+            assert.notEqual(
+              await page.$eval('.agenda-card--duty .agenda-eyebrow', node => node.textContent),
+              currentDay,
+              'Selecting tomorrow updates the duty schedule.'
+            );
+            await page.click('.agenda-day-button:first-child');
           } else if (route === 'komentar') {
             assert.ok(await page.$('textarea[maxlength="500"]'), 'Comment form enforces the 500 character limit.');
             await page.type('#commentInput', 'Tes komentar');

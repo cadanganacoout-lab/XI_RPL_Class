@@ -74,9 +74,14 @@
   transition: color 140ms ease-out, background-color 140ms ease-out, border-color 140ms ease-out;
 }
 
-.tab:hover,
 .tab.active {
   color: var(--color-text-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tab:hover {
+    color: var(--color-text-primary);
+  }
 }
 
 .tab.active {
@@ -106,9 +111,11 @@
   color: var(--color-text-secondary);
 }
 
-.theme-toggle:hover,
-.menu-toggle:hover {
-  color: var(--color-accent);
+@media (hover: hover) and (pointer: fine) {
+  .theme-toggle:hover,
+  .menu-toggle:hover {
+    color: var(--color-accent);
+  }
 }
 
 .theme-toggle .icon-sun {
@@ -157,20 +164,8 @@
 
 .site-footer {
   margin-top: 76px;
-  border-top: 1px solid var(--color-border);
-  background:
-    radial-gradient(ellipse at 50% 0%, rgb(177 132 82 / 12%), transparent 58%),
-    var(--gradient-glass),
-    var(--gradient-surface);
-  -webkit-backdrop-filter: blur(16px) saturate(120%);
-  backdrop-filter: blur(16px) saturate(120%);
-}
-
-[data-theme="dark"] .site-footer {
-  background:
-    radial-gradient(ellipse at 50% 0%, rgb(190 198 210 / 8%), transparent 58%),
-    var(--gradient-glass),
-    var(--gradient-surface);
+  border-top: 1px solid #303844;
+  background: #11151b;
 }
 
 .footer-inner {
@@ -181,7 +176,7 @@
   align-items: center;
   gap: 16px 30px;
   margin-inline: auto;
-  color: var(--color-text-muted);
+  color: #aeb8c6;
   font-size: 0.875rem;
 }
 
@@ -189,28 +184,28 @@
   display: flex;
   align-items: center;
   gap: 11px;
-  color: var(--color-text-primary);
+  color: #f1f3f5;
   font-weight: 700;
 }
 
 .footer-brand small {
   display: block;
   margin-top: 3px;
-  color: var(--color-text-muted);
+  color: #9aa4b2;
   font-size: 0.75rem;
   font-weight: 400;
 }
 
 .footer-message {
   justify-self: center;
-  color: var(--color-text-secondary);
+  color: #c4ccd6;
 }
 
 .footer-stack {
   grid-column: 1 / -1;
   padding-top: 12px;
-  border-top: 1px solid var(--color-border);
-  color: var(--color-text-secondary);
+  border-top: 1px solid #303844;
+  color: #c4ccd6;
   font-size: 0.75rem;
 }
 
@@ -229,9 +224,11 @@
   border-radius: 6px;
 }
 
-.footer-links a:hover {
-  background: var(--color-surface-raised);
-  color: var(--color-accent);
+@media (hover: hover) and (pointer: fine) {
+  .footer-links a:hover {
+    background: #252c36;
+    color: #9cc3ff;
+  }
 }
 
 .footer-slogan {

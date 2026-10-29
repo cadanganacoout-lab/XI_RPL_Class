@@ -105,10 +105,12 @@
   transition: background-color 120ms ease-out, color 120ms ease-out;
 }
 
-.button-primary:hover,
-.comment-submit:hover:not(:disabled) {
-  background: var(--color-accent);
-  color: var(--color-on-action);
+@media (hover: hover) and (pointer: fine) {
+  .button-primary:hover,
+  .comment-submit:hover:not(:disabled) {
+    background: var(--color-accent);
+    color: var(--color-on-action);
+  }
 }
 
 .comment-submit:disabled {

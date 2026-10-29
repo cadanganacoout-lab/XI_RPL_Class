@@ -23,12 +23,24 @@ function parityFor(date) {
   return getISOWeek(date) % 2 === 1 ? "genap" : "ganjil";
 }
 
+function minutesOfDay(time) {
+  const [hours, minutes] = time.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
+function formatAgendaDate(date) {
+  return new Intl.DateTimeFormat("id-ID", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  }).format(date);
+}
+
 function guruName(parity, day, subject, start) {
   const schedule = GURU_JADWAL[parity]?.[day];
   if (typeof schedule === "string") return schedule;
   if (schedule) {
-    const toMinutes = time => time.split(":").map(Number).reduce((hours, minutes) => hours * 60 + minutes);
-    return toMinutes(start) < toMinutes(schedule.mulai) ? schedule.sebelum : schedule.sesudah;
+    return minutesOfDay(start) < minutesOfDay(schedule.mulai) ? schedule.sebelum : schedule.sesudah;
   }
   const aliases = {
     "Pendidikan Agama Budi Pekerti": "Pendidikan Agama",
@@ -38,75 +50,175 @@ function guruName(parity, day, subject, start) {
   return GURU.find(teacher => teacher.mapel === (aliases[subject] || subject))?.nama || "—";
 }
 
-function ScheduleList({ date, label }) {
+function ScheduleList({ date, now, isToday }) {
   const day = HARI_LIST[date.getDay()];
   const parity = parityFor(date);
   if (!HARI_AKTIF.includes(day)) {
-    return <p className="empty-note">{label} {day}, tidak ada jadwal pelajaran.</p>;
+    return <p className="empty-note">Tidak ada jadwal pelajaran untuk hari {day}.</p>;
   }
   const rows = JADWAL[parity][day] || [];
+  const nowInMinutes = now.getHours() * 60 + now.getMinutes();
+  const currentIndex = isToday
+    ? rows.findIndex(row =>
+      typeof row !== "string" &&
+      minutesOfDay(row.mulai) <= nowInMinutes &&
+      nowInMinutes < minutesOfDay(row.selesai)
+    )
+    : -1;
+  const nextIndex = isToday && currentIndex < 0
+    ? rows.findIndex(row =>
+      typeof row !== "string" && minutesOfDay(row.mulai) > nowInMinutes
+    )
+    : -1;
+
   return rows.map((row, index) => {
-    if (typeof row === "string") return <p className="empty-note" key={index}>{row}</p>;
-    if (row.istirahat) {
-      return (
-        <div className="schedule-row schedule-row--break" key={index}>
-          <span className="schedule-row-number" aria-hidden="true">{index + 1}</span>
-          <span>{row.label}</span>
-          <time>{row.mulai}–{row.selesai}</time>
-        </div>
-      );
+    if (typeof row === "string") {
+      return <p className="empty-note" key={index}>{row}</p>;
     }
+    const isCurrent = index === currentIndex;
+    const isNext = index === nextIndex;
+    const rowClassName = [
+      "agenda-row",
+      row.istirahat && "agenda-row--break",
+      isCurrent && "agenda-row--current",
+      isNext && "agenda-row--next",
+    ].filter(Boolean).join(" ");
+
     return (
-      <div className="schedule-row" key={`${row.jamKe}-${row.mulai}`}>
-        <span className="schedule-row-number" aria-hidden="true">{index + 1}</span>
-        <time>{row.mulai}–{row.selesai}</time>
-        <span className="schedule-subject">
-          <strong>{row.mapel}</strong>
-          <small>{guruName(parity, day, row.mapel, row.mulai)}</small>
-        </span>
+      <div className={rowClassName} key={`${row.jamKe}-${row.mulai}`} aria-current={isCurrent ? "time" : undefined}>
+        <span className="agenda-row-marker" aria-hidden="true" />
+        <time className="agenda-row-time">
+          <span>{row.mulai}</span>
+          <span>{row.selesai}</span>
+        </time>
+        <div className="agenda-row-content">
+          <div className="agenda-row-title">
+            <strong>{row.istirahat ? row.label : row.mapel}</strong>
+            {(isCurrent || isNext) && (
+              <span className="agenda-row-badge">
+                {isCurrent ? row.istirahat ? "Istirahat" : "Berlangsung" : "Berikutnya"}
+              </span>
+            )}
+          </div>
+          {!row.istirahat && <small>{guruName(parity, day, row.mapel, row.mulai)}</small>}
+        </div>
       </div>
     );
   });
 }
 
-function DutyList({ date, label }) {
+function DutyList({ date }) {
   const day = HARI_LIST[date.getDay()];
   const names = HARI_AKTIF.includes(day) ? PIKET[day] : null;
-  if (!names) return <p className="empty-note">Tidak ada jadwal piket {label.toLowerCase()}.</p>;
+  if (!names) return <p className="agenda-empty">Tidak ada jadwal piket untuk hari {day}.</p>;
   return (
     <ul className="duty-list piket-list">
-      {names.map(name => <li key={name}>{name}</li>)}
+      {names.map((name, index) => (
+        <li key={name}>
+          <span className="duty-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+          <span>{name}</span>
+        </li>
+      ))}
     </ul>
   );
 }
 
-function DaySchedule({ date, label, today = false }) {
+function AgendaDashboard({ now }) {
+  const [dayOffset, setDayOffset] = useState(0);
+  const date = new Date(now);
+  date.setDate(date.getDate() + dayOffset);
   const day = HARI_LIST[date.getDay()];
   const parity = parityFor(date);
-  return (
-    <section className={`home-cell home-schedule${today ? " home-schedule--today" : ""}`}>
-      <div className="panel-head">
-        <h2>{label}</h2>
-        <span className="label-mono">{day} · minggu {parity}</span>
-      </div>
-      <div className="schedule-list sched-list"><ScheduleList date={date} label={label} /></div>
-    </section>
-  );
-}
+  const isToday = dayOffset === 0;
+  const options = [0, 1].map(offset => {
+    const optionDate = new Date(now);
+    optionDate.setDate(optionDate.getDate() + offset);
+    return { offset, date: optionDate };
+  });
+  const rows = HARI_AKTIF.includes(day) ? JADWAL[parity][day] || [] : [];
+  const nowInMinutes = now.getHours() * 60 + now.getMinutes();
+  const currentRow = isToday
+    ? rows.find(row =>
+      typeof row !== "string" &&
+      minutesOfDay(row.mulai) <= nowInMinutes &&
+      nowInMinutes < minutesOfDay(row.selesai)
+    )
+    : null;
+  const nextRow = isToday && !currentRow
+    ? rows.find(row => typeof row !== "string" && minutesOfDay(row.mulai) > nowInMinutes)
+    : null;
+  const scheduleStatus = !HARI_AKTIF.includes(day)
+    ? "Tidak ada jadwal pelajaran"
+    : currentRow
+      ? currentRow.istirahat ? "Waktu istirahat" : "Pelajaran sedang berlangsung"
+      : nextRow ? "Menunggu pelajaran berikutnya" : "Jadwal hari ini selesai";
 
-function DayDuty({ date, label, today = false }) {
   return (
-    <section className={`home-cell home-duty${today ? " home-duty--today" : ""}`}>
-      <div className="panel-head">
-        <h2>Piket {label}</h2>
+    <section className="agenda-dashboard" aria-labelledby="agenda-heading">
+      <div className="agenda-heading">
+        <div>
+          <span className="route-label">AGENDA KELAS</span>
+          <h2 id="agenda-heading">Jadwal &amp; piket</h2>
+          <p>Rencana belajar dan petugas kelas dalam satu tampilan.</p>
+        </div>
+        <div className="agenda-day-picker" aria-label="Pilih hari jadwal">
+          {options.map(({ offset, date: optionDate }) => (
+            <button
+              className="agenda-day-button"
+              type="button"
+              key={offset}
+              aria-pressed={dayOffset === offset}
+              onClick={() => setDayOffset(offset)}
+            >
+              <span>{offset === 0 ? "Hari ini" : "Besok"}</span>
+              <small>{new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "short" }).format(optionDate)}</small>
+            </button>
+          ))}
+        </div>
       </div>
-      <div className="duty-list-wrap"><DutyList date={date} label={label} /></div>
+
+      <div className="agenda-layout">
+        <section className="agenda-card agenda-card--schedule" aria-labelledby="schedule-heading">
+          <header className="agenda-card-header">
+            <div>
+              <span className="agenda-eyebrow">{formatAgendaDate(date)}</span>
+              <h3 id="schedule-heading">Jadwal pelajaran</h3>
+            </div>
+            <span className="agenda-week">Minggu {parity}</span>
+          </header>
+          {isToday && (
+            <div className={`agenda-status${currentRow ? " agenda-status--active" : ""}`} aria-live="polite">
+              <span className="agenda-status-dot" aria-hidden="true" />
+              <span>{scheduleStatus}</span>
+              <time>{new Intl.DateTimeFormat("id-ID", { hour: "2-digit", minute: "2-digit" }).format(now)}</time>
+            </div>
+          )}
+          <div className="agenda-timeline">
+            <ScheduleList date={date} now={now} isToday={isToday} />
+          </div>
+        </section>
+
+        <section className="agenda-card agenda-card--duty" aria-labelledby="duty-heading">
+          <header className="agenda-card-header">
+            <div>
+              <span className="agenda-eyebrow">{day}</span>
+              <h3 id="duty-heading">Petugas piket</h3>
+            </div>
+            {HARI_AKTIF.includes(day) && (
+              <span className="duty-count">{PIKET[day]?.length || 0} siswa</span>
+            )}
+          </header>
+          <p className="duty-intro">Tim yang bertugas menjaga kelas tetap nyaman.</p>
+          <DutyList date={date} />
+        </section>
+      </div>
     </section>
   );
 }
 
 export function HomePage({ route }) {
   const [motivationIndex, setMotivationIndex] = useState(0);
+  const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
     if (route === "komentar") {
@@ -122,9 +234,11 @@ export function HomePage({ route }) {
     return () => window.clearInterval(intervalId);
   }, []);
 
-  const now = new Date();
-  const tomorrow = new Date(now);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  useEffect(() => {
+    const intervalId = window.setInterval(() => setNow(new Date()), 60_000);
+    return () => window.clearInterval(intervalId);
+  }, []);
+
   const featuredMotivation = MOTIVASI[motivationIndex] || "";
 
   return (
@@ -159,6 +273,10 @@ export function HomePage({ route }) {
         </div>
       </section>
 
+      <div className="container">
+        <AgendaDashboard now={now} />
+      </div>
+
       <section className="container home-grid frame-grid" aria-label="Ringkasan kelas">
         <div className="home-cell home-statistics">
           <div className="panel-head"><h2>Ringkasan kelas</h2></div>
@@ -178,10 +296,6 @@ export function HomePage({ route }) {
           </div>
         </div>
 
-        <DaySchedule date={now} label="Jadwal hari ini" today />
-        <DayDuty date={now} label="Hari ini" today />
-        <DaySchedule date={tomorrow} label="Jadwal besok" />
-        <DayDuty date={tomorrow} label="Besok" />
         <section className="home-cell home-motivation">
           <div className="panel-head">
             <h2>Motivasi</h2>

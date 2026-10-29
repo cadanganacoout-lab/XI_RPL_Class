@@ -139,9 +139,11 @@
   font-weight: 600;
 }
 
-.comment-reply-button:hover,
-.reply-cancel:hover {
-  text-decoration: underline;
+@media (hover: hover) and (pointer: fine) {
+  .comment-reply-button:hover,
+  .reply-cancel:hover {
+    text-decoration: underline;
+  }
 }
 
 .comment-reply {

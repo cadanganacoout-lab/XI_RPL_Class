@@ -1,10 +1,5 @@
 @media (max-width: 900px) {
-  .home-schedule--today,
-  .home-duty--today,
-  .home-schedule:not(.home-schedule--today),
-  .home-duty:not(.home-duty--today) {
-    grid-column: span 6;
-  }
+  .agenda-layout { grid-template-columns: minmax(0, 1.35fr) minmax(240px, 0.85fr); }
 }
 
 @media (max-width: 720px) {
@@ -36,6 +31,7 @@
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   }
 
+  .agenda-layout { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 520px) {
@@ -98,23 +94,6 @@
     box-shadow: inset 2px 0 var(--color-accent);
   }
 
-  .schedule-row {
-    grid-template-columns: 20px 76px minmax(0, 1fr);
-    gap: 7px;
-  }
-
-  .duty-list {
-    grid-template-columns: 1fr;
-  }
-
-  .duty-list li:nth-child(odd) {
-    border-right: 0;
-  }
-
-  .duty-list li:nth-last-child(2) {
-    border-bottom: 1px solid var(--color-border);
-  }
-
   .people-grid {
     grid-template-columns: 1fr;
   }
@@ -154,11 +133,6 @@
 
   .home-grid .panel-head {
     align-items: flex-start;
-  }
-
-  .schedule-row {
-    grid-template-columns: 16px 70px minmax(0, 1fr);
-    gap: 5px;
   }
 
   .people-meta .row {

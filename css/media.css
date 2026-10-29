@@ -72,7 +72,6 @@
   transition: opacity 160ms ease-out;
 }
 
-.gallery-item:hover,
 .gallery-item:focus-visible {
   z-index: 1;
   transform: translateY(-3px);
@@ -82,7 +81,6 @@
     0 8px 26px var(--media-hover-glow);
 }
 
-.gallery-item:hover::after,
 .gallery-item:focus-visible::after {
   opacity: 1;
 }
@@ -94,9 +92,27 @@
   transition: transform 220ms ease-out;
 }
 
-.gallery-item:hover img,
 .gallery-item:focus-visible img {
   transform: scale(1.035);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gallery-item:hover {
+    z-index: 1;
+    transform: translateY(-3px);
+    border-color: var(--media-hover-accent);
+    box-shadow:
+      inset 0 0 0 1px var(--media-hover-accent),
+      0 8px 26px var(--media-hover-glow);
+  }
+
+  .gallery-item:hover::after {
+    opacity: 1;
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.035);
+  }
 }
 
 .gallery-item .cap {
@@ -176,7 +192,6 @@
   --media-hover-wash: rgb(56 117 45 / 14%);
 }
 
-.video-card:hover,
 .video-card:focus-within {
   z-index: 1;
   transform: translateY(-3px);
@@ -191,9 +206,23 @@
   transition: background-color 160ms ease-out;
 }
 
-.video-card:hover .video-info,
 .video-card:focus-within .video-info {
   background: linear-gradient(120deg, var(--media-hover-wash), transparent 80%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .video-card:hover {
+    z-index: 1;
+    transform: translateY(-3px);
+    border-color: var(--media-hover-accent);
+    box-shadow:
+      inset 0 0 0 2px var(--media-hover-accent),
+      0 8px 26px var(--media-hover-glow);
+  }
+
+  .video-card:hover .video-info {
+    background: linear-gradient(120deg, var(--media-hover-wash), transparent 80%);
+  }
 }
 
 .video-frame {
@@ -258,7 +287,9 @@
   font-weight: 600;
 }
 
-.video-external-link:hover { text-decoration: underline; }
+@media (hover: hover) and (pointer: fine) {
+  .video-external-link:hover { text-decoration: underline; }
+}
 
 .modal-backdrop {
   position: fixed;

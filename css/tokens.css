@@ -38,7 +38,7 @@
   --color-warning: #e9c06a;
   --color-danger: #ff8a94;
   --color-focus: #9cc3ff;
-  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
   --max-width: 1120px;
 }
