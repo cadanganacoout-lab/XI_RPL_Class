@@ -17,6 +17,8 @@ const welcomePhotos = [...new Set(
     .map(photo => typeof photo.foto === "string" ? photo.foto.trim() : "")
     .filter(Boolean),
 )];
+const photoHoldDuration = 4000;
+const photoTransitionDuration = 1100;
 
 function WelcomeBackground() {
   const [images, setImages] = useState([null, null]);
@@ -32,8 +34,16 @@ function WelcomeBackground() {
       const image = new Image();
       image.onload = () => {
         if (cancelled) return;
-        setImages([welcomePhotos[index], null]);
-        setActivePhotoIndex(index);
+        const showPhoto = () => {
+          if (cancelled) return;
+          setImages([welcomePhotos[index], null]);
+          setActivePhotoIndex(index);
+        };
+        if (typeof image.decode === "function") {
+          image.decode().then(showPhoto, () => loadNextPhoto(index + 1));
+        } else {
+          showPhoto();
+        }
       };
       image.onerror = () => loadNextPhoto(index + 1);
       image.src = welcomePhotos[index];
@@ -71,15 +81,23 @@ function WelcomeBackground() {
       const image = new Image();
       image.onload = () => {
         if (cancelled) return;
-        const nextLayer = 1 - activeLayer;
-        setImages(currentImages => currentImages.map((source, index) =>
-          index === nextLayer ? welcomePhotos[nextIndex] : source
-        ));
-        animationFrame = window.requestAnimationFrame(() => {
+        const showPhoto = () => {
           if (cancelled) return;
-          setActiveLayer(nextLayer);
-          setActivePhotoIndex(nextIndex);
-        });
+          const nextLayer = 1 - activeLayer;
+          setImages(currentImages => currentImages.map((source, index) =>
+            index === nextLayer ? welcomePhotos[nextIndex] : source
+          ));
+          animationFrame = window.requestAnimationFrame(() => {
+            if (cancelled) return;
+            setActiveLayer(nextLayer);
+            setActivePhotoIndex(nextIndex);
+          });
+        };
+        if (typeof image.decode === "function") {
+          image.decode().then(showPhoto, () => preloadNextPhoto(nextIndex, remaining - 1));
+        } else {
+          showPhoto();
+        }
       };
       image.onerror = () => preloadNextPhoto(nextIndex, remaining - 1);
       image.src = welcomePhotos[nextIndex];
@@ -87,7 +105,7 @@ function WelcomeBackground() {
 
     timeoutId = window.setTimeout(
       () => preloadNextPhoto(activePhotoIndex, welcomePhotos.length - 1),
-      4000,
+      photoHoldDuration + photoTransitionDuration,
     );
     return () => {
       cancelled = true;
