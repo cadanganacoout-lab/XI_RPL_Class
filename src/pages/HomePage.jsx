@@ -364,15 +364,15 @@ export function HomePage({ route }) {
       <section className="welcome-hero hero-beranda" aria-labelledby="welcome-title">
         <WelcomeBackground />
         <div className="welcome-content">
-          <span className="welcome-eyebrow">PORTAL DIGITAL · {SITE.className}</span>
-          <h1 id="welcome-title">Selamat Datang</h1>
+          <span className="welcome-eyebrow">WEBSITE · {SITE.className}</span>
+          <h1 id="welcome-title">WELCOME </h1>
           <p className="welcome-slogan">RPL! JAYA JAYA JAYA</p>
           <p className="welcome-class">{SITE.majorName} · {SITE.schoolShort}</p>
         </div>
         <div className="welcome-footer">
           <span className="welcome-scroll-cue">
             <span aria-hidden="true">↓</span>
-            Gulir untuk melihat agenda
+            Scroll untuk melihat agenda
           </span>
           <a
             className="hero-cta welcome-skip"
