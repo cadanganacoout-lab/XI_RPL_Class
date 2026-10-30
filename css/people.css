@@ -1,8 +1,18 @@
 .people-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  grid-auto-rows: minmax(300px, 1fr);
-  padding-bottom: 54px;
+  grid-auto-rows: auto;
+  margin-bottom: 54px;
+}
+
+.people-grid > .empty-note {
+  display: grid;
+  min-height: 112px;
+  grid-column: 1 / -1;
+  place-items: center;
+  border-right: 1px solid var(--color-border-strong);
+  border-bottom: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
 }
 
 .people-card {
@@ -10,7 +20,7 @@
   --card-hover-glow: rgb(110 168 255 / 9%);
   display: flex;
   min-width: 0;
-  height: 100%;
+  min-height: 100%;
   flex-direction: column;
   padding: 0 18px 18px;
   background: var(--gradient-glass), var(--gradient-surface);
@@ -160,6 +170,7 @@
   font-weight: 600;
   line-height: 1.25;
   overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 
 .people-body {

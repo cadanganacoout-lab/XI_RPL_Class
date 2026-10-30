@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
+  GALERI,
   GURU,
   GURU_JADWAL,
   HARI_AKTIF,
@@ -10,6 +11,106 @@ import {
   SITE,
 } from "../data/class-data.js";
 import { CommentsSection } from "./CommentsPage.jsx";
+
+const welcomePhotos = [...new Set(
+  GALERI
+    .map(photo => typeof photo.foto === "string" ? photo.foto.trim() : "")
+    .filter(Boolean),
+)];
+
+function WelcomeBackground() {
+  const [images, setImages] = useState([null, null]);
+  const [activeLayer, setActiveLayer] = useState(0);
+  const [activePhotoIndex, setActivePhotoIndex] = useState(null);
+  const [isTabVisible, setIsTabVisible] = useState(() => document.visibilityState !== "hidden");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    function loadNextPhoto(index) {
+      if (cancelled || index >= welcomePhotos.length) return;
+      const image = new Image();
+      image.onload = () => {
+        if (cancelled) return;
+        setImages([welcomePhotos[index], null]);
+        setActivePhotoIndex(index);
+      };
+      image.onerror = () => loadNextPhoto(index + 1);
+      image.src = welcomePhotos[index];
+    }
+
+    loadNextPhoto(0);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const updateVisibility = () => setIsTabVisible(document.visibilityState !== "hidden");
+
+    document.addEventListener("visibilitychange", updateVisibility);
+    return () => {
+      document.removeEventListener("visibilitychange", updateVisibility);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (
+      !isTabVisible ||
+      activePhotoIndex === null ||
+      welcomePhotos.length < 2
+    ) return undefined;
+
+    let cancelled = false;
+    let animationFrame;
+    let timeoutId;
+
+    function preloadNextPhoto(fromIndex, remaining) {
+      if (cancelled || remaining <= 0) return;
+      const nextIndex = (fromIndex + 1) % welcomePhotos.length;
+      const image = new Image();
+      image.onload = () => {
+        if (cancelled) return;
+        const nextLayer = 1 - activeLayer;
+        setImages(currentImages => currentImages.map((source, index) =>
+          index === nextLayer ? welcomePhotos[nextIndex] : source
+        ));
+        animationFrame = window.requestAnimationFrame(() => {
+          if (cancelled) return;
+          setActiveLayer(nextLayer);
+          setActivePhotoIndex(nextIndex);
+        });
+      };
+      image.onerror = () => preloadNextPhoto(nextIndex, remaining - 1);
+      image.src = welcomePhotos[nextIndex];
+    }
+
+    timeoutId = window.setTimeout(
+      () => preloadNextPhoto(activePhotoIndex, welcomePhotos.length - 1),
+      4000,
+    );
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeoutId);
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+    };
+  }, [activeLayer, activePhotoIndex, isTabVisible]);
+
+  return (
+    <div className="welcome-background" aria-hidden="true">
+      {images.map((source, index) => source && (
+        <img
+          className={`welcome-background-image${index === activeLayer ? " is-active" : ""}`}
+          src={source}
+          alt=""
+          key={index}
+          fetchPriority={index === activeLayer ? "high" : "auto"}
+        />
+      ))}
+      <div className="welcome-overlay" />
+    </div>
+  );
+}
 
 function getISOWeek(date) {
   const day = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
@@ -219,12 +320,29 @@ function AgendaDashboard({ now }) {
 export function HomePage({ route }) {
   const [motivationIndex, setMotivationIndex] = useState(0);
   const [now, setNow] = useState(() => new Date());
+  const dashboardRef = useRef(null);
 
   useEffect(() => {
     if (route === "komentar") {
       document.getElementById("diskusi")?.scrollIntoView({ block: "start" });
     }
   }, [route]);
+
+  useEffect(() => {
+    const dashboard = dashboardRef.current;
+    if (!dashboard || typeof window.IntersectionObserver !== "function") return undefined;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+
+    const observer = new window.IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        dashboard.classList.add("is-visible");
+        observer.unobserve(dashboard);
+      }
+    }, { threshold: 0.05, rootMargin: "0px 0px -6% 0px" });
+
+    observer.observe(dashboard);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (MOTIVASI.length < 2) return undefined;
@@ -242,73 +360,73 @@ export function HomePage({ route }) {
   const featuredMotivation = MOTIVASI[motivationIndex] || "";
 
   return (
-    <>
-      <section className="container hero-beranda">
-        <div className="hero-copy">
-          <span className="route-label">PORTAL DIGITAL · KELAS KAMI</span>
-          <h1 className="hero-title">
-            Belajar hari ini,<br /><span>membangun esok.</span>
-          </h1>
-          <p className="hero-major">{SITE.className} · {SITE.majorName}</p>
-          <p className="hero-description">
-            Ruang digital untuk mengenal warga kelas, melihat jadwal, dan menyimpan cerita perjalanan kami.
-          </p>
-          <a className="hero-cta" href="#/siswa">Kenali kelas kami <span aria-hidden="true">↗</span></a>
+    <div className="home-unveil">
+      <section className="welcome-hero hero-beranda" aria-labelledby="welcome-title">
+        <WelcomeBackground />
+        <div className="welcome-content">
+          <span className="welcome-eyebrow">PORTAL DIGITAL · {SITE.className}</span>
+          <h1 id="welcome-title">Selamat Datang</h1>
+          <p className="welcome-slogan">RPL! JAYA JAYA JAYA</p>
+          <p className="welcome-class">{SITE.majorName} · {SITE.schoolShort}</p>
         </div>
-        <div className="code-window" aria-hidden="true">
-          <div className="code-window-bar">
-            <span className="window-dots" aria-hidden="true"><i /><i /><i /></span>
-            <span>kelas-xi-rpl.json</span>
-            <span aria-hidden="true">•••</span>
-          </div>
-          <div className="code-window-body" aria-hidden="true">
-            <span className="code-line"><i>01</i><b className="code-purple">const</b> kelas = {'{'}</span>
-            <span className="code-line"><i>02</i>&nbsp; nama: <b className="code-green">"{SITE.className}"</b>,</span>
-            <span className="code-line"><i>03</i>&nbsp; sekolah: <b className="code-green">"{SITE.schoolShort}"</b>,</span>
-            <span className="code-line"><i>04</i>&nbsp; siswa: <b className="code-orange">{SITE.totalStudents}</b>,</span>
-            <span className="code-line"><i>05</i>&nbsp; fokus: <b className="code-green">"berkarya bersama"</b></span>
-            <span className="code-line"><i>06</i>{'}'}<b className="code-cursor">_</b></span>
-          </div>
-          <div className="code-window-foot"><span>●</span> Semangat belajar aktif</div>
+        <div className="welcome-footer">
+          <span className="welcome-scroll-cue">
+            <span aria-hidden="true">↓</span>
+            Gulir untuk melihat agenda
+          </span>
+          <a
+            className="hero-cta welcome-skip"
+            href="#dashboard"
+            onClick={event => {
+              event.preventDefault();
+              const dashboard = document.getElementById("dashboard");
+              dashboard?.scrollIntoView({ block: "start" });
+              dashboard?.focus({ preventScroll: true });
+            }}
+          >
+            Lewati ke dashboard <span aria-hidden="true">↓</span>
+          </a>
         </div>
       </section>
 
-      <div className="container">
-        <AgendaDashboard now={now} />
-      </div>
+      <section className="dashboard-reveal" id="dashboard" ref={dashboardRef} tabIndex="-1">
+        <div className="container">
+          <AgendaDashboard now={now} />
 
-      <section className="container home-grid frame-grid" aria-label="Ringkasan kelas">
-        <div className="home-cell home-statistics">
-          <div className="panel-head"><h2>Ringkasan kelas</h2></div>
-          <div className="stat-row">
-            <div className="stat-item stat-card">
-              <span className="stat-value">{SITE.totalStudents}</span>
-              <span className="stat-label">Siswa</span>
+          <section className="home-grid frame-grid" aria-label="Ringkasan kelas">
+            <div className="home-cell home-statistics">
+              <div className="panel-head"><h2>Ringkasan kelas</h2></div>
+              <div className="stat-row">
+                <div className="stat-item stat-card">
+                  <span className="stat-value">{SITE.totalStudents}</span>
+                  <span className="stat-label">Siswa</span>
+                </div>
+                <div className="stat-item stat-card">
+                  <span className="stat-value">{SITE.totalTeachers}</span>
+                  <span className="stat-label">Guru</span>
+                </div>
+                <div className="stat-item stat-card">
+                  <span className="stat-value stat-value--name">{SITE.waliKelas}</span>
+                  <span className="stat-label">Wali kelas</span>
+                </div>
+              </div>
             </div>
-            <div className="stat-item stat-card">
-              <span className="stat-value">{SITE.totalTeachers}</span>
-              <span className="stat-label">Guru</span>
-            </div>
-            <div className="stat-item stat-card">
-              <span className="stat-value stat-value--name">{SITE.waliKelas}</span>
-              <span className="stat-label">Wali kelas</span>
-            </div>
-          </div>
+
+            <section className="home-cell home-motivation">
+              <div className="panel-head">
+                <h2>Motivasi</h2>
+                <span className="motivation-count" aria-hidden="true">
+                  {String(motivationIndex + 1).padStart(2, "0")} / {String(MOTIVASI.length).padStart(2, "0")}
+                </span>
+              </div>
+              <blockquote key={motivationIndex} className="motivation-quote" aria-live="polite">
+                {featuredMotivation}
+              </blockquote>
+            </section>
+          </section>
         </div>
-
-        <section className="home-cell home-motivation">
-          <div className="panel-head">
-            <h2>Motivasi</h2>
-            <span className="motivation-count" aria-hidden="true">
-              {String(motivationIndex + 1).padStart(2, "0")} / {String(MOTIVASI.length).padStart(2, "0")}
-            </span>
-          </div>
-          <blockquote key={motivationIndex} className="motivation-quote" aria-live="polite">
-            {featuredMotivation}
-          </blockquote>
-        </section>
+        <CommentsSection />
       </section>
-      <CommentsSection />
-    </>
+    </div>
   );
 }

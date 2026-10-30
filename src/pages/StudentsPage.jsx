@@ -89,8 +89,7 @@ export function StudentsPage() {
           <span className="route-label">/siswa</span>
           <h1>Daftar Siswa</h1>
           <p>
-            Seluruh siswa aktif kelas XI RPL. Ketuk kolom pencarian untuk menemukan siswa
-            berdasarkan nama atau jabatan.
+            Temukan profil siswa kelas XI RPL berdasarkan nama atau jabatan.
           </p>
       </section>
       <section className="container">
@@ -117,7 +116,7 @@ export function StudentsPage() {
               <StudentCard key={student.id} student={student} />
             ))}
             {filteredStudents.length === 0 && (
-              <p className="empty-note">Tidak ada siswa yang cocok dengan pencarian.</p>
+              <p className="empty-note">Tidak ada siswa yang cocok. Coba kata kunci lain.</p>
             )}
           </div>
       </section>

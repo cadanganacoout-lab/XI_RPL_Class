@@ -10,7 +10,7 @@
 .navwrap {
   display: flex;
   width: min(100% - 48px, var(--max-width));
-  min-height: 76px;
+  min-height: 68px;
   align-items: center;
   gap: 28px;
   margin-inline: auto;
@@ -49,7 +49,7 @@
 
 .tabbar {
   display: flex;
-  height: 76px;
+  height: 68px;
   flex: 1;
   align-items: stretch;
   gap: 5px;
@@ -163,7 +163,7 @@
 }
 
 .site-footer {
-  margin-top: 76px;
+  margin-top: 60px;
   border-top: 1px solid #303844;
   background: #11151b;
 }
@@ -172,7 +172,7 @@
   display: grid;
   grid-template-columns: auto 1fr auto;
   width: min(100% - 48px, var(--max-width));
-  min-height: 180px;
+  min-height: 164px;
   align-items: center;
   gap: 16px 30px;
   margin-inline: auto;

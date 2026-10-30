@@ -11,7 +11,7 @@ export function VideosPage() {
           <h1>Video Kegiatan</h1>
           <p>
             Dokumentasi dan materi belajar kelas XI RPL. Jika pemutar tidak tersedia,
-            video tetap dapat dibuka langsung di YouTube.
+            buka video langsung di YouTube.
           </p>
       </section>
       <section className="container">

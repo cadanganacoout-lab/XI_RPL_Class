@@ -6,11 +6,11 @@
     <script>
       (function () {
         try {
-          var theme = localStorage.getItem("xirpl1-theme") ||
-            (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          var savedTheme = localStorage.getItem("xirpl1-theme");
+          var theme = savedTheme === "light" || savedTheme === "dark" ? savedTheme : "dark";
           document.documentElement.setAttribute("data-theme", theme);
         } catch {
-          document.documentElement.setAttribute("data-theme", "light");
+          document.documentElement.setAttribute("data-theme", "dark");
         }
       })();
     </script>

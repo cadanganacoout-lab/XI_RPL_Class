@@ -23,7 +23,7 @@
   }
 
   .page-hero {
-    padding-block: 36px 22px;
+    padding-block: 32px 20px;
   }
 
   .video-grid,
@@ -32,6 +32,7 @@
   }
 
   .agenda-layout { grid-template-columns: 1fr; }
+  .comments-layout:not(.comments-layout--home) { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 520px) {

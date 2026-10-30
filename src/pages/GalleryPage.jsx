@@ -23,13 +23,12 @@ export function GalleryPage() {
           <span className="route-label">/galeri</span>
           <h1>Galeri Kegiatan</h1>
           <p>
-            Dokumentasi kegiatan kelas XI RPL. Telusuri galeri dari atas ke bawah;
-            ketuk foto untuk memperbesar.
+            Dokumentasi kegiatan kelas XI RPL. Pilih foto untuk melihatnya lebih besar.
           </p>
       </section>
       <section className="container">
           <p className="gallery-hint">
-            Gulir ke bawah untuk melihat lebih banyak foto · klik foto untuk memperbesar
+            Pilih foto untuk memperbesar · jelajahi galeri dengan menggulir
           </p>
           <div className="gallery-grid">
             {GALERI.map((photo) => (

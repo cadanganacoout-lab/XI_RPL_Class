@@ -182,8 +182,17 @@ const results = [];
           await page.click('.menu-toggle');
           assert.equal(await page.$eval('.menu-toggle', button => button.getAttribute('aria-expanded')), 'false');
           const previousTheme = await page.$eval('.theme-toggle', button => button.getAttribute('aria-pressed'));
+          const footerBackground = await page.$eval(
+            '.site-footer',
+            footer => getComputedStyle(footer).backgroundColor
+          );
           await page.click('.theme-toggle');
           assert.notEqual(await page.$eval('.theme-toggle', button => button.getAttribute('aria-pressed')), previousTheme);
+          assert.equal(
+            await page.$eval('.site-footer', footer => getComputedStyle(footer).backgroundColor),
+            footerBackground,
+            'Footer background stays dark when changing the page theme.'
+          );
           await page.click('.theme-toggle');
           const pageErrors = messages.filter(message => message.type === 'pageerror');
           assert.equal(pageErrors.length, 0, `${route} should not raise browser runtime errors.`);

@@ -11,12 +11,10 @@ const navigation = [
 
 function getInitialTheme() {
   try {
-    return (
-      localStorage.getItem("xirpl1-theme") ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-    );
+    const savedTheme = window.localStorage.getItem("xirpl1-theme");
+    return savedTheme === "light" || savedTheme === "dark" ? savedTheme : "dark";
   } catch {
-    return "light";
+    return "dark";
   }
 }
 

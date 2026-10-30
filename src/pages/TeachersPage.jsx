@@ -82,8 +82,7 @@ export function TeachersPage() {
           <span className="route-label">/guru</span>
           <h1>Daftar Guru</h1>
           <p>
-            Guru-guru yang mengajar di kelas XI RPL, lengkap dengan mata pelajaran
-            yang diampu.
+            Kenali guru yang mengajar di kelas XI RPL dan mata pelajaran yang diampu.
           </p>
       </section>
       <section className="container">
@@ -110,7 +109,7 @@ export function TeachersPage() {
               <TeacherCard key={teacher.id} teacher={teacher} />
             ))}
             {filteredTeachers.length === 0 && (
-              <p className="empty-note">Tidak ada guru yang cocok dengan pencarian.</p>
+              <p className="empty-note">Tidak ada guru yang cocok. Coba kata kunci lain.</p>
             )}
           </div>
       </section>
