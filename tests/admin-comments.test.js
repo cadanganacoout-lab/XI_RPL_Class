@@ -190,6 +190,18 @@ test("Supabase schema errors give safe actionable feedback without exposing its 
     }),
   });
 
+  test("Supabase permission errors are distinguished from invalid server keys", async () => {
+    const { upstreamFailure } = require("../api/_routes/admin-comments");
+    assert.equal(
+      upstreamFailure({ status: 403 }, "42501").code,
+      "COMMENT_SERVICE_PERMISSION",
+    );
+    assert.equal(
+      upstreamFailure({ status: 401 }, "UNKNOWN").code,
+      "COMMENT_SERVICE_AUTH",
+    );
+  });
+
   try {
     const response = createResponse();
     await handler(createRequest({ content: "Admin post" }, db.token), response);

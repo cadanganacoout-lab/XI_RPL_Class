@@ -19,6 +19,8 @@ revoke all on public.comments from anon, authenticated;
 revoke insert (author_name) on public.comments from anon, authenticated;
 grant select on public.comments to anon, authenticated;
 grant insert (content, parent_id) on public.comments to anon, authenticated;
+grant select, insert (content, parent_id, author_name) on public.comments to service_role;
+grant usage, select on sequence public.comments_id_seq to service_role;
 
 drop policy if exists "Comments are visible to everyone" on public.comments;
 create policy "Comments are visible to everyone"

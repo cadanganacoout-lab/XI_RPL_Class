@@ -61,11 +61,18 @@ function upstreamFailure(response, code) {
       "Supabase cannot find public.comments. Apply supabase/comments.sql to this project.",
     );
   }
-  if (response.status === 401 || response.status === 403 || code === "42501") {
+  if (response.status === 401) {
     return new ApiError(
       502,
       "COMMENT_SERVICE_AUTH",
-      "Supabase rejected the server key. Check SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in the same project.",
+      "Supabase did not accept the server key. Check that SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY belong to the same project and redeploy.",
+    );
+  }
+  if (response.status === 403 || code === "42501") {
+    return new ApiError(
+      502,
+      "COMMENT_SERVICE_PERMISSION",
+      "Supabase authenticated the request but denied table access. Re-run the grants in supabase/comments.sql, then retry.",
     );
   }
   if (code === "23503") {
