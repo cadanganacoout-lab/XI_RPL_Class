@@ -43,10 +43,12 @@ export function CommentsSection() {
 
   return (
       <section className="container home-discussion" id="diskusi">
-        <div className="discussion-heading">
+        <div className="section-head discussion-heading">
+          <div>
           <span className="route-label">ruang kelas</span>
           <h2>Ruang Diskusi</h2>
           <p>Berbagi kabar dan ide secara anonim. Jangan bagikan informasi pribadi.</p>
+          </div>
         </div>
         <div className="comments-layout comments-layout--home">
           <form className="panel comment-form" onSubmit={submitComment}>
@@ -84,17 +86,23 @@ export function CommentsSection() {
               onChange={event => setText(event.target.value)}
             />
             <div className="comment-form-footer">
-              <span>{text.length}/500</span>
+              <span className={text.length > 450 ? "is-near" : undefined}>{text.length}/500</span>
               <button className="comment-submit" type="submit" disabled={!feed.enabled || submitting}>
                 {submitting ? "Mengirim..." : replyTo !== null ? "Kirim balasan" : "Kirim anonim"}
               </button>
             </div>
-            <p className="comment-notice" role="status" aria-live="polite">{notice}</p>
+            <p
+              className={`comment-notice${/gagal|terlebih dahulu|maksimal/i.test(notice) ? " is-error" : ""}`}
+              role="status"
+              aria-live="polite"
+            >
+              {notice}
+            </p>
           </form>
           <div className="panel comments-panel">
             <div className="panel-head">
               <h3>Semua Komentar</h3>
-              <span className="filetag">{feed.status}</span>
+              <span className={`filetag feed-status${feed.status.startsWith("Terhubung") ? " is-online" : ""}`}>{feed.status}</span>
             </div>
             <div
               className="discussion-scroll"

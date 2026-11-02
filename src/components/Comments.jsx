@@ -28,31 +28,37 @@ function formatCommentTime(value) {
 export function CommentCard({ comment, onReply }) {
   return (
     <article className={`comment-card${comment.parent_id ? " comment-reply" : ""}`} data-comment-id={comment.id}>
-      <div className="comment-card-head">
-        <strong>Anonim</strong>
-        <div className="comment-actions">
-          {onReply && (
-            <button
-              className="comment-reply-button"
-              type="button"
-              onClick={() => onReply(comment)}
-            >
-              Balas
-            </button>
-          )}
-          <time dateTime={comment.created_at}>{formatCommentTime(comment.created_at)}</time>
+      <span className="comment-avatar" aria-hidden="true">A</span>
+      <div className="comment-main">
+        <div className="comment-card-head">
+          <div className="comment-who">
+            <strong>Anonim</strong>
+            <time dateTime={comment.created_at}>{formatCommentTime(comment.created_at)}</time>
+          </div>
+          <div className="comment-actions">
+            {onReply && (
+              <button
+                className="comment-reply-button"
+                type="button"
+                onClick={() => onReply(comment)}
+              >
+                <ReplyIndicator />
+                Balas
+              </button>
+            )}
+          </div>
         </div>
+        {comment.parent_id && (
+          <blockquote className="comment-reply-context">
+            <span className="comment-reply-label">
+              <ReplyIndicator />
+              Membalas:
+            </span>
+            <span>{comment.parent?.content || comment.parentContent || "Komentar asal tidak tersedia."}</span>
+          </blockquote>
+        )}
+        <p className="comment-text">{comment.content}</p>
       </div>
-      {comment.parent_id && (
-        <blockquote className="comment-reply-context">
-          <span className="comment-reply-label">
-            <ReplyIndicator />
-            Membalas:
-          </span>
-          <span>{comment.parent?.content || comment.parentContent || "Komentar asal tidak tersedia."}</span>
-        </blockquote>
-      )}
-      <p className="comment-text">{comment.content}</p>
     </article>
   );
 }

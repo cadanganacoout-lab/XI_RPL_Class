@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SITE } from "../data/class-data.js";
 
 const navigation = [
@@ -41,11 +41,11 @@ function ThemeToggle() {
       aria-pressed={dark}
       onClick={toggleTheme}
     >
-      <svg className="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg className="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="4.5" />
         <path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7" />
       </svg>
-      <svg className="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg className="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z" />
       </svg>
     </button>
@@ -55,44 +55,57 @@ function ThemeToggle() {
 export function SiteHeader({ activePage }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+    function onKeyDown(event) {
+      if (event.key === "Escape") setMenuOpen(false);
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
+
   return (
-    <header className="site-header">
-      <div className="navwrap">
-        <a href="#/beranda" className="brand">
-          <span className="brand-mark" aria-hidden="true">&lt;/&gt;</span>
-          <span>
-            XI RPL
-            <small>SMK PGRI 2 Ponorogo</small>
-          </span>
-        </a>
-        <nav className={`tabbar${menuOpen ? " open" : ""}`} aria-label="Navigasi utama">
-          {navigation.map(([page, label, href]) => (
-            <a
-              className={`tab${page === activePage ? " active" : ""}`}
-              data-page={page}
-              href={href}
-              key={page}
-              aria-current={page === activePage ? "page" : undefined}
-              onClick={() => setMenuOpen(false)}
+    <>
+      <header className="site-header">
+        <div className="navwrap">
+          <a href="#/beranda" className="brand" onClick={() => setMenuOpen(false)}>
+            <span className="brand-mark" aria-hidden="true">&lt;/&gt;</span>
+            <span>
+              XI RPL
+              <small>SMK PGRI 2 Ponorogo</small>
+            </span>
+          </a>
+          <nav id="site-nav" className={`tabbar${menuOpen ? " open" : ""}`} aria-label="Navigasi utama">
+            {navigation.map(([page, label, href]) => (
+              <a
+                className={`tab${page === activePage ? " active" : ""}`}
+                data-page={page}
+                href={href}
+                key={page}
+                aria-current={page === activePage ? "page" : undefined}
+                onClick={() => setMenuOpen(false)}
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+          <div className="nav-actions">
+            <ThemeToggle />
+            <button
+              className="menu-toggle"
+              type="button"
+              aria-label={menuOpen ? "Tutup menu" : "Buka menu"}
+              aria-expanded={menuOpen}
+              aria-controls="site-nav"
+              onClick={() => setMenuOpen((open) => !open)}
             >
-              {label}
-            </a>
-          ))}
-        </nav>
-        <div className="nav-actions">
-          <ThemeToggle />
-          <button
-            className="menu-toggle"
-            type="button"
-            aria-label={menuOpen ? "Tutup menu" : "Buka menu"}
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            <i className="hamburger" />
-          </button>
+              <i className="hamburger" />
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+      {menuOpen && <div className="nav-backdrop" aria-hidden="true" onClick={() => setMenuOpen(false)} />}
+    </>
   );
 }
 
@@ -100,24 +113,31 @@ export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="footer-inner">
-        <div className="footer-brand">
-          <span className="brand-mark" aria-hidden="true">&lt;/&gt;</span>
-          <span>{SITE.className}<small>{SITE.schoolName}</small></span>
+        <div className="footer-main">
+          <div>
+            <div className="footer-brand">
+              <span className="brand-mark" aria-hidden="true">&lt;/&gt;</span>
+              <span>{SITE.className}<small>{SITE.schoolName}</small></span>
+            </div>
+            <p className="footer-message">Belajar bersama, bertumbuh lewat karya.</p>
+          </div>
+          <nav className="footer-links" aria-label="Navigasi footer">
+            {navigation.map(([, label, href]) => (
+              <a href={href} key={href}>{label}</a>
+            ))}
+          </nav>
+          <img
+            className="footer-slogan"
+            src="asset/logo/slogan.webp"
+            alt='Logo SMK PGRI 2 Ponorogo dengan slogan "Tidak tertib, tidak baik"'
+            loading="lazy"
+            decoding="async"
+          />
         </div>
-        <p className="footer-message">Belajar bersama, bertumbuh lewat karya.</p>
-        <nav className="footer-links" aria-label="Navigasi footer">
-          {navigation.map(([, label, href]) => (
-            <a href={href} key={href}>{label}</a>
-          ))}
-        </nav>
-        <img
-          className="footer-slogan"
-          src="asset/logo/slogan.webp"
-          alt='Logo SMK PGRI 2 Ponorogo dengan slogan "Tidak tertib, tidak baik"'
-          loading="lazy"
-          decoding="async"
-        />
-        <span className="footer-stack">Dibuat dengan semangat RPL</span>
+        <div className="footer-bottom">
+          <span>© {new Date().getFullYear()} {SITE.className} · {SITE.schoolName}</span>
+          <span className="footer-stack">Dibuat dengan semangat RPL</span>
+        </div>
       </div>
     </footer>
   );

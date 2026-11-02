@@ -105,7 +105,8 @@ const GURU = [
     "id": "g11",
     "nama": "Andies Pramudiyantoro, S.Kom",
     "mapel": "Pemrograman Perangkat Bergerak",
-    "foto": "asset/profil/pak andies.png"
+    "foto": "asset/profil/pak andies.png",
+    "linktree": "https://linktr.ee/andiespramudiyantoro"
   },
   {
     "id": "g12",

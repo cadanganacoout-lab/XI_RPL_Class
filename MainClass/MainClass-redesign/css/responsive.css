@@ -1,0 +1,37 @@
+/* Aturan responsif spesifik komponen berada di file masing-masing.
+   File ini hanya memuat aturan lintas-komponen. */
+
+@media (max-width: 720px) {
+  .container {
+    width: min(100% - 32px, var(--max-width));
+  }
+
+  .page-hero {
+    padding-block: 32px 22px;
+  }
+
+  .toolbar-row {
+    margin-bottom: 18px;
+  }
+}
+
+@media (max-width: 520px) {
+  .toolbar-main {
+    flex-basis: 100%;
+  }
+
+  .count-pill {
+    margin-left: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

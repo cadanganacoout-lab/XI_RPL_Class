@@ -146,7 +146,9 @@ const results = [];
           } else if (route === 'video') {
             const count = await page.evaluate(() => window.XIRPL1_DATA.VIDEO.length);
             assert.equal((await page.$$('.video-card')).length, count);
-            assert.ok(await page.$('.video-frame iframe[title]'), 'Video embeds have accessible titles.');
+            assert.ok(await page.$('.video-frame button.video-play[aria-label]'), 'Video players have accessible labels.');
+            await page.click('.video-play');
+            assert.ok(await page.$('.video-frame iframe[title]'), 'Playing a video loads an embed with an accessible title.');
           } else if (route === 'beranda') {
             assert.ok(await page.$('.hero-beranda'), 'Home page renders the class hero.');
             assert.equal((await page.$$('.stat-card')).length, 3);

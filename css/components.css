@@ -1,67 +1,157 @@
+/* ---------- Permukaan ---------- */
+
 .panel {
   min-width: 0;
   background: var(--gradient-glass), var(--gradient-surface);
   border: 1px solid var(--color-border-strong);
-  box-shadow: 0 8px 26px rgb(22 27 35 / 5%);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
   -webkit-backdrop-filter: blur(14px) saturate(120%);
   backdrop-filter: blur(14px) saturate(120%);
 }
 
-.frame-grid {
-  border-top: 1px solid var(--color-border-strong);
-  border-left: 1px solid var(--color-border-strong);
-}
-
-.frame-grid > .frame-cell {
-  border-right: 1px solid var(--color-border-strong);
-  border-bottom: 1px solid var(--color-border-strong);
-}
-
 .panel-head {
   display: flex;
-  min-height: 40px;
+  min-height: 52px;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 8px 16px;
-  border-bottom: 1px solid var(--color-border-strong);
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .panel-head h2,
 .panel-head h3 {
-  color: var(--color-text-secondary);
-  font: 600 0.6875rem/1.3 var(--font-mono);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  color: var(--color-text-primary);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: -0.005em;
 }
 
 .filetag {
   color: var(--color-text-muted);
-  font: 500 0.6875rem/1.2 var(--font-mono);
+  font: 500 0.6875rem/1.3 var(--font-mono);
 }
+
+/* ---------- Warna aksen per kartu (6 warna bawaan tema) ---------- */
+
+.people-card,
+.gallery-item,
+.video-card,
+.explore-card,
+.duty-list li {
+  --card-accent: var(--hue-1);
+}
+
+.people-card:nth-child(6n + 2),
+.gallery-item:nth-child(6n + 2),
+.video-card:nth-child(6n + 2),
+.explore-card:nth-child(6n + 2),
+.duty-list li:nth-child(6n + 2) {
+  --card-accent: var(--hue-2);
+}
+
+.people-card:nth-child(6n + 3),
+.gallery-item:nth-child(6n + 3),
+.video-card:nth-child(6n + 3),
+.explore-card:nth-child(6n + 3),
+.duty-list li:nth-child(6n + 3) {
+  --card-accent: var(--hue-3);
+}
+
+.people-card:nth-child(6n + 4),
+.gallery-item:nth-child(6n + 4),
+.video-card:nth-child(6n + 4),
+.explore-card:nth-child(6n + 4),
+.duty-list li:nth-child(6n + 4) {
+  --card-accent: var(--hue-4);
+}
+
+.people-card:nth-child(6n + 5),
+.gallery-item:nth-child(6n + 5),
+.video-card:nth-child(6n + 5),
+.explore-card:nth-child(6n + 5),
+.duty-list li:nth-child(6n + 5) {
+  --card-accent: var(--hue-5);
+}
+
+.people-card:nth-child(6n),
+.gallery-item:nth-child(6n),
+.video-card:nth-child(6n),
+.explore-card:nth-child(6n),
+.duty-list li:nth-child(6n) {
+  --card-accent: var(--hue-6);
+}
+
+/* ---------- Avatar (foto atau inisial) ---------- */
+
+.avatar {
+  position: relative;
+  display: grid;
+  width: var(--avatar-size, 64px);
+  height: var(--avatar-size, 64px);
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--card-accent, var(--hue-1)) 45%, var(--color-border));
+  border-radius: calc(var(--avatar-size, 64px) * 0.3);
+  background: color-mix(in srgb, var(--card-accent, var(--hue-1)) 14%, var(--color-surface-muted));
+  color: var(--card-accent, var(--hue-1));
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-base) ease-out;
+}
+
+.avatar-initials {
+  font-size: calc(var(--avatar-size, 64px) * 0.34);
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.avatar--round {
+  border-radius: 50%;
+}
+
+/* ---------- Toolbar, pencarian, chip ---------- */
 
 .toolbar-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 12px 16px;
+  margin: 0 0 22px;
+}
+
+.toolbar-main {
+  display: flex;
+  min-width: min(100%, 280px);
+  flex: 1 1 360px;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 12px;
-  margin: 0 0 18px;
 }
 
 .search-box {
   display: flex;
-  min-width: min(100%, 280px);
-  min-height: 44px;
-  flex: 1;
+  min-width: min(100%, 240px);
+  min-height: 48px;
+  flex: 1 1 280px;
   align-items: center;
   gap: 10px;
-  padding: 0 12px;
-  border: 1px solid var(--color-border);
+  padding: 0 16px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
   background: var(--gradient-glass), var(--gradient-surface);
-  -webkit-backdrop-filter: blur(12px) saturate(120%);
-  backdrop-filter: blur(12px) saturate(120%);
   color: var(--color-text-muted);
+  transition:
+    border-color var(--dur-fast) ease-out,
+    box-shadow var(--dur-fast) ease-out;
 }
 
 .search-box input {
@@ -71,52 +161,150 @@
   outline: 0;
   background: transparent;
   color: var(--color-text-primary);
+  font-size: 0.9375rem;
 }
 
 .search-box:focus-within {
-  border-color: var(--color-accent);
+  border-color: var(--color-accent-strong);
+  box-shadow: 0 0 0 4px var(--color-ring);
 }
 
 .search-box input::placeholder {
   color: var(--color-text-muted);
 }
 
+.search-box input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
 .count-pill {
-  color: var(--color-text-muted);
-  font: 500 0.6875rem/1.2 var(--font-mono);
+  padding: 6px 12px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-secondary);
+  font: 600 0.75rem/1.2 var(--font-mono);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition:
+    background-color var(--dur-fast) ease-out,
+    border-color var(--dur-fast) ease-out,
+    color var(--dur-fast) ease-out;
+}
+
+.chip small {
+  color: var(--color-text-muted);
+  font: 600 0.6875rem/1 var(--font-mono);
+}
+
+.chip[aria-pressed="true"] {
+  border-color: var(--color-accent-border);
+  background: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+}
+
+.chip[aria-pressed="true"] small {
+  color: inherit;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chip:hover:not([aria-pressed="true"]) {
+    border-color: var(--color-accent-border);
+    color: var(--color-text-primary);
+  }
+}
+
+/* ---------- Tombol ---------- */
+
 .button-primary,
+.button-secondary,
 .comment-submit {
   display: inline-flex;
-  min-height: 44px;
+  min-height: 46px;
   align-items: center;
   justify-content: center;
-  padding: 0 14px;
-  border: 0;
-  border-radius: 2px;
+  gap: 8px;
+  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  line-height: 1;
+  text-align: center;
+  transition:
+    background-color var(--dur-fast) ease-out,
+    border-color var(--dur-fast) ease-out,
+    color var(--dur-fast) ease-out,
+    box-shadow var(--dur-fast) ease-out;
+}
+
+.button-primary,
+.comment-submit {
   background: var(--color-action);
   color: var(--color-on-action);
-  font: 700 0.6875rem/1 var(--font-mono);
-  letter-spacing: 0.08em;
-  text-align: center;
-  text-transform: uppercase;
-  transition: background-color 120ms ease-out, color 120ms ease-out;
+  box-shadow: 0 1px 0 rgb(255 255 255 / 18%) inset, 0 6px 16px rgb(0 0 0 / 16%);
+}
+
+.button-secondary {
+  border-color: var(--color-border-strong);
+  background: color-mix(in srgb, var(--color-surface) 55%, transparent);
+  color: var(--color-text-primary);
+}
+
+.button-primary svg,
+.button-secondary svg {
+  flex: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .button-primary:hover,
   .comment-submit:hover:not(:disabled) {
-    background: var(--color-accent);
+    background: var(--color-action-hover);
     color: var(--color-on-action);
+  }
+
+  .button-secondary:hover:not(:disabled):not([aria-disabled="true"]) {
+    border-color: var(--color-accent-border);
+    background: var(--color-accent-soft);
+    color: var(--color-accent-strong);
   }
 }
 
+.button-primary:disabled,
+.button-secondary:disabled,
 .comment-submit:disabled {
   cursor: not-allowed;
-  opacity: 0.55;
+}
+
+.comment-submit:disabled {
+  opacity: 0.5;
+}
+
+.button-secondary:disabled {
+  border-style: dashed;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-weight: 600;
 }
 
 .empty-note {

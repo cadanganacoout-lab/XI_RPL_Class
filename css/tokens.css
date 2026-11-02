@@ -41,6 +41,34 @@
   --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
   --max-width: 1120px;
+
+  /* Tambahan token (palet bawaan di atas tidak diubah) */
+  --color-link: var(--color-accent);
+  --color-action-hover: var(--color-accent-strong);
+  --color-ring: rgb(110 168 255 / 28%);
+  --hue-1: #6ea8ff;
+  --hue-2: #60c6b0;
+  --hue-3: #b18aff;
+  --hue-4: #efb45e;
+  --hue-5: #f08a9d;
+  --hue-6: #84bd76;
+  --shadow-card: 0 1px 0 rgb(255 255 255 / 4%) inset, 0 12px 32px rgb(0 0 0 / 28%);
+  --shadow-lift: 0 1px 0 rgb(255 255 255 / 6%) inset, 0 18px 44px rgb(0 0 0 / 38%);
+  --shadow-pop: 0 24px 80px rgb(0 0 0 / 55%);
+}
+
+/* Token yang sama di kedua tema */
+:root {
+  --header-h: 68px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  --radius-pill: 999px;
+  --ease-out: cubic-bezier(0.2, 0.75, 0.25, 1);
+  --dur-fast: 140ms;
+  --dur-base: 220ms;
+  --space-section: clamp(44px, 6vw, 76px);
 }
 
 :root[data-theme="light"] {
@@ -82,4 +110,17 @@
   --color-warning: #7e5710;
   --color-danger: #b02f3f;
   --color-focus: #1d5fd1;
+
+  --color-link: var(--color-accent-strong);
+  --color-action-hover: var(--color-accent-strong);
+  --color-ring: rgb(29 95 209 / 24%);
+  --hue-1: #1d5fd1;
+  --hue-2: #087e72;
+  --hue-3: #7040c8;
+  --hue-4: #9a6200;
+  --hue-5: #bd4058;
+  --hue-6: #38752d;
+  --shadow-card: 0 1px 2px rgb(70 50 25 / 6%), 0 12px 30px rgb(70 50 25 / 8%);
+  --shadow-lift: 0 2px 4px rgb(70 50 25 / 8%), 0 18px 40px rgb(70 50 25 / 14%);
+  --shadow-pop: 0 24px 70px rgb(40 30 15 / 30%);
 }

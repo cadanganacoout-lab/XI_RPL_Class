@@ -4,6 +4,9 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -13,8 +16,10 @@ body {
   background-attachment: fixed;
   color: var(--color-text-primary);
   font-family: var(--font-sans);
-  line-height: 1.55;
+  font-size: 1rem;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   transition: color 120ms ease-out;
 }
 
@@ -39,7 +44,9 @@ h2,
 h3,
 h4,
 p,
-blockquote {
+blockquote,
+dl,
+dd {
   margin: 0;
 }
 
@@ -54,9 +61,47 @@ button {
   cursor: pointer;
 }
 
+::selection {
+  background: color-mix(in srgb, var(--color-accent-strong) 34%, transparent);
+}
+
 :focus-visible {
   outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+main {
+  display: block;
+  min-height: 62vh;
+  /* Hanya fade saat pindah halaman. "backwards" tidak meninggalkan transform,
+     jadi elemen fixed (lightbox) dan sticky (hero) tetap aman. */
+  animation: page-enter 360ms var(--ease-out) backwards;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 200;
+  top: -80px;
+  left: 16px;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--color-action);
+  color: var(--color-on-action);
+  font-size: 0.875rem;
+  font-weight: 650;
+  transition: top var(--dur-fast) ease-out;
+}
+
+.skip-link:focus {
+  top: 12px;
 }
 
 .container {
@@ -64,46 +109,109 @@ button {
   margin-inline: auto;
 }
 
-.label-mono,
-.route-label {
+/* ---------- Label & eyebrow ---------- */
+
+.label-mono {
   color: var(--color-text-muted);
   font: 500 0.6875rem/1.2 var(--font-mono);
   letter-spacing: 0.08em;
-}
-
-.label-mono {
   text-transform: uppercase;
 }
 
 .route-label {
-  display: inline-block;
-  margin-bottom: 12px;
-  letter-spacing: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 5px 11px 5px 9px;
+  border: 1px solid var(--color-accent-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-soft);
+  color: var(--color-link);
+  font: 600 0.6875rem/1.2 var(--font-mono);
+  letter-spacing: 0.04em;
 }
 
+.route-label::before {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+}
+
+/* ---------- Page hero ---------- */
+
 .page-hero {
-  padding-block: 44px 26px;
-  margin-bottom: 24px;
-  border-bottom: 1px solid var(--color-border-strong);
+  position: relative;
+  padding-block: clamp(40px, 7vw, 72px) clamp(24px, 4vw, 36px);
 }
 
 .page-hero h1 {
-  margin-bottom: 8px;
-  font-size: clamp(1.9rem, 4.5vw, 2.875rem);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  font-size: clamp(2.1rem, 5vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
   text-wrap: balance;
 }
 
 .page-hero p {
-  max-width: 620px;
+  max-width: 600px;
   color: var(--color-text-secondary);
+  font-size: clamp(1rem, 1.6vw, 1.0625rem);
+  text-wrap: pretty;
+}
+
+.page-hero::after {
+  display: block;
+  height: 1px;
+  margin-top: clamp(24px, 4vw, 36px);
+  background: linear-gradient(
+    90deg,
+    var(--color-border-strong),
+    color-mix(in srgb, var(--color-border-strong) 30%, transparent) 70%,
+    transparent
+  );
+  content: "";
+}
+
+/* ---------- Judul seksi ---------- */
+
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-bottom: 20px;
+}
+
+.section-head .route-label {
+  margin-bottom: 10px;
+}
+
+.section-head h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 750;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+.section-head p {
+  margin-top: 6px;
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
   text-wrap: pretty;
 }
 
 .empty-note {
-  padding: 18px;
+  padding: 22px;
   color: var(--color-text-muted);
   text-align: center;
   text-wrap: pretty;
+}
+
+main:focus {
+  outline: none;
 }
