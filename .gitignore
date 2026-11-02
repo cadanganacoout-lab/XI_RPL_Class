@@ -5,6 +5,7 @@ skills-lock.json
 # Build output and local deployment metadata
 dist/
 .vercel/
+docs/
 
 # Local environment variables and secrets
 .env
@@ -12,6 +13,9 @@ dist/
 !.env.example
 *credentials*.env
 atlas-credentials.env
+
+# Local-only student account credentials
+docs/profil-user/AKUN-SISWA-TERBATAS.md
 
 # Local logs
 *.log

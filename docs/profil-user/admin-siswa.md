@@ -30,12 +30,10 @@
     password: --
 16. username: GAYUH GITA YULIA NATASYA
     password: --
-17. username: GILANG NUR MAULIDA FAID
-    password: --
+17. akun sudah ada
 18. username: HELCIA ANDIKA PUTRI
     password: --
-19. username: HEDRI SETIAWAN
-    password: --
+19. akun sudah ada
 20. username: ILHAM ROFIG ANANDA BAROCTA
     password: --
 21. username: JULIAN TRI PRATAMA
@@ -50,8 +48,7 @@
     password: --
 26. username: NABILA' ATHA NUR AL FIYAH
     password: --
-27. username: NURUL SAFIKA
-    password: --
+27. akun sudah ada
 28. username: RAGIL BAGUS NUGROHO
     password: --
 29. username: RAGIL SATRIA RISDIYANTO

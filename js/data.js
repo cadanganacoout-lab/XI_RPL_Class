@@ -282,7 +282,7 @@ const SISWA = [
   },
   {
     id: "s19",
-    nama: "Hedri Setiawan",
+    nama: "Hendri Setiawan",
     jabatan: "Persensi Kelas",
     hobi: "-",
     catatan: "-",
@@ -452,7 +452,7 @@ const PIKET = {
   "Kamis": [
     "Gayuh Gita Yulia Natasya",
     "Helcia Andika Putri",
-    "Hedri Setiawan",
+    "Hendri Setiawan",
     "Sultan Pasha Ibrahim Sukarno",
     "Kenza Pratama"
   ],
