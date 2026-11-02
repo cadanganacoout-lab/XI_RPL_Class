@@ -17,16 +17,19 @@ Jangan gunakan prefix `VITE_`, `REACT_APP_`, atau `NEXT_PUBLIC_` untuk variabel 
 | `MONGODB_DB` | Nama database production | Nama database preview yang berbeda |
 | `MONGODB_ENVIRONMENT` | `production` | `preview` |
 | `APP_ORIGIN` | `https://www.rpl42sterida.web.id` | Origin preview tetap/alias yang tepat; aplikasi menolak origin yang tidak cocok |
+| `SUPABASE_URL` | URL project Supabase komentar | URL project Supabase komentar |
+| `SUPABASE_SERVICE_ROLE_KEY` | Secret server-side untuk menampilkan identitas komentar admin utama | Secret server-side pada project yang sama; jangan pernah gunakan prefix publik |
 | `SESSION_COOKIE_NAME` | Opsional; default `xirpl1_session` dan otomatis memakai prefix `__Host-` pada production | Opsional; default `xirpl1_session` |
 | `SESSION_TTL_DAYS` | Opsional; default 7, rentang 1–30 | Opsional; default 7, rentang 1–30 |
 
 `NODE_ENV` dan `VERCEL_ENV` disediakan platform. Gunakan user MongoDB dengan hak minimum pada database lingkungannya. Jangan menyalin URI Production ke Preview atau development.
 
-Supabase tetap hanya dipakai untuk komentar. URL dan publishable/anon key komentar berada pada konfigurasi browser yang memang publik; pastikan RLS komentar telah ditinjau. Background card dan Supabase Storage tidak digunakan, sehingga `SUPABASE_SERVICE_ROLE_KEY` tidak diperlukan.
+Supabase tetap dipakai untuk komentar. URL dan publishable/anon key komentar berada pada konfigurasi browser yang memang publik; pastikan RLS komentar telah ditinjau. `SUPABASE_SERVICE_ROLE_KEY` hanya digunakan server-side untuk membuat komentar bernama dari akun admin utama, dan tidak boleh dimasukkan ke konfigurasi browser.
 
 ## Preview
 
 - [ ] Isi environment Preview dengan cluster/database serta credential khusus Preview.
+- [ ] Terapkan `supabase/comments.sql` ke project Supabase yang sesuai dan isi URL serta service-role key hanya pada environment server.
 - [ ] Gunakan origin Preview yang stabil untuk `APP_ORIGIN`; jangan memakai wildcard.
 - [ ] Deploy Preview dan uji login, logout, ganti password, profil, daftar siswa, edit card, komentar, dan tampilan mobile.
 - [ ] Pastikan CSP Report-Only tidak menghasilkan pelanggaran yang tidak diharapkan sebelum mempertimbangkan mode enforce.

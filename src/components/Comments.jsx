@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useAuth } from "../context/AuthContext.jsx";
+import { apiRequest } from "../lib/api.js";
 
 const PAGE_SIZE = 50;
 
@@ -26,13 +28,19 @@ function formatCommentTime(value) {
 }
 
 export function CommentCard({ comment, onReply }) {
+  const authorName = comment.author_name || "Anonim";
+  const initials = comment.author_name
+    ? authorName.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase()
+    : "A";
+
   return (
     <article className={`comment-card${comment.parent_id ? " comment-reply" : ""}`} data-comment-id={comment.id}>
-      <span className="comment-avatar" aria-hidden="true">A</span>
+      <span className={`comment-avatar${comment.author_name ? " comment-avatar--admin" : ""}`} aria-hidden="true">{initials}</span>
       <div className="comment-main">
         <div className="comment-card-head">
           <div className="comment-who">
-            <strong>Anonim</strong>
+            <strong>{authorName}</strong>
+            {comment.author_name && <span className="comment-admin-badge">Admin utama</span>}
             <time dateTime={comment.created_at}>{formatCommentTime(comment.created_at)}</time>
           </div>
           <div className="comment-actions">
@@ -95,7 +103,7 @@ export function useCommentFeed({ limit } = {}) {
     setStatus("Menghubungkan ke ruang diskusi...");
     const { data, error } = await client
       .from("comments")
-      .select("id, content, parent_id, created_at")
+      .select("id, content, parent_id, created_at, author_name")
       .order("id", { ascending: false })
       .limit(limit || PAGE_SIZE);
     if (error) throw error;
@@ -181,7 +189,7 @@ export function useCommentFeed({ limit } = {}) {
     try {
       const { data, error } = await client
         .from("comments")
-        .select("id, content, parent_id, created_at")
+        .select("id, content, parent_id, created_at, author_name")
         .lt("id", cursor)
         .order("id", { ascending: false })
         .limit(PAGE_SIZE);
@@ -210,7 +218,35 @@ export function useCommentFeed({ limit } = {}) {
     if (error) throw error;
   }, []);
 
-  return { comments, status, enabled, hasOlder, loadingOlder, loadOlder, loadLatest, insertComment };
+  const insertAdminComment = useCallback(async (content, parentId) => {
+    const payload = await apiRequest("/api/comments/admin", {
+      method: "POST",
+      body: { content, parent_id: parentId },
+    });
+    if (!payload.comment) throw new Error("Respons komentar admin tidak valid.");
+    const parent = comments.find(comment => comment.id === payload.comment.parent_id);
+    const next = {
+      ...payload.comment,
+      parentContent: parent?.content || null,
+    };
+    setComments(current => {
+      if (current.some(comment => comment.id === next.id)) return current;
+      const updated = [next, ...current];
+      return limit ? updated.slice(0, limit) : updated;
+    });
+  }, [comments, limit]);
+
+  return {
+    comments,
+    status,
+    enabled,
+    hasOlder,
+    loadingOlder,
+    loadOlder,
+    loadLatest,
+    insertComment,
+    insertAdminComment,
+  };
 }
 
 export function RecentComments() {

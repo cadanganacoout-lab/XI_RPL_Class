@@ -5,8 +5,16 @@ const { handleAuthRoute, isAuthRoute } = require("./_routes/auth");
 const { handleCardRoute, isCardRoute } = require("./_routes/cards");
 const { handleContentRoute, isContentRoute } = require("./_routes/content");
 const { handleAdminDataRoute, isAdminDataRoute } = require("./_routes/admin-data");
+const {
+  handleAdminCommentRoute,
+  isAdminCommentRoute,
+} = require("./_routes/admin-comments");
 
-function createHandler({ getDatabase = getDb } = {}) {
+function createHandler({
+  getDatabase = getDb,
+  fetchImpl = globalThis.fetch,
+  getSupabaseConfig,
+} = {}) {
   return async function handler(request, response) {
     await handleApiError(response, async () => {
       const requestUrl = new URL(request.url, "http://localhost");
@@ -50,6 +58,19 @@ function createHandler({ getDatabase = getDb } = {}) {
         if (route !== "teachers" && request.method !== "GET") requireSameOrigin(request);
         const db = await getDatabase();
         await handleAdminDataRoute({ request, response, route, db });
+        return;
+      }
+
+      if (isAdminCommentRoute(route)) {
+        if (request.method === "POST") requireSameOrigin(request);
+        const db = await getDatabase();
+        await handleAdminCommentRoute({
+          request,
+          response,
+          db,
+          fetchImpl,
+          ...(getSupabaseConfig ? { getSupabaseConfig } : {}),
+        });
         return;
       }
 

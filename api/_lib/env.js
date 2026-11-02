@@ -44,6 +44,20 @@ const envSchema = z.object({
     .regex(/^[A-Za-z0-9_-]+$/)
     .optional(),
   APP_ORIGIN: appOriginSchema.optional(),
+  SUPABASE_URL: z
+    .string()
+    .trim()
+    .url()
+    .refine(value => {
+      try {
+        const url = new URL(value);
+        return url.protocol === "https:" && url.pathname === "/";
+      } catch {
+        return false;
+      }
+    })
+    .optional(),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().trim().min(1).optional(),
   MONGODB_ENVIRONMENT: z.enum(["development", "preview", "production"]).optional(),
   SESSION_COOKIE_NAME: z
     .string()
@@ -82,4 +96,25 @@ function requireAppOrigin(source = process.env) {
   return new URL(env.APP_ORIGIN).origin;
 }
 
-module.exports = { readServerEnv, requireAppOrigin, requireMongoConfig };
+function requireSupabaseServiceConfig(source = process.env) {
+  const env = readServerEnv(source);
+  if (!env.SUPABASE_URL) {
+    throw new Error("Missing required server environment variable: SUPABASE_URL");
+  }
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new Error(
+      "Missing required server environment variable: SUPABASE_SERVICE_ROLE_KEY",
+    );
+  }
+  return {
+    url: env.SUPABASE_URL,
+    serviceRoleKey: env.SUPABASE_SERVICE_ROLE_KEY,
+  };
+}
+
+module.exports = {
+  readServerEnv,
+  requireAppOrigin,
+  requireMongoConfig,
+  requireSupabaseServiceConfig,
+};

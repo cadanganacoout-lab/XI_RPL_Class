@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { CommentCard, useCommentFeed } from "../components/Comments.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export function CommentsSection() {
   const feed = useCommentFeed();
+  const { user } = useAuth();
+  const isMainAdmin = user?.role === "admin" && user?.username === "admin";
   const [text, setText] = useState("");
   const [notice, setNotice] = useState("");
   const [replyTo, setReplyTo] = useState(null);
@@ -28,7 +31,8 @@ export function CommentsSection() {
     try {
       setSubmitting(true);
       setNotice("Mengirim komentar...");
-      await feed.insertComment(content, replyTo);
+      if (isMainAdmin) await feed.insertAdminComment(content, replyTo);
+      else await feed.insertComment(content, replyTo);
       setText("");
       setReplyTo(null);
       setNotice(replyTo !== null
@@ -47,7 +51,7 @@ export function CommentsSection() {
           <div>
           <span className="route-label">ruang kelas</span>
           <h2>Ruang Diskusi</h2>
-          <p>Berbagi kabar dan ide secara anonim. Jangan bagikan informasi pribadi.</p>
+          <p>Berbagi kabar dan ide secara anonim. Admin utama tampil dengan nama akun. Jangan bagikan informasi pribadi.</p>
           </div>
         </div>
         <div className="comments-layout comments-layout--home">
@@ -88,7 +92,11 @@ export function CommentsSection() {
             <div className="comment-form-footer">
               <span className={text.length > 450 ? "is-near" : undefined}>{text.length}/500</span>
               <button className="comment-submit" type="submit" disabled={!feed.enabled || submitting}>
-                {submitting ? "Mengirim..." : replyTo !== null ? "Kirim balasan" : "Kirim anonim"}
+                {submitting
+                  ? "Mengirim..."
+                  : isMainAdmin
+                    ? replyTo !== null ? "Kirim balasan sebagai admin" : "Kirim sebagai admin"
+                    : replyTo !== null ? "Kirim balasan" : "Kirim anonim"}
               </button>
             </div>
             <p

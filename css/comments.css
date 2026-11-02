@@ -219,6 +219,12 @@
   font-weight: 750;
 }
 
+.comment-avatar--admin {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-on-action);
+}
+
 .comment-main {
   min-width: 0;
 }
@@ -243,6 +249,17 @@
   color: var(--color-text-primary);
   font-size: 0.875rem;
   font-weight: 700;
+}
+
+.comment-admin-badge {
+  padding: 2px 7px;
+  border: 1px solid var(--color-accent-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 .comment-who time {
