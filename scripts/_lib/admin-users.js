@@ -1,7 +1,7 @@
 const { randomInt } = require("node:crypto");
 const { createInterface } = require("node:readline/promises");
 const { ObjectId } = require("mongodb");
-const { getDb } = require("../../api/_lib/db");
+const { closeDb, getDb } = require("../../api/_lib/db");
 const { readServerEnv } = require("../../api/_lib/env");
 const { hashPassword } = require("../../api/_lib/password");
 const { destroyAllSessions } = require("../../api/_lib/session");
@@ -378,6 +378,14 @@ function runCli(command) {
           : "Account administration failed; sensitive database details were not printed.",
       );
       process.exitCode = 1;
+    })
+    .finally(async () => {
+      try {
+        await closeDb();
+      } catch {
+        console.error("Could not close the database connection cleanly.");
+        process.exitCode = 1;
+      }
     });
 }
 

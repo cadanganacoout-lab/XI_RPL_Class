@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 const { buildLegacyCards, loadLegacyStudents } = require('./migrate-legacy');
+const { loadLegacyTeachers } = require('./migrate-teachers');
 const chromeCandidates = [
   process.env.CHROME_PATH,
   process.platform === 'win32' ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' : null,
@@ -29,6 +30,10 @@ const browserCards = buildLegacyCards(loadLegacyStudents()).map(card => ({
   ...(card.portfolio ? {portfolio: card.portfolio} : {}),
   sortOrder: card.sortOrder
 }));
+const browserTeachers = loadLegacyTeachers().map((teacher, index) => ({
+  ...teacher,
+  sortOrder: index + 1
+}));
 
 async function mockSiteApi(page) {
   await page.setRequestInterception(true);
@@ -46,6 +51,13 @@ async function mockSiteApi(page) {
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify({cards: browserCards})
+      });
+    }
+    if (pathname === '/api/teachers') {
+      return request.respond({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({teachers: browserTeachers})
       });
     }
     return request.continue();

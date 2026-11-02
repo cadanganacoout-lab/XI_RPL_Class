@@ -154,6 +154,9 @@ export function SiteHeader({ activePage }) {
                       {["student", "admin"].includes(user.role) && (
                         <a href="#/card-saya" onClick={closeAccountMenu}>Edit Card</a>
                       )}
+                      {user.role === "admin" && (
+                        <a href="#/admin" onClick={closeAccountMenu}>Kelola Data</a>
+                      )}
                     </>
                   )}
                   {(user.role !== "member" || user.mustChangePassword) && (

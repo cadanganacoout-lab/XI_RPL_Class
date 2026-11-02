@@ -14,6 +14,7 @@ import {
   RegisterPage,
 } from "./pages/AuthPages.jsx";
 import { CardEditorPage } from "./pages/CardEditorPage.jsx";
+import { AdminDataPage } from "./pages/AdminDataPage.jsx";
 import { ProfilePage } from "./pages/ProfilePage.jsx";
 import { HomePage } from "./pages/HomePage.jsx";
 import { StudentsPage } from "./pages/StudentsPage.jsx";
@@ -52,6 +53,7 @@ const pageTitles = {
   "ganti-password": "Ganti Password",
   profil: "Profil Saya",
   "card-saya": "Edit Card Saya",
+  admin: "Kelola Data",
 };
 
 function readRoute() {
@@ -197,6 +199,13 @@ function RouteContent({ route }) {
     return (
       <RequireRole roles={["student", "admin"]}>
         <CardEditorPage />
+      </RequireRole>
+    );
+  }
+  if (route.page === "admin") {
+    return (
+      <RequireRole roles={["admin"]}>
+        <AdminDataPage />
       </RequireRole>
     );
   }

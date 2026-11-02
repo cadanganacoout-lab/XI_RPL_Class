@@ -80,6 +80,33 @@ const cardJsonSchema = {
   },
 };
 
+const teacherJsonSchema = {
+  bsonType: "object",
+  required: [
+    "id",
+    "nama",
+    "mapel",
+    "foto",
+    "sortOrder",
+    "isActive",
+    "createdAt",
+    "updatedAt",
+  ],
+  additionalProperties: false,
+  properties: {
+    _id: { bsonType: "objectId" },
+    id: { bsonType: "string", pattern: "^g[0-9]{2}$" },
+    nama: { bsonType: "string", minLength: 1, maxLength: 100 },
+    mapel: { bsonType: "string", minLength: 1, maxLength: 120 },
+    foto: { bsonType: "string", minLength: 1, maxLength: 2048 },
+    linktree: { bsonType: "string", pattern: "^https://", maxLength: 2048 },
+    sortOrder: { bsonType: "int", minimum: 1 },
+    isActive: { bsonType: "bool" },
+    createdAt: { bsonType: "date" },
+    updatedAt: { bsonType: "date" },
+  },
+};
+
 const rateLimitJsonSchema = {
   bsonType: "object",
   required: ["count", "expiresAt"],
@@ -95,6 +122,7 @@ const COLLECTION_SCHEMAS = {
   users: userJsonSchema,
   sessions: sessionJsonSchema,
   cards: cardJsonSchema,
+  teachers: teacherJsonSchema,
   rate_limits: rateLimitJsonSchema,
 };
 

@@ -13,6 +13,7 @@ import {
 } from "../data/class-data.js";
 import { CommentsSection } from "./CommentsPage.jsx";
 import { initialsOf } from "../components/Avatar.jsx";
+import { apiRequest } from "../lib/api.js";
 
 const welcomePhotos = [...new Set(
   GALERI
@@ -157,21 +158,35 @@ function formatAgendaDate(date) {
   }).format(date);
 }
 
-function guruName(parity, day, subject, start) {
+function guruName(parity, day, subject, start, teachers) {
   const schedule = GURU_JADWAL[parity]?.[day];
-  if (typeof schedule === "string") return schedule;
+  let originalName;
+  if (typeof schedule === "string") originalName = schedule;
   if (schedule) {
-    return minutesOfDay(start) < minutesOfDay(schedule.mulai) ? schedule.sebelum : schedule.sesudah;
+    if (typeof schedule !== "string") {
+      originalName = minutesOfDay(start) < minutesOfDay(schedule.mulai)
+        ? schedule.sebelum
+        : schedule.sesudah;
+    }
+  }
+  if (originalName) {
+    const originalTeacher = GURU.find(teacher => teacher.nama === originalName);
+    return teachers.find(teacher => teacher.id === originalTeacher?.id)?.nama || originalName;
   }
   const aliases = {
     "Pendidikan Agama Budi Pekerti": "Pendidikan Agama",
     "Pendidikan Jasmani Olahraga Kesehatan": "PJOK",
     "Kreativitas Inovasi & Kewirausahaan": "Kewirausahaan",
   };
-  return GURU.find(teacher => teacher.mapel === (aliases[subject] || subject))?.nama || "—";
+  const originalTeacher = GURU.find(
+    teacher => teacher.mapel === (aliases[subject] || subject),
+  );
+  return teachers.find(teacher => teacher.id === originalTeacher?.id)?.nama ||
+    originalTeacher?.nama ||
+    "—";
 }
 
-function ScheduleList({ date, now, isToday }) {
+function ScheduleList({ date, now, isToday, teachers }) {
   const day = HARI_LIST[date.getDay()];
   const parity = parityFor(date);
   if (!HARI_AKTIF.includes(day)) {
@@ -228,7 +243,9 @@ function ScheduleList({ date, now, isToday }) {
               </span>
             )}
           </div>
-          {!row.istirahat && <small>{guruName(parity, day, row.mapel, row.mulai)}</small>}
+          {!row.istirahat && (
+            <small>{guruName(parity, day, row.mapel, row.mulai, teachers)}</small>
+          )}
           {isCurrent && (
             <>
               <div
@@ -268,7 +285,26 @@ function DutyList({ date }) {
 
 function AgendaDashboard({ now }) {
   const [dayOffset, setDayOffset] = useState(0);
+  const [teachers, setTeachers] = useState([]);
+  const [teacherDataError, setTeacherDataError] = useState("");
   const date = new Date(now);
+
+  useEffect(() => {
+    let active = true;
+    apiRequest("/api/teachers")
+      .then(payload => {
+        if (!Array.isArray(payload.teachers)) {
+          throw new Error("Respons daftar guru tidak valid.");
+        }
+        if (active) setTeachers(payload.teachers);
+      })
+      .catch(() => {
+        if (active) setTeacherDataError("Nama guru mungkin belum menggunakan data terbaru.");
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
   date.setDate(date.getDate() + dayOffset);
   const day = HARI_LIST[date.getDay()];
   const parity = parityFor(date);
@@ -337,7 +373,14 @@ function AgendaDashboard({ now }) {
             </div>
           )}
           <div className="agenda-timeline">
-            <ScheduleList date={date} now={now} isToday={isToday} />
+            {teacherDataError && <p className="empty-note" role="status">{teacherDataError}</p>}
+            <ScheduleList
+              date={date}
+              now={now}
+              isToday={isToday}
+              teachers={teachers}
+              teacherDataError={teacherDataError}
+            />
           </div>
         </section>
 

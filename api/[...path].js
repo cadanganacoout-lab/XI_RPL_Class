@@ -4,6 +4,7 @@ const { requireSameOrigin } = require("./_lib/security");
 const { handleAuthRoute, isAuthRoute } = require("./_routes/auth");
 const { handleCardRoute, isCardRoute } = require("./_routes/cards");
 const { handleContentRoute, isContentRoute } = require("./_routes/content");
+const { handleAdminDataRoute, isAdminDataRoute } = require("./_routes/admin-data");
 
 function createHandler({ getDatabase = getDb } = {}) {
   return async function handler(request, response) {
@@ -42,6 +43,13 @@ function createHandler({ getDatabase = getDb } = {}) {
         if (request.method === "PATCH") requireSameOrigin(request);
         const db = await getDatabase();
         await handleContentRoute({ request, response, route, db });
+        return;
+      }
+
+      if (isAdminDataRoute(route)) {
+        if (route !== "teachers" && request.method !== "GET") requireSameOrigin(request);
+        const db = await getDatabase();
+        await handleAdminDataRoute({ request, response, route, db });
         return;
       }
 

@@ -23,6 +23,10 @@ const INDEXES = {
       },
     ],
   ],
+  teachers: [
+    [{ id: 1 }, { unique: true, name: "teacher_id_unique" }],
+    [{ sortOrder: 1, id: 1 }, { name: "teacher_order" }],
+  ],
   rate_limits: [
     [{ expiresAt: 1 }, { expireAfterSeconds: 0, name: "rate_limit_expiry_ttl" }],
   ],
@@ -75,13 +79,24 @@ async function createIndexes(db) {
 }
 
 if (require.main === module) {
-  getDb()
-    .then(createIndexes)
-    .then(summary => console.log(JSON.stringify(summary)))
-    .catch(() => {
+  const { closeDb } = require("../api/_lib/db");
+  async function main() {
+    let failed = false;
+    try {
+      console.log(JSON.stringify(await createIndexes(await getDb())));
+    } catch {
       console.error("Could not create database indexes; no credentials or database details were printed.");
-      process.exitCode = 1;
-    });
+      failed = true;
+    }
+    try {
+      await closeDb();
+    } catch {
+      console.error("Could not close the database connection cleanly.");
+      failed = true;
+    }
+    if (failed) process.exitCode = 1;
+  }
+  main();
 }
 
 module.exports = { INDEXES, createIndexes, ensureCollection };

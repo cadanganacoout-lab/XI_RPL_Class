@@ -21,12 +21,28 @@ const displayNameSchema = z
 const roleSchema = z.enum(["member", "student", "admin"]);
 const objectIdStringSchema = z.string().regex(/^[a-f0-9]{24}$/i);
 const legacyIdSchema = z.string().regex(/^s[0-9]{2}$/);
+const teacherIdSchema = z.string().regex(/^g[0-9]{2}$/);
 const slugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(60);
 const httpsUrlSchema = z
   .string()
   .max(2048)
   .url()
-  .refine(value => new URL(value).protocol === "https:");
+  .refine(value => value.slice(0, 8).toLowerCase() === "https://");
+const photoPathSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .max(2048)
+  .refine(value => {
+    if (httpsUrlSchema.safeParse(value).success) return true;
+    return (
+      value.startsWith("asset/") &&
+      !value.includes("\\") &&
+      !/[<>"']/.test(value) &&
+      ![...value].some(character => character.charCodeAt(0) <= 0x1f) &&
+      !value.split("/").some(part => part === "." || part === "..")
+    );
+  });
 
 const userDocumentSchema = z
   .object({
@@ -61,13 +77,37 @@ const cardDocumentSchema = z
     jabatan: z.string().max(80),
     hobi: z.string().max(300),
     catatan: z.string().max(500),
-    foto: z.string().min(1).max(2048),
+    foto: photoPathSchema,
     portfolio: httpsUrlSchema.optional(),
     sortOrder: z.number().int().positive(),
     ownerUserId: z.instanceof(ObjectId).nullable(),
     isPublished: z.boolean(),
     createdAt: z.date(),
     updatedAt: z.date(),
+  })
+  .strict();
+
+const teacherDocumentSchema = z
+  .object({
+    id: teacherIdSchema,
+    nama: z.string().trim().min(1).max(100),
+    mapel: z.string().trim().min(1).max(120),
+    foto: photoPathSchema,
+    linktree: httpsUrlSchema.optional(),
+    sortOrder: z.number().int().positive(),
+    isActive: z.boolean(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+  })
+  .strict();
+
+const legacyTeacherSchema = z
+  .object({
+    id: teacherIdSchema,
+    nama: z.string().trim().min(1).max(100),
+    mapel: z.string().trim().min(1).max(120),
+    foto: photoPathSchema,
+    linktree: httpsUrlSchema.optional(),
   })
   .strict();
 
@@ -78,7 +118,7 @@ const legacyStudentSchema = z
     jabatan: z.string().max(80),
     hobi: z.string().max(300),
     catatan: z.string().max(500),
-    foto: z.string().min(1).max(2048),
+    foto: photoPathSchema,
     portfolio: httpsUrlSchema.optional(),
   })
   .strict();
@@ -110,6 +150,17 @@ const publicCardSchema = z
     catatan: z.string().max(500),
     foto: z.string().min(1).max(2048),
     portfolio: httpsUrlSchema.optional(),
+    sortOrder: z.number().int().positive(),
+  })
+  .strict();
+
+const publicTeacherSchema = z
+  .object({
+    id: teacherIdSchema,
+    nama: z.string().min(1).max(100),
+    mapel: z.string().min(1).max(120),
+    foto: photoPathSchema,
+    linktree: httpsUrlSchema.optional(),
     sortOrder: z.number().int().positive(),
   })
   .strict();
@@ -150,20 +201,37 @@ function toPublicCard(card) {
   });
 }
 
+function toPublicTeacher(teacher) {
+  return publicTeacherSchema.parse({
+    id: teacher.id,
+    nama: teacher.nama,
+    mapel: teacher.mapel,
+    foto: teacher.foto,
+    ...(teacher.linktree ? { linktree: teacher.linktree } : {}),
+    sortOrder: teacher.sortOrder,
+  });
+}
+
 module.exports = {
   cardDocumentSchema,
   displayNameSchema,
   httpsUrlSchema,
   legacyIdSchema,
   legacyStudentSchema,
+  legacyTeacherSchema,
   objectIdStringSchema,
   parseObjectId,
+  photoPathSchema,
   publicProfileSchema,
   publicCardSchema,
+  publicTeacherSchema,
   publicUserSchema,
   roleSchema,
   slugSchema,
+  teacherDocumentSchema,
+  teacherIdSchema,
   toPublicCard,
+  toPublicTeacher,
   toPublicProfile,
   toPublicUser,
   userDocumentSchema,
