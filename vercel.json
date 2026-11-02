@@ -3,6 +3,12 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/[...path]?route=:path*"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

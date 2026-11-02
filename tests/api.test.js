@@ -142,6 +142,22 @@ test("health endpoint returns only the minimal health response", async () => {
   assert.equal(response.headers["cache-control"], "no-store");
 });
 
+test("rewritten nested routes dispatch using the original API route", async () => {
+  const handler = createHandler({ getDatabase: async () => createAuthDatabase() });
+  const response = createResponse();
+  await handler(
+    {
+      method: "GET",
+      url: "/api/[...path]?route=auth%2Fme",
+      headers: {},
+    },
+    response,
+  );
+
+  assert.equal(response.statusCode, 200);
+  assert.deepEqual(JSON.parse(response.body), { user: null });
+});
+
 test("health endpoint rejects non-GET methods without internal details", async () => {
   const response = createResponse();
   await apiHandler(

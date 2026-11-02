@@ -8,8 +8,12 @@ const { handleContentRoute, isContentRoute } = require("./_routes/content");
 function createHandler({ getDatabase = getDb } = {}) {
   return async function handler(request, response) {
     await handleApiError(response, async () => {
-      const pathname = new URL(request.url, "http://localhost").pathname;
-      const route = pathname.replace(/^\/api\/?/, "");
+      const requestUrl = new URL(request.url, "http://localhost");
+      const pathname = requestUrl.pathname;
+      const route =
+        pathname === "/api/[...path]"
+          ? requestUrl.searchParams.get("route") || ""
+          : pathname.replace(/^\/api\/?/, "");
 
       if (route === "health") {
         if (request.method !== "GET") {
