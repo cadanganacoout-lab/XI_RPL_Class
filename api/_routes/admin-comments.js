@@ -24,6 +24,18 @@ function isAdminCommentRoute(route) {
   return route === "comments/admin";
 }
 
+function supabaseHeaders(serviceKey) {
+  const headers = {
+    apikey: serviceKey,
+    "Content-Type": "application/json",
+    Prefer: "return=representation",
+  };
+  if (!serviceKey.startsWith("sb_secret_")) {
+    headers.Authorization = `Bearer ${serviceKey}`;
+  }
+  return headers;
+}
+
 async function readUpstreamError(response) {
   try {
     const body = await response.json();
@@ -125,12 +137,7 @@ async function handleAdminCommentRoute({
   try {
     upstream = await fetchImpl(new URL("rest/v1/comments", config.url), {
       method: "POST",
-      headers: {
-        apikey: config.serviceRoleKey,
-        Authorization: `Bearer ${config.serviceRoleKey}`,
-        "Content-Type": "application/json",
-        Prefer: "return=representation",
-      },
+      headers: supabaseHeaders(config.serviceRoleKey),
       body: JSON.stringify({
         content: input.content,
         parent_id: input.parent_id ?? null,
@@ -164,5 +171,6 @@ module.exports = {
   adminCommentBodySchema,
   handleAdminCommentRoute,
   isAdminCommentRoute,
+  supabaseHeaders,
   upstreamFailure,
 };

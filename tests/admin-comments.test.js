@@ -88,11 +88,12 @@ test("main admin comments use trusted account name and reject forged author fiel
     getDatabase: async () => db,
     getSupabaseConfig: () => ({
       url: "https://comments.example/",
-      serviceRoleKey: "server-only-key",
+      serviceRoleKey: "sb_secret_server-only-key",
     }),
     fetchImpl: async (url, options) => {
       assert.equal(String(url), "https://comments.example/rest/v1/comments");
-      assert.equal(options.headers.Authorization, "Bearer server-only-key");
+      assert.equal(options.headers.apikey, "sb_secret_server-only-key");
+      assert.equal(options.headers.Authorization, undefined);
       inserted = JSON.parse(options.body);
       return {
         ok: true,
@@ -107,6 +108,18 @@ test("main admin comments use trusted account name and reject forged author fiel
         },
       };
     },
+  });
+
+  test("legacy service_role JWTs keep Bearer auth while new secret keys use apikey only", () => {
+    const { supabaseHeaders } = require("../api/_routes/admin-comments");
+    assert.equal(
+      supabaseHeaders("sb_secret_new-key").Authorization,
+      undefined,
+    );
+    assert.equal(
+      supabaseHeaders("eyJhbGciOi.test.signature").Authorization,
+      "Bearer eyJhbGciOi.test.signature",
+    );
   });
 
   try {
@@ -146,7 +159,7 @@ test("only the main admin account may publish named comments", async () => {
     getDatabase: async () => db,
     getSupabaseConfig: () => ({
       url: "https://comments.example/",
-      serviceRoleKey: "server-only-key",
+      serviceRoleKey: "eyJhbGciOi.test.signature",
     }),
     fetchImpl: async () => {
       called = true;
@@ -176,7 +189,7 @@ test("Supabase schema errors give safe actionable feedback without exposing its 
     getDatabase: async () => db,
     getSupabaseConfig: () => ({
       url: "https://comments.example/",
-      serviceRoleKey: "server-only-key",
+      serviceRoleKey: "eyJhbGciOi.test.signature",
     }),
     fetchImpl: async () => ({
       ok: false,
