@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
+const { buildLegacyCards, loadLegacyStudents } = require('./migrate-legacy');
 const chromeCandidates = [
   process.env.CHROME_PATH,
   process.platform === 'win32' ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' : null,
@@ -16,12 +17,51 @@ const REPORT_DIR = path.join(ROOT_DIR, 'reports');
 const SCREENSHOT_DIR = path.join(REPORT_DIR, 'screenshots');
 const routes = ['beranda','siswa','guru','galeri','video','komentar'];
 const results = [];
+const wait = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
+const browserCards = buildLegacyCards(loadLegacyStudents()).map(card => ({
+  id: card.legacyId,
+  slug: card.slug,
+  nama: card.nama,
+  jabatan: card.jabatan,
+  hobi: card.hobi,
+  catatan: card.catatan,
+  foto: card.foto,
+  ...(card.portfolio ? {portfolio: card.portfolio} : {}),
+  sortOrder: card.sortOrder
+}));
+
+async function mockSiteApi(page) {
+  await page.setRequestInterception(true);
+  page.on('request', request => {
+    const pathname = new URL(request.url()).pathname;
+    if (pathname === '/api/auth/me') {
+      return request.respond({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({user: null})
+      });
+    }
+    if (pathname === '/api/cards') {
+      return request.respond({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({cards: browserCards})
+      });
+    }
+    return request.continue();
+  });
+}
+
 (async () => {
   const { createServer } = await import('vite');
   const viteServer = await createServer({
     configFile: path.join(ROOT_DIR, 'vite.config.js'),
     logLevel: 'error',
-    server: { host: '127.0.0.1', port: 0 }
+    server: {
+      host: '127.0.0.1',
+      port: 0,
+      watch: { ignored: ['**/*credentials*.env'] }
+    }
   });
   await viteServer.listen();
   const address = viteServer.httpServer.address();
@@ -41,6 +81,7 @@ const results = [];
       if (!fs.existsSync(file)) continue;
       const page = await browser.newPage();
       const messages = [];
+      await mockSiteApi(page);
 
       page.on('console', msg => {
         messages.push({type: 'console.'+msg.type(), text: msg.text()});
@@ -54,8 +95,9 @@ const results = [];
 
       try {
         const url = `http://127.0.0.1:${address.port}/index.html#/${route}`;
-        await page.goto(url, {waitUntil: 'networkidle2', timeout: 30000});
-        await page.waitForTimeout(500);
+        await page.goto(url, {waitUntil: 'domcontentloaded', timeout: 30000});
+        await page.waitForSelector('#root > *', {timeout: 10000});
+        await wait(250);
         const mobileHoverTargets = {
           beranda: '.hero-cta',
           siswa: '.people-card',
@@ -66,8 +108,10 @@ const results = [];
         };
         const mobilePage = await browser.newPage();
         try {
+          await mockSiteApi(mobilePage);
           await mobilePage.setViewport({width: 390, height: 844, isMobile: true, hasTouch: true});
-          await mobilePage.goto(url, {waitUntil: 'networkidle2', timeout: 30000});
+          await mobilePage.goto(url, {waitUntil: 'domcontentloaded', timeout: 30000});
+          await mobilePage.waitForSelector(mobileHoverTargets[route], {timeout: 10000});
           assert.equal(
             await mobilePage.evaluate(() => matchMedia('(hover: hover) and (pointer: fine)').matches),
             false,
@@ -81,7 +125,7 @@ const results = [];
           }, element);
           const beforeHover = await visualState(hoverElement);
           await hoverElement.hover();
-          await mobilePage.waitForTimeout(200);
+          await wait(200);
           assert.deepEqual(
             await visualState(hoverElement),
             beforeHover,
@@ -174,9 +218,27 @@ const results = [];
           }
 
           await page.setViewport({width: 390, height: 844});
+          const overflowDetails = await page.evaluate(() => ({
+            documentWidth: document.documentElement.scrollWidth,
+            viewportWidth: window.innerWidth,
+            elements: [...document.querySelectorAll('body *')]
+              .filter(element => {
+                const bounds = element.getBoundingClientRect();
+                return bounds.right > window.innerWidth + 1 || bounds.left < -1;
+              })
+              .slice(0, 8)
+              .map(element => ({
+                selector: element.tagName.toLowerCase() +
+                  (element.className && typeof element.className === 'string'
+                    ? '.' + element.className.trim().replace(/\s+/g, '.')
+                    : ''),
+                left: Math.round(element.getBoundingClientRect().left),
+                right: Math.round(element.getBoundingClientRect().right)
+              }))
+          }));
           assert.ok(
-            await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
-            `${route} should not overflow horizontally at mobile width.`
+            overflowDetails.documentWidth <= overflowDetails.viewportWidth,
+            `${route} should not overflow horizontally at mobile width: ${JSON.stringify(overflowDetails)}`
           );
           await page.click('.menu-toggle');
           assert.equal(await page.$eval('.menu-toggle', button => button.getAttribute('aria-expanded')), 'true');
@@ -207,6 +269,328 @@ const results = [];
         results.push({file:route, error: (err && err.message) || String(err), messages});
       }
       await page.close();
+    }
+
+    async function runAuthLogin(next, displayName = "Browser Member") {
+      const authPage = await browser.newPage();
+      const authPageErrors = [];
+      let loginHeaders = null;
+      authPage.on('pageerror', error => authPageErrors.push(error.message));
+      await authPage.setRequestInterception(true);
+      authPage.on('request', request => {
+        const pathname = new URL(request.url()).pathname;
+        if (pathname === '/api/auth/me') {
+          return request.respond({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({user: null})
+          });
+        }
+        if (pathname === '/api/profile/me') {
+          return request.respond({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({
+              user: {
+                username: 'browser_member',
+                displayName,
+                role: 'member',
+                joinedAt: '2026-01-01T00:00:00.000Z'
+              },
+              card: null
+            })
+          });
+        }
+        if (pathname === '/api/auth/login') {
+          loginHeaders = request.headers();
+          return request.respond({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({
+              user: {username: 'browser_member', displayName, role: 'member'},
+              mustChangePassword: false
+            })
+          });
+        }
+        return request.continue();
+      });
+
+      try {
+        await authPage.goto(
+          `http://127.0.0.1:${address.port}/index.html#/login?next=${encodeURIComponent(next)}`,
+          {waitUntil: 'domcontentloaded', timeout: 30000}
+        );
+        await authPage.waitForSelector('#login-username');
+        assert.equal(
+          await authPage.$eval('#login-username', input => input.autocomplete),
+          'username'
+        );
+        assert.equal(
+          await authPage.$eval('#login-password', input => input.autocomplete),
+          'current-password'
+        );
+        assert.ok(
+          await authPage.$('label[for="login-username"]'),
+          'Login username has a visible label.'
+        );
+        await authPage.type('#login-username', 'browser_member');
+        await authPage.type('#login-password', 'A-valid-password-48!');
+        await authPage.click('.auth-submit');
+        await authPage.waitForFunction(
+          () => window.location.hash === '#/beranda' ||
+            window.location.hash === '#/profil',
+          {timeout: 10000}
+        );
+        assert.equal(loginHeaders?.['x-requested-with'], 'fetch');
+        assert.equal(loginHeaders?.['content-type'], 'application/json');
+        assert.equal(
+          await authPage.evaluate(() => {
+            const keys = [...Object.keys(localStorage), ...Object.keys(sessionStorage)];
+            return keys.some(key => /auth|session|token|user/i.test(key));
+          }),
+          false,
+          'Auth data is not persisted in browser storage.'
+        );
+        assert.equal(authPageErrors.length, 0, 'Auth pages should not raise browser errors.');
+        return authPage;
+      } catch (error) {
+        await authPage.close();
+        throw error;
+      }
+    }
+
+    for (const unsafeNext of [
+      'https://evil.example',
+      '//evil.example',
+      'javascript:alert(1)'
+    ]) {
+      const authPage = await runAuthLogin(unsafeNext);
+      try {
+        assert.equal(
+          await authPage.evaluate(() => window.location.hash),
+          '#/beranda',
+          `Unsafe redirect ${unsafeNext} should fall back to the home page.`
+        );
+      } finally {
+        await authPage.close();
+      }
+    }
+
+    const profilePage = await runAuthLogin(
+      '/profil',
+      '<img src=x onerror=alert(1)>'
+    );
+    try {
+      await profilePage.waitForSelector('.account-details');
+      assert.equal(await profilePage.$('button[aria-controls="profile-name-editor"]'), null);
+      assert.equal(await profilePage.$('a[href="#/card-saya"]'), null);
+      assert.equal(await profilePage.$('a[href="#/ganti-password"]'), null);
+      assert.equal(
+        await profilePage.$('img[src="x"]'),
+        null,
+        'Display names are rendered as text rather than HTML.'
+      );
+      assert.match(
+        await profilePage.$eval('.profile-header h1', node => node.textContent),
+        /<img src=x onerror=alert\(1\)>/
+      );
+      await profilePage.evaluate(() => {
+        window.location.hash = '#/ganti-password';
+      });
+      await profilePage.waitForSelector('.auth-card h1');
+      assert.match(
+        await profilePage.$eval('.auth-card h1', node => node.textContent),
+        /Perubahan password melalui admin/
+      );
+      assert.equal(await profilePage.$('#current-password'), null);
+    } finally {
+      await profilePage.close();
+    }
+
+    const publicProfilePage = await browser.newPage();
+    const publicProfileErrors = [];
+    await publicProfilePage.setRequestInterception(true);
+    publicProfilePage.on('request', request => {
+      const pathname = new URL(request.url()).pathname;
+      if (pathname === '/api/auth/me') {
+        return request.respond({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({user: null})
+        });
+      }
+      if (pathname === '/api/profile/student_01') {
+        return request.respond({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            user: {
+              username: 'student_01',
+              displayName: 'Public Student',
+              role: 'student',
+              joinedAt: '2026-01-01T00:00:00.000Z'
+            },
+            card: browserCards[0]
+          })
+        });
+      }
+      return request.continue();
+    });
+    publicProfilePage.on('pageerror', error => publicProfileErrors.push(error.message));
+    try {
+      await publicProfilePage.goto(
+        `http://127.0.0.1:${address.port}/index.html#/profil/student_01`,
+        {waitUntil: 'domcontentloaded', timeout: 30000}
+      );
+      await publicProfilePage.waitForSelector('.profile-card .people-card');
+      assert.match(
+        await publicProfilePage.$eval('.profile-header h1', node => node.textContent),
+        /Public Student/
+      );
+      assert.equal(await publicProfilePage.$('button[aria-controls="profile-name-editor"]'), null);
+      assert.equal(publicProfileErrors.length, 0, 'Public student profiles should not raise browser errors.');
+    } finally {
+      await publicProfilePage.close();
+    }
+
+    const ownedProfilePage = await browser.newPage();
+    const ownedProfileErrors = [];
+    let ownerDisplayName = 'Student Owner';
+    ownedProfilePage.on('pageerror', error => ownedProfileErrors.push(error.message));
+    await ownedProfilePage.setRequestInterception(true);
+    ownedProfilePage.on('request', request => {
+      const pathname = new URL(request.url()).pathname;
+      if (pathname === '/api/auth/me') {
+        return request.respond({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            user: {
+              username: 'student_owner',
+              displayName: ownerDisplayName,
+              role: 'student',
+              mustChangePassword: false
+            }
+          })
+        });
+      }
+      if (pathname === '/api/profile/me') {
+        if (request.method() === 'PATCH') {
+          const input = JSON.parse(request.postData());
+          ownerDisplayName = input.displayName;
+        }
+        return request.respond({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            user: {
+              username: 'student_owner',
+              displayName: ownerDisplayName,
+              role: 'student',
+              joinedAt: '2026-01-01T00:00:00.000Z'
+            },
+            card: browserCards[0]
+          })
+        });
+      }
+      return request.continue();
+    });
+    try {
+      await ownedProfilePage.goto(
+        `http://127.0.0.1:${address.port}/index.html#/profil`,
+        {waitUntil: 'domcontentloaded', timeout: 30000}
+      );
+      await ownedProfilePage.waitForSelector('.profile-header h1');
+      await ownedProfilePage.waitForSelector('button[aria-controls="profile-name-editor"]');
+      await ownedProfilePage.click('button[aria-controls="profile-name-editor"]');
+      await ownedProfilePage.click('#profile-display-name');
+      await ownedProfilePage.keyboard.down('Control');
+      await ownedProfilePage.keyboard.press('A');
+      await ownedProfilePage.keyboard.up('Control');
+      await ownedProfilePage.type('#profile-display-name', 'Updated Student');
+      await ownedProfilePage.click('.profile-name-form .auth-submit');
+      await ownedProfilePage.waitForFunction(
+        () => document.querySelector('.account-trigger-name')?.textContent === 'Updated Student',
+        {timeout: 10000}
+      );
+      assert.match(
+        await ownedProfilePage.$eval('.profile-header h1', node => node.textContent),
+        /Updated Student/
+      );
+      assert.equal(ownedProfileErrors.length, 0, 'Owned profile edits should not raise browser errors.');
+    } finally {
+      await ownedProfilePage.close();
+    }
+
+    const cardEditorPage = await browser.newPage();
+    const cardEditorErrors = [];
+    let unsavedNavigationPrompts = 0;
+    await cardEditorPage.setRequestInterception(true);
+    cardEditorPage.on('request', request => {
+      const pathname = new URL(request.url()).pathname;
+      if (pathname === '/api/auth/me') {
+        return request.respond({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            user: {
+              username: 'browser_student',
+              displayName: 'Browser Student',
+              role: 'student',
+              mustChangePassword: false
+            }
+          })
+        });
+      }
+      if (pathname === '/api/cards/me') {
+        return request.respond({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({card: browserCards[0]})
+        });
+      }
+      return request.continue();
+    });
+    cardEditorPage.on('pageerror', error => cardEditorErrors.push(error.message));
+    cardEditorPage.on('dialog', async dialog => {
+      unsavedNavigationPrompts += 1;
+      await dialog.dismiss();
+    });
+    try {
+      await cardEditorPage.goto(
+        `http://127.0.0.1:${address.port}/index.html#/card-saya`,
+        {waitUntil: 'domcontentloaded', timeout: 30000}
+      );
+      await cardEditorPage.waitForSelector('#card-hobi');
+      await cardEditorPage.click('#card-hobi');
+      await cardEditorPage.keyboard.down('Control');
+      await cardEditorPage.keyboard.press('A');
+      await cardEditorPage.keyboard.up('Control');
+      await cardEditorPage.type('#card-hobi', 'Hobi yang diperbarui');
+      await cardEditorPage.waitForSelector('.card-editor-unsaved');
+      await wait(50);
+      await cardEditorPage.click('.tab[href="#/beranda"]');
+      await wait(250);
+      const restoredRoute = await cardEditorPage.evaluate(() => ({
+        hash: window.location.hash,
+        editorVisible: Boolean(document.querySelector('#card-hobi'))
+      }));
+      assert.deepEqual(
+        restoredRoute,
+        {hash: '#/card-saya', editorVisible: true},
+        `Rejecting navigation should restore the editor, got ${JSON.stringify({
+          ...restoredRoute,
+          prompts: unsavedNavigationPrompts
+        })}.`
+      );
+      assert.equal(
+        unsavedNavigationPrompts,
+        1,
+        'Rejecting unsaved navigation restores the route without prompting again.'
+      );
+      assert.equal(cardEditorErrors.length, 0, 'Card editor should not raise browser errors.');
+    } finally {
+      await cardEditorPage.close();
     }
   } finally {
     if (browser) await browser.close();

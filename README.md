@@ -13,7 +13,7 @@ Website untuk kelas XI RPL SMK PGRI 2 Ponorogo. Jalankan lokal dengan Vite atau 
 │   ├── components/     # Header/footer bersama
 │   ├── data/           # Adapter ke sumber data js/data.js
 │   └── pages/          # Implementasi halaman React
-├── docs/               # Referensi jadwal dan manifest foto
+├── docs/               # Dokumentasi proyek dan roadmap fitur
 ├── scripts/            # Pemeriksaan runtime dan browser
 ├── reports/            # Hasil pemeriksaan lokal (tidak untuk deployment)
 ├── supabase/           # SQL schema dan kebijakan akses komentar
@@ -23,7 +23,7 @@ Website untuk kelas XI RPL SMK PGRI 2 Ponorogo. Jalankan lokal dengan Vite atau 
 
 ## Aplikasi React
 
-Semua halaman menggunakan React melalui satu entry `index.html`. Navigasi memakai hash (`#/siswa`, `#/guru`, `#/galeri`, `#/video`, `#/komentar`) agar bisa digunakan pada hosting statis tanpa konfigurasi rewrite. Tampilan mengikuti desain saat ini; redesign pada `docs/DESIGN-SYSTEM.md` belum diterapkan. Header/footer bersama berada di `src/components/SiteShell.jsx`, sedangkan data tetap bersumber dari `js/data.js`.
+Semua halaman menggunakan React melalui satu entry `index.html`. Navigasi memakai hash (`#/siswa`, `#/guru`, `#/galeri`, `#/video`, `#/komentar`) agar bisa digunakan pada hosting statis tanpa konfigurasi rewrite. UI saat ini memakai stylesheet modular di `css/`; header/footer bersama berada di `src/components/SiteShell.jsx`. Data kelas tetap bersumber dari `js/data.js` dan dipakai melalui adapter `src/data/class-data.js`.
 
 ```bash
 npm install
@@ -41,7 +41,7 @@ Buka `http://localhost:5173/` melalui Vite untuk menjalankan situs. Beranda dan 
 - **Deploy ke Vercel:** impor repository GitHub ini di Vercel, gunakan root directory `.` dan biarkan konfigurasi proyek menentukan instalasi `npm ci`, build `npm run build`, serta output `dist`. Setelah deploy pertama, setiap push ke branch yang terhubung akan memicu deployment baru. Situs memakai navigasi hash, jadi tidak memerlukan rewrite rute.
 - Komentar anonim bersifat publik; pengunjung dapat membaca dan menambahkan komentar, tetapi hanya pemilik project yang dapat menghapusnya dari Supabase Dashboard. Form membatasi 500 karakter; untuk mencegah spam lebih lanjut, tambahkan CAPTCHA/rate limiting sebelum situs dibuka luas.
 - Simpan aset baru di subfolder yang sesuai di `asset/` dan sesuaikan field `foto` di `js/data.js`.
-- Gunakan `docs/foto-manifest.md` untuk mencatat pemetaan foto profil.
+- Dokumentasi dan roadmap pengembangan ada di `docs/rencana/fitur/README.md`. Fitur autentikasi, profil pengguna, edit card siswa, dan unggah background masih berupa rencana; belum diterapkan ke aplikasi.
 - Jalankan `npm run check` setelah perubahan untuk memeriksa seluruh rute React.
 
 ## Pemeriksaan

@@ -4,6 +4,9 @@ import { resolve } from "node:path";
 
 export default defineConfig({
   base: "./",
+  build: {
+    sourcemap: false,
+  },
   plugins: [
     {
       name: "copy-class-assets",

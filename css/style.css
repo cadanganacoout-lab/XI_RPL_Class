@@ -2,6 +2,7 @@
 @import "./base.css";
 @import "./shell.css";
 @import "./components.css";
+@import "./auth.css";
 @import "./home.css";
 @import "./people.css";
 @import "./media.css";

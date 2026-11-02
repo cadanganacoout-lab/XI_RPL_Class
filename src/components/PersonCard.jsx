@@ -62,7 +62,7 @@ export function PersonCard({
             className="portfolio-link button-secondary"
             href={action.href}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer nofollow"
           >
             {action.label}
             <ExternalIcon />

@@ -1,7 +1,6 @@
 node_modules/
 .agents/
 skills-lock.json
-docs/
 
 # Build output and local deployment metadata
 dist/
@@ -11,6 +10,8 @@ dist/
 .env
 .env.*
 !.env.example
+*credentials*.env
+atlas-credentials.env
 
 # Local logs
 *.log

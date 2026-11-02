@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SITE } from "../data/class-data.js";
+import { useAuth } from "../context/AuthContext.jsx";
+import { nextPathFromHash } from "../lib/navigation.js";
 
 const navigation = [
   ["beranda", "Beranda", "#/beranda"],
@@ -54,6 +56,26 @@ function ThemeToggle() {
 
 export function SiteHeader({ activePage }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, loading, logout } = useAuth();
+  const [logoutError, setLogoutError] = useState("");
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  async function signOut() {
+    setLogoutError("");
+    setLoggingOut(true);
+    try {
+      await logout();
+      window.location.hash = "#/beranda";
+    } catch (error) {
+      setLogoutError(error.message);
+    } finally {
+      setLoggingOut(false);
+    }
+  }
+
+  function closeAccountMenu(event) {
+    event.currentTarget.closest("details")?.removeAttribute("open");
+  }
 
   useEffect(() => {
     if (!menuOpen) return undefined;
@@ -88,8 +110,74 @@ export function SiteHeader({ activePage }) {
                 {label}
               </a>
             ))}
+            {!loading && !user && (
+              <div className="mobile-auth-links">
+                <a
+                  className="nav-auth-link"
+                  href={`#/login?next=${encodeURIComponent(nextPathFromHash())}`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Masuk
+                </a>
+                <a
+                  className="nav-auth-link nav-auth-link--primary"
+                  href="#/daftar"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Daftar
+                </a>
+              </div>
+            )}
           </nav>
           <div className="nav-actions">
+            {loading ? (
+              <span className="nav-auth-loading" role="status">Memeriksa akun…</span>
+            ) : user ? (
+              <details className="account-menu">
+                <summary className="account-trigger">
+                  <span className="account-avatar" aria-hidden="true">
+                    {user.displayName
+                      .trim()
+                      .split(/\s+/)
+                      .slice(0, 2)
+                      .map(part => part[0])
+                      .join("")
+                      .toUpperCase()}
+                  </span>
+                  <span className="account-trigger-name">{user.displayName}</span>
+                  <span className="account-chevron" aria-hidden="true">⌄</span>
+                </summary>
+                <div className="account-menu-panel">
+                  {!user.mustChangePassword && (
+                    <>
+                      <a href="#/profil" onClick={closeAccountMenu}>Profil Saya</a>
+                      {["student", "admin"].includes(user.role) && (
+                        <a href="#/card-saya" onClick={closeAccountMenu}>Edit Card</a>
+                      )}
+                    </>
+                  )}
+                  {(user.role !== "member" || user.mustChangePassword) && (
+                    <a href="#/ganti-password" onClick={closeAccountMenu}>Ganti password</a>
+                  )}
+                  <button type="button" disabled={loggingOut} onClick={signOut}>
+                    {loggingOut ? "Keluar…" : "Keluar"}
+                  </button>
+                  {logoutError && <p role="alert">{logoutError}</p>}
+                </div>
+              </details>
+            ) : (
+              <div className="nav-auth-links">
+                <a
+                  className="nav-auth-link"
+                  href={`#/login?next=${encodeURIComponent(nextPathFromHash())}`}
+                >
+                  Masuk
+                </a>
+                <a className="nav-auth-link nav-auth-link--primary" href="#/daftar">
+                  Daftar
+                </a>
+              </div>
+            )}
             <ThemeToggle />
             <button
               className="menu-toggle"
