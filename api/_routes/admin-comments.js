@@ -10,16 +10,6 @@ const adminCommentBodySchema = z
   })
   .strict();
 
-const insertedCommentSchema = z
-  .object({
-    id: z.number().int().positive(),
-    content: z.string().min(1).max(500),
-    parent_id: z.number().int().positive().nullable(),
-    created_at: z.string().datetime(),
-    author_name: z.string().trim().min(1).max(40),
-  })
-  .strict();
-
 function isAdminCommentRoute(route) {
   return route === "comments/admin";
 }
@@ -137,7 +127,12 @@ async function handleAdminCommentRoute({
   try {
     upstream = await fetchImpl(new URL("rest/v1/comments", config.url), {
       method: "POST",
-      headers: supabaseHeaders(config.serviceRoleKey),
+      // The client receives the new row through Realtime; avoid depending on
+      // PostgREST's representation format for a successful insert.
+      headers: {
+        ...supabaseHeaders(config.serviceRoleKey),
+        Prefer: "return=minimal",
+      },
       body: JSON.stringify({
         content: input.content,
         parent_id: input.parent_id ?? null,
@@ -154,17 +149,7 @@ async function handleAdminCommentRoute({
     throw upstreamFailure(upstream, await readUpstreamError(upstream));
   }
 
-  let payload;
-  try {
-    payload = await upstream.json();
-  } catch {
-    throw new ApiError(502, "COMMENT_SERVICE_ERROR", "The comment service returned an invalid response.");
-  }
-  const parsed = insertedCommentSchema.safeParse(Array.isArray(payload) ? payload[0] : null);
-  if (!parsed.success) {
-    throw new ApiError(502, "COMMENT_SERVICE_ERROR", "The comment service returned an invalid response.");
-  }
-  sendJson(response, 201, { comment: parsed.data });
+  sendJson(response, 201, { ok: true });
 }
 
 module.exports = {

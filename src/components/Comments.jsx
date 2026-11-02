@@ -223,18 +223,8 @@ export function useCommentFeed({ limit } = {}) {
       method: "POST",
       body: { content, parent_id: parentId },
     });
-    if (!payload.comment) throw new Error("Respons komentar admin tidak valid.");
-    const parent = comments.find(comment => comment.id === payload.comment.parent_id);
-    const next = {
-      ...payload.comment,
-      parentContent: parent?.content || null,
-    };
-    setComments(current => {
-      if (current.some(comment => comment.id === next.id)) return current;
-      const updated = [next, ...current];
-      return limit ? updated.slice(0, limit) : updated;
-    });
-  }, [comments, limit]);
+    if (payload.ok !== true) throw new Error("Respons komentar admin tidak valid.");
+  }, []);
 
   return {
     comments,

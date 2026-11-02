@@ -82,7 +82,6 @@ test("main admin comments use trusted account name and reject forged author fiel
   const previousOrigin = process.env.APP_ORIGIN;
   process.env.APP_ORIGIN = "https://class.example";
   const db = createDatabase();
-  const now = new Date().toISOString();
   let inserted;
   const handler = apiHandler.createHandler({
     getDatabase: async () => db,
@@ -94,18 +93,10 @@ test("main admin comments use trusted account name and reject forged author fiel
       assert.equal(String(url), "https://comments.example/rest/v1/comments");
       assert.equal(options.headers.apikey, "sb_secret_server-only-key");
       assert.equal(options.headers.Authorization, undefined);
+      assert.equal(options.headers.Prefer, "return=minimal");
       inserted = JSON.parse(options.body);
       return {
         ok: true,
-        async json() {
-          return [{
-            id: 12,
-            content: inserted.content,
-            parent_id: inserted.parent_id,
-            created_at: now,
-            author_name: inserted.author_name,
-          }];
-        },
       };
     },
   });
@@ -143,7 +134,7 @@ test("main admin comments use trusted account name and reject forged author fiel
       parent_id: 4,
       author_name: "Admin web",
     });
-    assert.equal(JSON.parse(validResponse.body).comment.author_name, "Admin web");
+    assert.deepEqual(JSON.parse(validResponse.body), { ok: true });
   } finally {
     if (previousOrigin === undefined) delete process.env.APP_ORIGIN;
     else process.env.APP_ORIGIN = previousOrigin;
