@@ -165,3 +165,42 @@ test("only the main admin account may publish named comments", async () => {
     else process.env.APP_ORIGIN = previousOrigin;
   }
 });
+
+test("Supabase schema errors give safe actionable feedback without exposing its response", async () => {
+  const previousOrigin = process.env.APP_ORIGIN;
+  const previousWarn = console.warn;
+  process.env.APP_ORIGIN = "https://class.example";
+  console.warn = () => {};
+  const db = createDatabase();
+  const handler = apiHandler.createHandler({
+    getDatabase: async () => db,
+    getSupabaseConfig: () => ({
+      url: "https://comments.example/",
+      serviceRoleKey: "server-only-key",
+    }),
+    fetchImpl: async () => ({
+      ok: false,
+      status: 400,
+      async json() {
+        return {
+          code: "PGRST204",
+          message: "Could not find author_name. secret-value-must-not-escape",
+        };
+      },
+    }),
+  });
+
+  try {
+    const response = createResponse();
+    await handler(createRequest({ content: "Admin post" }, db.token), response);
+    const payload = JSON.parse(response.body);
+    assert.equal(response.statusCode, 502);
+    assert.equal(payload.error.code, "COMMENT_SCHEMA_MISSING");
+    assert.match(payload.error.message, /author_name column/);
+    assert.doesNotMatch(response.body, /secret-value-must-not-escape/);
+  } finally {
+    console.warn = previousWarn;
+    if (previousOrigin === undefined) delete process.env.APP_ORIGIN;
+    else process.env.APP_ORIGIN = previousOrigin;
+  }
+});

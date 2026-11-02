@@ -24,6 +24,71 @@ function isAdminCommentRoute(route) {
   return route === "comments/admin";
 }
 
+async function readUpstreamError(response) {
+  try {
+    const body = await response.json();
+    return typeof body?.code === "string" ? body.code : "";
+  } catch {
+    return "";
+  }
+}
+
+function upstreamFailure(response, code) {
+  const knownCodes = new Set([
+    "PGRST204",
+    "PGRST205",
+    "42501",
+    "23503",
+    "23514",
+  ]);
+  const safeCode = knownCodes.has(code) ? code : "UNKNOWN";
+  console.warn("Admin comment request rejected by Supabase.", {
+    status: response.status,
+    code: safeCode,
+  });
+
+  if (code === "PGRST204") {
+    return new ApiError(
+      502,
+      "COMMENT_SCHEMA_MISSING",
+      "Supabase is missing the author_name column. Apply supabase/comments.sql to this project.",
+    );
+  }
+  if (code === "PGRST205") {
+    return new ApiError(
+      502,
+      "COMMENT_TABLE_MISSING",
+      "Supabase cannot find public.comments. Apply supabase/comments.sql to this project.",
+    );
+  }
+  if (response.status === 401 || response.status === 403 || code === "42501") {
+    return new ApiError(
+      502,
+      "COMMENT_SERVICE_AUTH",
+      "Supabase rejected the server key. Check SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in the same project.",
+    );
+  }
+  if (code === "23503") {
+    return new ApiError(
+      400,
+      "COMMENT_PARENT_NOT_FOUND",
+      "The comment being replied to no longer exists. Reload comments and try again.",
+    );
+  }
+  if (code === "23514") {
+    return new ApiError(
+      400,
+      "COMMENT_INVALID",
+      "Supabase rejected the comment content. Check that it is between 1 and 500 characters.",
+    );
+  }
+  return new ApiError(
+    502,
+    "COMMENT_SERVICE_ERROR",
+    `Supabase could not save the comment (HTTP ${response.status}). Check the server logs for the safe error code.`,
+  );
+}
+
 async function handleAdminCommentRoute({
   request,
   response,
@@ -67,11 +132,12 @@ async function handleAdminCommentRoute({
       signal: AbortSignal.timeout(8000),
     });
   } catch {
+    console.warn("Could not connect to Supabase while sending an admin comment.");
     throw new ApiError(502, "COMMENT_SERVICE_ERROR", "The comment could not be sent.");
   }
 
   if (!upstream.ok) {
-    throw new ApiError(502, "COMMENT_SERVICE_ERROR", "The comment could not be sent.");
+    throw upstreamFailure(upstream, await readUpstreamError(upstream));
   }
 
   let payload;
@@ -91,4 +157,5 @@ module.exports = {
   adminCommentBodySchema,
   handleAdminCommentRoute,
   isAdminCommentRoute,
+  upstreamFailure,
 };
