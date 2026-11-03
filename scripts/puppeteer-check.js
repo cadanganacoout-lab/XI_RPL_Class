@@ -283,6 +283,102 @@ async function mockSiteApi(page) {
       await page.close();
     }
 
+    const mobileBackgroundPage = await browser.newPage();
+    await mobileBackgroundPage.setViewport({width: 390, height: 844});
+    await mobileBackgroundPage.setRequestInterception(true);
+    mobileBackgroundPage.on('request', request => {
+      const pathname = new URL(request.url()).pathname;
+      if (pathname === '/api/auth/me') {
+        return request.respond({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            user: {username: 'browser_student', displayName: 'Browser Student', role: 'student'}
+          })
+        });
+      }
+      if (pathname === '/api/cards/me') {
+        const background = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='300'%3E%3Crect width='100%25' height='100%25' fill='blue'/%3E%3C/svg%3E";
+        return request.respond({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            card: {
+              id: 's01',
+              nama: 'Browser Student',
+              jabatan: 'Siswa',
+              hobi: '',
+              catatan: '',
+              foto: '',
+              avatar: null,
+              background: {url: background},
+              portfolio: ''
+            }
+          })
+        });
+      }
+      return request.continue();
+    });
+    try {
+      await mobileBackgroundPage.goto(
+        `http://127.0.0.1:${address.port}/index.html#/card-saya`,
+        {waitUntil: 'domcontentloaded', timeout: 30000}
+      );
+      await mobileBackgroundPage.waitForSelector('.media-uploader-preview--background img');
+      const backgroundPreviewBounds = await mobileBackgroundPage.evaluate(() => {
+        const preview = document.querySelector('.media-uploader-preview--background');
+        const image = preview.querySelector('img');
+        const uploader = preview.closest('.media-uploader');
+        const uploaderBounds = uploader.getBoundingClientRect();
+        const previewBounds = preview.getBoundingClientRect();
+        const imageBounds = image.getBoundingClientRect();
+        const overflowingContents = [...uploader.querySelectorAll('small, input[type="file"]')]
+          .map(element => ({
+            selector: element.tagName.toLowerCase() +
+              (element.type ? `[type="${element.type}"]` : ''),
+            right: element.getBoundingClientRect().right,
+            scrollWidth: element.scrollWidth,
+            clientWidth: element.clientWidth
+          }))
+          .filter(element =>
+            element.right > uploaderBounds.right + 1 ||
+            element.scrollWidth > element.clientWidth + 1
+          );
+        return {
+          uploaderRight: uploaderBounds.right,
+          previewRight: previewBounds.right,
+          imageRight: imageBounds.right,
+          imageWidth: imageBounds.width,
+          previewWidth: previewBounds.width,
+          documentWidth: document.documentElement.scrollWidth,
+          viewportWidth: window.innerWidth,
+          naturalImageWidth: image.naturalWidth,
+          overflowingContents
+        };
+      });
+      assert.equal(backgroundPreviewBounds.naturalImageWidth, 1200);
+      assert.ok(
+        backgroundPreviewBounds.previewRight <= backgroundPreviewBounds.uploaderRight,
+        `Background preview frame should stay within its uploader on mobile: ${JSON.stringify(backgroundPreviewBounds)}`
+      );
+      assert.ok(
+        backgroundPreviewBounds.imageWidth <= backgroundPreviewBounds.previewWidth + 1,
+        `Background preview image should stay within its frame on mobile: ${JSON.stringify(backgroundPreviewBounds)}`
+      );
+      assert.ok(
+        backgroundPreviewBounds.documentWidth <= backgroundPreviewBounds.viewportWidth,
+        `Card editor should not overflow horizontally on mobile: ${JSON.stringify(backgroundPreviewBounds)}`
+      );
+      assert.deepEqual(
+        backgroundPreviewBounds.overflowingContents,
+        [],
+        `Upload helper text and file control should stay within the uploader on mobile: ${JSON.stringify(backgroundPreviewBounds)}`
+      );
+      results.push({file: 'card-editor-background-mobile', backgroundPreviewBounds});
+    } finally {
+      await mobileBackgroundPage.close();
+    }
+
     async function runAuthLogin(next, displayName = "Browser Member") {
       const authPage = await browser.newPage();
       const authPageErrors = [];

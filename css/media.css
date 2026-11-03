@@ -503,6 +503,8 @@
 .media-uploader {
   display: grid;
   min-width: 0;
+  min-inline-size: 0;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.7rem;
   margin: 0;
   padding: 1rem;
@@ -541,6 +543,8 @@
 }
 
 .media-uploader input[type="file"] {
+  width: 100%;
+  min-width: 0;
   max-width: 100%;
   color: var(--color-text-secondary);
   font: inherit;
@@ -548,6 +552,8 @@
 
 .media-uploader small,
 .media-uploader-filename {
+  display: block;
+  min-width: 0;
   color: var(--color-text-muted);
   font-size: 0.75rem;
   line-height: 1.5;
@@ -574,6 +580,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.media-uploader-preview--background img {
+  position: absolute;
+  inset: 0;
 }
 
 .media-uploader-preview span {
