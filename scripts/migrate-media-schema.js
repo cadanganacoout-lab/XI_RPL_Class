@@ -1,7 +1,14 @@
 const { closeDb, getDb } = require("../api/_lib/db");
 const { requireMongoConfig, readServerEnv } = require("../api/_lib/env");
 const { COLLECTION_SCHEMAS } = require("../api/_lib/collection-schemas");
-const { createIndexes } = require("./create-indexes");
+const { INDEXES, ensureCollection } = require("./create-indexes");
+
+const MEDIA_COLLECTIONS = [
+  "gallery_photos",
+  "media_uploads",
+  "media_cleanup",
+  "media_audit",
+];
 
 function parseArgs(args) {
   const databaseArg = args.find(argument => argument.startsWith("--confirm-db="));
@@ -24,6 +31,28 @@ async function updateExistingValidator(db, name) {
     validationAction: "error",
   });
   return true;
+}
+
+async function setupMediaCollections(db) {
+  const createdCollections = [];
+  for (const name of MEDIA_COLLECTIONS) {
+    if (await ensureCollection(db, name, COLLECTION_SCHEMAS[name])) {
+      createdCollections.push(name);
+    }
+  }
+  let indexesEnsured = 0;
+  for (const name of MEDIA_COLLECTIONS) {
+    const collection = db.collection(name);
+    for (const [keys, options] of INDEXES[name]) {
+      await collection.createIndex(keys, options);
+      indexesEnsured += 1;
+    }
+  }
+  return {
+    collectionsEnsured: MEDIA_COLLECTIONS.length,
+    collectionsCreated: createdCollections.length,
+    indexesEnsured,
+  };
 }
 
 async function runMigration({
@@ -54,7 +83,7 @@ async function runMigration({
   for (const name of ["cards", "teachers"]) {
     if (await updateExistingValidator(db, name)) validatorsUpdated.push(name);
   }
-  const indexes = await createIndexes(db);
+  const indexes = await setupMediaCollections(db);
   return { mode: "apply", validatorsUpdated, ...indexes };
 }
 
@@ -81,7 +110,9 @@ if (require.main === module) {
 }
 
 module.exports = {
+  MEDIA_COLLECTIONS,
   parseArgs,
   runMigration,
+  setupMediaCollections,
   updateExistingValidator,
 };

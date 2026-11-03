@@ -113,6 +113,23 @@ function requireSupabaseServiceConfig(source = process.env) {
       "Missing required server environment variable: SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY",
     );
   }
+  const isSecretKey = serviceKey.startsWith("sb_secret_");
+  let isLegacyServiceRoleKey = false;
+  if (!isSecretKey && serviceKey.startsWith("eyJ")) {
+    try {
+      const claims = JSON.parse(
+        Buffer.from(serviceKey.split(".")[1], "base64url").toString("utf8"),
+      );
+      isLegacyServiceRoleKey = claims.role === "service_role";
+    } catch {
+      isLegacyServiceRoleKey = false;
+    }
+  }
+  if (!isSecretKey && !isLegacyServiceRoleKey) {
+    throw new Error(
+      "SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY must be an elevated secret or service_role key.",
+    );
+  }
   return {
     url: env.SUPABASE_URL,
     serviceRoleKey: serviceKey,

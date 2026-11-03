@@ -74,7 +74,11 @@ async function ensureBucket(config, fetchImpl, bucket) {
     `${baseUrl}/bucket/${encodeURIComponent(bucket.id)}`,
     { headers },
   );
-  if (response.status === 404) {
+  let existing = null;
+  if (response.status === 404 || response.status === 400) {
+    existing = await responseJson(response);
+  }
+  if (response.status === 404 || existing?.code === "NoSuchBucket") {
     response = await fetchImpl(`${baseUrl}/bucket`, {
       method: "POST",
       headers,
@@ -89,7 +93,7 @@ async function ensureBucket(config, fetchImpl, bucket) {
     throw new Error(`Could not inspect media bucket ${bucket.id} (HTTP ${response.status}).`);
   }
 
-  const existing = await responseJson(response);
+  if (existing === null) existing = await responseJson(response);
   const actualTypes = Array.isArray(existing?.allowed_mime_types)
     ? [...existing.allowed_mime_types].sort()
     : [];
