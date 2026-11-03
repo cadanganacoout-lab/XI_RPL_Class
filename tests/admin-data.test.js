@@ -6,6 +6,7 @@ const apiHandler = require("../api/[...path].js");
 const { getCookieName, hashSessionToken } = require("../api/_lib/session");
 const {
   buildLegacyTeachers,
+  makeRoleBackfillOperations,
   makeUpsertOperations,
   loadLegacyTeachers,
 } = require("../scripts/migrate-teachers");
@@ -66,6 +67,7 @@ function createDatabase(role, { mutable = false } = {}) {
     id: "g01",
     nama: "Guru",
     mapel: "Matematika",
+    role: "Guru Teori",
     foto: "asset/profil/guru.webp",
     sortOrder: 1,
   };
@@ -171,12 +173,22 @@ test("teacher migration maps all source records without overwriting existing dat
 
   assert.equal(records.length, 15);
   assert.equal(records[0].id, "g01");
+  assert.equal(records[2].role, "Guru Praktek");
+  assert.equal(records[7].role, "Guru Teori");
+  assert.equal(records[10].role, "Guru Praktek");
   assert.equal(records[14].sortOrder, 15);
   assert.equal(records[10].linktree, "https://linktr.ee/andiespramudiyantoro");
   assert.deepEqual(operations[0].updateOne.update, {
     $setOnInsert: records[0],
   });
   assert.equal(operations[0].updateOne.upsert, true);
+
+  const backfillOperations = makeRoleBackfillOperations(records);
+  assert.deepEqual(backfillOperations[0].updateOne.filter, {
+    id: "g01",
+    role: { $exists: false },
+  });
+  assert.deepEqual(backfillOperations[0].updateOne.update.$set.role, "Guru Teori");
 });
 
 test("admin record schemas reject unsafe URLs and fields outside the editor", () => {
@@ -195,6 +207,7 @@ test("admin record schemas reject unsafe URLs and fields outside the editor", ()
     createTeacherSchema.safeParse({
       nama: "Guru",
       mapel: "Matematika",
+      role: "Guru Teori",
       foto: "http://example.test/guru.png",
     }).success,
     false,
@@ -218,6 +231,7 @@ test("public teacher list is readable while non-admin users cannot read admin da
     id: "g01",
     nama: "Guru",
     mapel: "Matematika",
+    role: "Guru Teori",
     foto: "asset/profil/guru.webp",
     sortOrder: 1,
   });
@@ -251,7 +265,12 @@ test("admin can create, edit, archive, and restore teacher records", async () =>
       "POST",
       "/api/admin/teachers",
       headers,
-      { nama: "Guru Baru", mapel: "Matematika", foto: "asset/profil/guru.webp" },
+      {
+        nama: "Guru Baru",
+        mapel: "Matematika",
+        role: "Guru Praktek",
+        foto: "asset/profil/guru.webp",
+      },
     ), createdResponse);
     assert.equal(createdResponse.statusCode, 201);
     assert.equal(JSON.parse(createdResponse.body).teacher.id, "g01");
@@ -261,10 +280,11 @@ test("admin can create, edit, archive, and restore teacher records", async () =>
       "PATCH",
       "/api/admin/teachers/g01",
       headers,
-      { mapel: "Basis Data" },
+      { mapel: "Basis Data", role: "Guru Praktek" },
     ), updatedResponse);
     assert.equal(updatedResponse.statusCode, 200);
     assert.equal(JSON.parse(updatedResponse.body).teacher.mapel, "Basis Data");
+    assert.equal(JSON.parse(updatedResponse.body).teacher.role, "Guru Praktek");
 
     const archivedResponse = createResponse();
     await handler(createRequest("DELETE", "/api/admin/teachers/g01", headers), archivedResponse);

@@ -13,6 +13,7 @@ const {
   slugSchema,
   teacherDocumentSchema,
   teacherIdSchema,
+  teacherRoleSchema,
   toPublicCard,
   toPublicTeacher,
 } = require("../_lib/schemas");
@@ -47,6 +48,7 @@ const updateStudentSchema = z.object(studentFields).partial().strict().refine(
 const teacherFields = {
   nama: z.string().trim().min(1).max(100),
   mapel: z.string().trim().min(1).max(120),
+  role: teacherRoleSchema,
   foto: photoPathSchema,
   linktree: EMPTY_OR_HTTPS.optional(),
   sortOrder: z.number().int().positive(),
@@ -55,6 +57,7 @@ const teacherFields = {
 const createTeacherSchema = z.object({
   nama: teacherFields.nama,
   mapel: teacherFields.mapel,
+  role: teacherFields.role,
   foto: teacherFields.foto,
   linktree: teacherFields.linktree,
 }).strict();

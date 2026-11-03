@@ -45,66 +45,77 @@ const GURU = [
     "id": "g01",
     "nama": "Ema Dwi Novita, S.Pd",
     "mapel": "Matematika",
+    "role": "Guru Teori",
     "foto": "asset/profil/foto_awal/sementara.png"
   },
   {
     "id": "g02",
     "nama": "Edlin Vivi Muratrie, S.Pd",
     "mapel": "Sejarah Indonesia",
+    "role": "Guru Teori",
     "foto": "asset/profil/foto_awal/sementara.png"
   },
   {
     "id": "g03",
     "nama": "Linda Savitri, S.Pd",
     "mapel": "Kewirausahaan",
+    "role": "Guru Praktek",
     "foto": "asset/profil/foto_awal/sementara.png"
   },
   {
     "id": "g04",
     "nama": "Afrida Vidiyastuti, S.Pd",
     "mapel": "Bahasa Inggris",
+    "role": "Guru Teori",
     "foto": "asset/profil/foto_awal/sementara.png"
   },
   {
     "id": "g05",
     "nama": "Zainul Arifin, S. Ag, M.PdI",
     "mapel": "Pendidikan Agama",
+    "role": "Guru Teori",
     "foto": "asset/profil/foto_awal/sementara.png"
   },
   {
     "id": "g06",
     "nama": "Viska Kholifatul Ummah, S.Pd",
     "mapel": "Bahasa Indonesia",
+    "role": "Guru Teori",
     "foto": "asset/profil/foto_awal/sementara.png"
   },
   {
     "id": "g07",
     "nama": "Anies Kurniawati, S.Pd",
     "mapel": "Bahasa Jawa",
+    "role": "Guru Teori",
     "foto": "asset/profil/foto_awal/sementara.png"
   },
   {
     "id": "g08",
     "nama": "Samsu Nur Zamaniyanto, S.Pd",
     "mapel": "PJOK",
+    "role": "Guru Teori",
     "foto": "asset/profil/foto_awal/sementara.png"
   },
   {
     "id": "g09",
     "nama": "Mita Argawati, S.Pd",
     "mapel": "Pendidikan Pancasila",
+    "role": "Guru Teori",
     "foto": "asset/profil/foto_awal/sementara.png"
   },
   {
     "id": "g10",
     "nama": "Mutia Dwi Zulfana, S. Pd.",
     "mapel": "Bimbingan Konseling",
+    "role": "Guru Teori",
     "foto": "asset/profil/foto_awal/sementara.png"
   },
   {
     "id": "g11",
     "nama": "Andies Pramudiyantoro, S.Kom",
     "mapel": "Pemrograman Perangkat Bergerak",
+    "role": "Guru Praktek",
     "foto": "asset/profil/pak andies.png",
     "linktree": "https://linktr.ee/andiespramudiyantoro"
   },
@@ -112,24 +123,28 @@ const GURU = [
     "id": "g12",
     "nama": "Endy Bagus Setyawan R. S.Kom",
     "mapel": "Administrasi Infrastruktur Jaringan",
+    "role": "Guru Praktek",
     "foto": "asset/profil/pak endy.jpg"
   },
   {
     "id": "g13",
     "nama": "Muh. Faqihuddin Assholih, S.Kom",
     "mapel": "Basis Data",
+    "role": "Guru Praktek",
     "foto": "asset/profil/foto_awal/sementara.png"
   },
   {
     "id": "g14",
     "nama": "Hendrik Dwi Yusyanto, S.Kom",
     "mapel": "Pemrograman Berorientasi Objek",
+    "role": "Guru Praktek",
     "foto": "asset/profil/foto_awal/sementara.png"
   },
   {
     "id": "g15",
     "nama": "Ridwan Mudakir, S.Kom",
     "mapel": "Pemrograman Dasar",
+    "role": "Guru Praktek",
     "foto": "asset/profil/pak ridwan.jpg"
   }
 ];

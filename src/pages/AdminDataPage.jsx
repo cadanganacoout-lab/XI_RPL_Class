@@ -12,6 +12,7 @@ const EMPTY_STUDENT = {
 const EMPTY_TEACHER = {
   nama: "",
   mapel: "",
+  role: "Guru Teori",
   foto: "",
   linktree: "",
 };
@@ -29,6 +30,7 @@ function getFields(kind) {
     : [
         ["nama", "Nama guru", "text"],
         ["mapel", "Mata pelajaran", "text"],
+        ["role", "Role guru", "select"],
         ["foto", "Foto (path asset/ atau URL HTTPS)", "text"],
         ["linktree", "URL Linktree (opsional)", "url"],
       ];
@@ -112,6 +114,7 @@ export function AdminDataPage() {
         : {
             nama: record.nama,
             mapel: record.mapel,
+            role: record.role,
             foto: record.foto,
             linktree: record.linktree || "",
           },
@@ -208,7 +211,11 @@ export function AdminDataPage() {
                     <li key={record.id} className={!active ? "is-archived" : ""}>
                       <div>
                         <strong>{record.nama}</strong>
-                        <span>{kind === "students" ? record.jabatan : record.mapel}</span>
+                        <span>
+                          {kind === "students"
+                            ? record.jabatan
+                            : `${record.mapel} · ${record.role}`}
+                        </span>
                         <small>{active ? "Tampil publik" : "Diarsipkan"} · {record.id}</small>
                       </div>
                       <div className="admin-record-actions">
@@ -247,6 +254,16 @@ export function AdminDataPage() {
                       rows={3}
                       maxLength={500}
                     />
+                  ) : type === "select" ? (
+                    <select
+                      name={name}
+                      value={form[name]}
+                      onChange={event => setForm(current => ({ ...current, [name]: event.target.value }))}
+                      required
+                    >
+                      <option value="Guru Teori">Guru Teori</option>
+                      <option value="Guru Praktek">Guru Praktek</option>
+                    </select>
                   ) : (
                     <input
                       name={name}

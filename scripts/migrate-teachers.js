@@ -66,6 +66,15 @@ function makeUpsertOperations(teachers) {
   }));
 }
 
+function makeRoleBackfillOperations(teachers, now = new Date()) {
+  return teachers.map(teacher => ({
+    updateOne: {
+      filter: { id: teacher.id, role: { $exists: false } },
+      update: { $set: { role: teacher.role, updatedAt: now } },
+    },
+  }));
+}
+
 async function runMigration(args = process.argv.slice(2)) {
   const options = parseArgs(args);
   const teachers = buildLegacyTeachers(loadLegacyTeachers());
@@ -87,12 +96,17 @@ async function runMigration(args = process.argv.slice(2)) {
   await setupTeachers(db);
   const collection = db.collection("teachers");
   await collection.createIndex({ id: 1 }, { unique: true, name: "teacher_id_unique" });
+  const backfill = await collection.bulkWrite(
+    makeRoleBackfillOperations(teachers),
+    { ordered: true },
+  );
   const result = await collection.bulkWrite(makeUpsertOperations(teachers), { ordered: true });
   return {
     mode: "apply",
     teachers: teachers.length,
     inserted: result.upsertedCount,
     alreadyExisted: result.matchedCount,
+    rolesBackfilled: backfill.modifiedCount,
   };
 }
 
@@ -122,6 +136,7 @@ module.exports = {
   buildLegacyTeachers,
   loadLegacyTeachers,
   makeUpsertOperations,
+  makeRoleBackfillOperations,
   parseArgs,
   runMigration,
 };

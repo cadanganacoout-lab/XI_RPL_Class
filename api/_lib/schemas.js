@@ -22,6 +22,7 @@ const roleSchema = z.enum(["member", "student", "admin"]);
 const objectIdStringSchema = z.string().regex(/^[a-f0-9]{24}$/i);
 const legacyIdSchema = z.string().regex(/^s[0-9]{2}$/);
 const teacherIdSchema = z.string().regex(/^g[0-9]{2}$/);
+const teacherRoleSchema = z.enum(["Guru Teori", "Guru Praktek"]);
 const slugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(60);
 const httpsUrlSchema = z
   .string()
@@ -92,6 +93,7 @@ const teacherDocumentSchema = z
     id: teacherIdSchema,
     nama: z.string().trim().min(1).max(100),
     mapel: z.string().trim().min(1).max(120),
+    role: teacherRoleSchema,
     foto: photoPathSchema,
     linktree: httpsUrlSchema.optional(),
     sortOrder: z.number().int().positive(),
@@ -106,6 +108,7 @@ const legacyTeacherSchema = z
     id: teacherIdSchema,
     nama: z.string().trim().min(1).max(100),
     mapel: z.string().trim().min(1).max(120),
+    role: teacherRoleSchema,
     foto: photoPathSchema,
     linktree: httpsUrlSchema.optional(),
   })
@@ -159,6 +162,7 @@ const publicTeacherSchema = z
     id: teacherIdSchema,
     nama: z.string().min(1).max(100),
     mapel: z.string().min(1).max(120),
+    role: teacherRoleSchema,
     foto: photoPathSchema,
     linktree: httpsUrlSchema.optional(),
     sortOrder: z.number().int().positive(),
@@ -206,6 +210,7 @@ function toPublicTeacher(teacher) {
     id: teacher.id,
     nama: teacher.nama,
     mapel: teacher.mapel,
+    role: teacher.role,
     foto: teacher.foto,
     ...(teacher.linktree ? { linktree: teacher.linktree } : {}),
     sortOrder: teacher.sortOrder,
@@ -230,6 +235,7 @@ module.exports = {
   slugSchema,
   teacherDocumentSchema,
   teacherIdSchema,
+  teacherRoleSchema,
   toPublicCard,
   toPublicTeacher,
   toPublicProfile,

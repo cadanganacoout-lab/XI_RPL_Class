@@ -1,9 +1,32 @@
+const { isDeepStrictEqual } = require("node:util");
 const { closeDb, getDb } = require("../api/_lib/db");
 const { COLLECTION_SCHEMAS } = require("../api/_lib/collection-schemas");
 const { INDEXES, ensureCollection } = require("./create-indexes");
 
 async function setupTeachers(db) {
-  const created = await ensureCollection(db, "teachers", COLLECTION_SCHEMAS.teachers);
+  const [existing] = await db
+    .listCollections({ name: "teachers" }, { nameOnly: false })
+    .toArray();
+  let created = false;
+  if (!existing) {
+    created = await ensureCollection(db, "teachers", COLLECTION_SCHEMAS.teachers);
+  } else {
+    const currentSchema = existing.options?.validator?.$jsonSchema;
+    if (!isDeepStrictEqual(currentSchema, COLLECTION_SCHEMAS.teachers)) {
+      const previousSchema = JSON.parse(JSON.stringify(COLLECTION_SCHEMAS.teachers));
+      previousSchema.required = previousSchema.required.filter(field => field !== "role");
+      delete previousSchema.properties.role;
+      if (!isDeepStrictEqual(currentSchema, previousSchema)) {
+        throw new Error("Collection schema requires review: teachers");
+      }
+      await db.command({
+        collMod: "teachers",
+        validator: { $jsonSchema: COLLECTION_SCHEMAS.teachers },
+        validationLevel: "strict",
+        validationAction: "error",
+      });
+    }
+  }
   for (const [keys, options] of INDEXES.teachers) {
     await db.collection("teachers").createIndex(keys, options);
   }
