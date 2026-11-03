@@ -6,6 +6,7 @@ skills-lock.json
 dist/
 .vercel/
 docs/
+supabase/
 
 # Local environment variables and secrets
 .env

@@ -51,13 +51,6 @@ const COMMON_PASSWORD_SUFFIXES = [
 const COMMON_PASSWORDS = new Set([
   "123456", "123456789", "12345678", "1234567890", "password", "password1",
   "password123", "qwerty", "qwerty123", "abc123", "111111", "000000",
-  "iloveyou", "admin", "admin123", "welcome", "welcome123", "letmein",
-  "monkey", "dragon", "football", "master", "sunshine", "princess",
-  "whatever", "trustno1", "secret", "login", "user", "passw0rd",
-  "123123", "654321", "00000000", "1q2w3e4r", "qwertyuiop", "asdfghjkl",
-  "zxcvbnm", "zaq12wsx", "qazwsx", "iloveyou1", "changeme", "student",
-  "student123", "indonesia", "indonesia123", "merdeka", "semangat",
-  "bismillah", "kelas123", "sekolah123", "smk123", "terserah",
   ...COMMON_PASSWORD_BASES.flatMap(base =>
     COMMON_PASSWORD_SUFFIXES.map(suffix => `${base}${suffix}`),
   ),
