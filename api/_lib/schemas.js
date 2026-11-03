@@ -44,6 +44,24 @@ const photoPathSchema = z
       !value.split("/").some(part => part === "." || part === "..")
     );
   });
+const storagePathSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .max(512)
+  .refine(value =>
+    !value.includes("\\") &&
+    ![...value].some(character => character.charCodeAt(0) <= 0x1f) &&
+    !value.split("/").some(part => !part || part === "." || part === ".."),
+  );
+const mediaPointerSchema = z
+  .object({
+    url: httpsUrlSchema,
+    path: storagePathSchema,
+    updatedAt: z.date(),
+  })
+  .strict();
+const publicMediaSchema = z.object({ url: httpsUrlSchema }).strict();
 
 const userDocumentSchema = z
   .object({
@@ -79,6 +97,8 @@ const cardDocumentSchema = z
     hobi: z.string().max(300),
     catatan: z.string().max(500),
     foto: photoPathSchema,
+    avatar: mediaPointerSchema.nullable().optional(),
+    background: mediaPointerSchema.nullable().optional(),
     portfolio: httpsUrlSchema.optional(),
     sortOrder: z.number().int().positive(),
     ownerUserId: z.instanceof(ObjectId).nullable(),
@@ -95,6 +115,8 @@ const teacherDocumentSchema = z
     mapel: z.string().trim().min(1).max(120),
     role: teacherRoleSchema,
     foto: photoPathSchema,
+    avatar: mediaPointerSchema.nullable().optional(),
+    background: mediaPointerSchema.nullable().optional(),
     linktree: httpsUrlSchema.optional(),
     sortOrder: z.number().int().positive(),
     isActive: z.boolean(),
@@ -152,6 +174,8 @@ const publicCardSchema = z
     hobi: z.string().max(300),
     catatan: z.string().max(500),
     foto: z.string().min(1).max(2048),
+    avatar: publicMediaSchema.nullable().optional(),
+    background: publicMediaSchema.nullable().optional(),
     portfolio: httpsUrlSchema.optional(),
     sortOrder: z.number().int().positive(),
   })
@@ -164,6 +188,8 @@ const publicTeacherSchema = z
     mapel: z.string().min(1).max(120),
     role: teacherRoleSchema,
     foto: photoPathSchema,
+    avatar: publicMediaSchema.nullable().optional(),
+    background: publicMediaSchema.nullable().optional(),
     linktree: httpsUrlSchema.optional(),
     sortOrder: z.number().int().positive(),
   })
@@ -200,6 +226,12 @@ function toPublicCard(card) {
     hobi: card.hobi,
     catatan: card.catatan,
     foto: card.foto,
+    ...(card.avatar === undefined ? {} : {
+      avatar: card.avatar ? { url: card.avatar.url } : null,
+    }),
+    ...(card.background === undefined ? {} : {
+      background: card.background ? { url: card.background.url } : null,
+    }),
     ...(card.portfolio ? { portfolio: card.portfolio } : {}),
     sortOrder: card.sortOrder,
   });
@@ -212,6 +244,12 @@ function toPublicTeacher(teacher) {
     mapel: teacher.mapel,
     role: teacher.role,
     foto: teacher.foto,
+    ...(teacher.avatar === undefined ? {} : {
+      avatar: teacher.avatar ? { url: teacher.avatar.url } : null,
+    }),
+    ...(teacher.background === undefined ? {} : {
+      background: teacher.background ? { url: teacher.background.url } : null,
+    }),
     ...(teacher.linktree ? { linktree: teacher.linktree } : {}),
     sortOrder: teacher.sortOrder,
   });
@@ -227,9 +265,12 @@ module.exports = {
   objectIdStringSchema,
   parseObjectId,
   photoPathSchema,
+  storagePathSchema,
+  mediaPointerSchema,
   publicProfileSchema,
   publicCardSchema,
   publicTeacherSchema,
+  publicMediaSchema,
   publicUserSchema,
   roleSchema,
   slugSchema,

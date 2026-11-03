@@ -9,6 +9,8 @@ const PUBLIC_CARD_PROJECTION = {
   hobi: 1,
   catatan: 1,
   foto: 1,
+  avatar: 1,
+  background: 1,
   portfolio: 1,
   sortOrder: 1,
 };
@@ -21,6 +23,8 @@ const OWNER_CARD_PROJECTION = {
   hobi: 1,
   catatan: 1,
   foto: 1,
+  avatar: 1,
+  background: 1,
   portfolio: 1,
   sortOrder: 1,
   ownerUserId: 1,

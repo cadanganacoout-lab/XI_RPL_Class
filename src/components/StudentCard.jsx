@@ -12,7 +12,8 @@ export function StudentCard({ student }) {
     <PersonCard
       number={student.id.match(/\d+/)?.[0] || ""}
       name={student.nama}
-      photo={student.foto}
+      photo={student.avatar?.url || student.foto}
+      background={student.background?.url}
       role={student.jabatan}
       lead={isClassOfficer(student)}
       rows={[

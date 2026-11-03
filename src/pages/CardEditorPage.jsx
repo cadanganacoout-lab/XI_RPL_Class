@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { StudentCard } from "../components/StudentCard.jsx";
+import { MediaUploader } from "../components/MediaUploader.jsx";
 import { apiRequest } from "../lib/api.js";
 
 const fieldLimits = {
@@ -230,6 +231,23 @@ export function CardEditorPage() {
                 <small id="card-portfolio-count">{draft.portfolio.length}/{fieldLimits.portfolio} karakter</small>
               </div>
 
+              <MediaUploader
+                targetType="students"
+                targetId={card.id}
+                mediaType="avatar"
+                currentUrl={card.avatar?.url || card.foto}
+                removable={Boolean(card.avatar)}
+                onChanged={media => setCard(current => ({ ...current, avatar: media }))}
+              />
+              <MediaUploader
+                targetType="students"
+                targetId={card.id}
+                mediaType="background"
+                currentUrl={card.background?.url || ""}
+                removable={Boolean(card.background)}
+                onChanged={media => setCard(current => ({ ...current, background: media }))}
+              />
+
               {error && (
                 <p className="auth-error" role="alert" aria-live="assertive">
                   {error}
@@ -241,18 +259,7 @@ export function CardEditorPage() {
                 <button className="auth-submit" type="submit" disabled={!dirty || saving}>
                   {saving ? "Menyimpan…" : "Simpan perubahan"}
                 </button>
-                <button
-                  className="button-secondary"
-                  type="button"
-                  disabled
-                  aria-describedby="background-deferred-help"
-                >
-                  Ganti Background
-                </button>
               </div>
-              <small id="background-deferred-help" className="card-editor-deferred">
-                Fitur background card belum termasuk tahap ini.
-              </small>
               {dirty && <p className="card-editor-unsaved" role="status">Ada perubahan yang belum disimpan.</p>}
             </form>
 

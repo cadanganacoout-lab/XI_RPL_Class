@@ -24,22 +24,40 @@ const photoHoldDuration = 4000;
 const photoTransitionDuration = 1100;
 
 function WelcomeBackground() {
+  const [photos, setPhotos] = useState(welcomePhotos);
   const [images, setImages] = useState([null, null]);
   const [activeLayer, setActiveLayer] = useState(0);
   const [activePhotoIndex, setActivePhotoIndex] = useState(null);
   const [isTabVisible, setIsTabVisible] = useState(() => document.visibilityState !== "hidden");
 
   useEffect(() => {
+    let active = true;
+    apiRequest("/api/gallery")
+      .then(payload => {
+        const urls = Array.isArray(payload.photos)
+          ? payload.photos.map(photo => photo.url).filter(url => typeof url === "string" && url)
+          : [];
+        if (active && urls.length > 0) setPhotos(urls);
+      })
+      .catch(() => {
+        if (active) setPhotos(welcomePhotos);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
     let cancelled = false;
 
     function loadNextPhoto(index) {
-      if (cancelled || index >= welcomePhotos.length) return;
+      if (cancelled || index >= photos.length) return;
       const image = new Image();
       image.onload = () => {
         if (cancelled) return;
         const showPhoto = () => {
           if (cancelled) return;
-          setImages([welcomePhotos[index], null]);
+          setImages([photos[index], null]);
           setActivePhotoIndex(index);
         };
         if (typeof image.decode === "function") {
@@ -49,14 +67,14 @@ function WelcomeBackground() {
         }
       };
       image.onerror = () => loadNextPhoto(index + 1);
-      image.src = welcomePhotos[index];
+      image.src = photos[index];
     }
 
     loadNextPhoto(0);
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [photos]);
 
   useEffect(() => {
     const updateVisibility = () => setIsTabVisible(document.visibilityState !== "hidden");
@@ -71,7 +89,7 @@ function WelcomeBackground() {
     if (
       !isTabVisible ||
       activePhotoIndex === null ||
-      welcomePhotos.length < 2
+      photos.length < 2
     ) return undefined;
 
     let cancelled = false;
@@ -80,7 +98,7 @@ function WelcomeBackground() {
 
     function preloadNextPhoto(fromIndex, remaining) {
       if (cancelled || remaining <= 0) return;
-      const nextIndex = (fromIndex + 1) % welcomePhotos.length;
+      const nextIndex = (fromIndex + 1) % photos.length;
       const image = new Image();
       image.onload = () => {
         if (cancelled) return;
@@ -88,7 +106,7 @@ function WelcomeBackground() {
           if (cancelled) return;
           const nextLayer = 1 - activeLayer;
           setImages(currentImages => currentImages.map((source, index) =>
-            index === nextLayer ? welcomePhotos[nextIndex] : source
+            index === nextLayer ? photos[nextIndex] : source
           ));
           animationFrame = window.requestAnimationFrame(() => {
             if (cancelled) return;
@@ -103,11 +121,11 @@ function WelcomeBackground() {
         }
       };
       image.onerror = () => preloadNextPhoto(nextIndex, remaining - 1);
-      image.src = welcomePhotos[nextIndex];
+      image.src = photos[nextIndex];
     }
 
     timeoutId = window.setTimeout(
-      () => preloadNextPhoto(activePhotoIndex, welcomePhotos.length - 1),
+      () => preloadNextPhoto(activePhotoIndex, photos.length - 1),
       photoHoldDuration + photoTransitionDuration,
     );
     return () => {
@@ -115,7 +133,7 @@ function WelcomeBackground() {
       window.clearTimeout(timeoutId);
       if (animationFrame) window.cancelAnimationFrame(animationFrame);
     };
-  }, [activeLayer, activePhotoIndex, isTabVisible]);
+  }, [activeLayer, activePhotoIndex, isTabVisible, photos]);
 
   return (
     <div className="welcome-background" aria-hidden="true">

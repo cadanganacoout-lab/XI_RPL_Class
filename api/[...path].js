@@ -5,6 +5,8 @@ const { handleAuthRoute, isAuthRoute } = require("./_routes/auth");
 const { handleCardRoute, isCardRoute } = require("./_routes/cards");
 const { handleContentRoute, isContentRoute } = require("./_routes/content");
 const { handleAdminDataRoute, isAdminDataRoute } = require("./_routes/admin-data");
+const { handleMediaRoute, isMediaRoute } = require("./_routes/media");
+const { requireSupabaseServiceConfig } = require("./_lib/env");
 const {
   handleAdminCommentRoute,
   isAdminCommentRoute,
@@ -58,6 +60,20 @@ function createHandler({
         if (route !== "teachers" && request.method !== "GET") requireSameOrigin(request);
         const db = await getDatabase();
         await handleAdminDataRoute({ request, response, route, db });
+        return;
+      }
+
+      if (isMediaRoute(route)) {
+        if (request.method !== "GET") requireSameOrigin(request);
+        const db = await getDatabase();
+        await handleMediaRoute({
+          request,
+          response,
+          route,
+          db,
+          fetchImpl,
+          getSupabaseConfig: getSupabaseConfig || requireSupabaseServiceConfig,
+        });
         return;
       }
 

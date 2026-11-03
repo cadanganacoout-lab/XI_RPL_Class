@@ -135,6 +135,8 @@ async function listAdminStudents(db, response) {
         hobi: 1,
         catatan: 1,
         foto: 1,
+        avatar: 1,
+        background: 1,
         portfolio: 1,
         sortOrder: 1,
         isPublished: 1,
@@ -218,7 +220,7 @@ async function updateStudent(db, response, request, legacyId) {
   }
   const student = await cards.findOne(
     { legacyId },
-    { projection: { _id: 0, legacyId: 1, slug: 1, nama: 1, jabatan: 1, hobi: 1, catatan: 1, foto: 1, portfolio: 1, sortOrder: 1, isPublished: 1 } },
+    { projection: { _id: 0, legacyId: 1, slug: 1, nama: 1, jabatan: 1, hobi: 1, catatan: 1, foto: 1, avatar: 1, background: 1, portfolio: 1, sortOrder: 1, isPublished: 1 } },
   );
   sendJson(response, 200, {
     student: { ...toPublicCard(student), isPublished: student.isPublished },

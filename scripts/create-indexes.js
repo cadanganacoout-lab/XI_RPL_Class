@@ -30,6 +30,20 @@ const INDEXES = {
   rate_limits: [
     [{ expiresAt: 1 }, { expireAfterSeconds: 0, name: "rate_limit_expiry_ttl" }],
   ],
+  gallery_photos: [
+    [{ legacyId: 1 }, { unique: true, partialFilterExpression: { legacyId: { $type: "string" } }, name: "gallery_legacy_id_unique" }],
+    [{ isPublished: 1, sortOrder: 1 }, { name: "gallery_public_order" }],
+  ],
+  media_uploads: [
+    [{ expiresAt: 1, status: 1 }, { name: "media_upload_expiry" }],
+    [{ actorUserId: 1, status: 1 }, { name: "media_upload_actor_status" }],
+  ],
+  media_cleanup: [
+    [{ status: 1, createdAt: 1 }, { name: "media_cleanup_pending" }],
+  ],
+  media_audit: [
+    [{ createdAt: 1 }, { expireAfterSeconds: 180 * 24 * 60 * 60, name: "media_audit_ttl" }],
+  ],
 };
 
 async function ensureCollection(db, name, jsonSchema) {

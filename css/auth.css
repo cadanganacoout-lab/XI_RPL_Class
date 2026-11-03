@@ -435,6 +435,10 @@
   margin-top: 18px;
 }
 
+.profile-media-tools {
+  margin-top: 20px;
+}
+
 .profile-actions {
   display: flex;
   flex-wrap: wrap;

@@ -26,6 +26,7 @@ export function PersonCard({
   number,
   name,
   photo,
+  background,
   role,
   lead = false,
   rows,
@@ -35,7 +36,17 @@ export function PersonCard({
   const visibleRows = rows.filter(([, value]) => filledValue(value));
 
   return (
-    <article className="people-card">
+    <article className={`people-card${background ? " people-card--with-background" : ""}`}>
+      {background && (
+        <img
+          className="people-card-background"
+          src={background}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
+      )}
       {number && <span className="card-number" aria-hidden="true">{number}</span>}
       <div className="people-top">
         <Avatar name={name} src={photo} size={68} />

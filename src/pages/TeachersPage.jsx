@@ -9,7 +9,8 @@ function TeacherCard({ teacher }) {
     <PersonCard
       number={teacher.id.match(/\d+/)?.[0] || ""}
       name={teacher.nama}
-      photo={teacher.foto}
+      photo={teacher.avatar?.url || teacher.foto}
+      background={teacher.background?.url}
       role={teacher.role}
       rows={[["Mapel", teacher.mapel]]}
       emptyNote="Mata pelajaran belum diisi."

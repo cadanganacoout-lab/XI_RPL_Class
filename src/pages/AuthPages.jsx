@@ -107,6 +107,9 @@ export function LoginPage() {
         <p className="auth-switch">
           Belum memiliki akun? <a href={`#/daftar?next=${encodeURIComponent(next)}`}>Daftar</a>
         </p>
+        <p className="auth-switch">
+          Penghuni kelas ini? WA admin kelas untuk mendapatkan akun khusus Siswa/i.
+        </p>
       </form>
     </AuthFrame>
   );
@@ -200,6 +203,9 @@ export function RegisterPage() {
         </button>
         <p className="auth-switch">
           Sudah memiliki akun? <a href={`#/login?next=${encodeURIComponent(next)}`}>Masuk</a>
+        </p>
+        <p className="auth-switch">
+          Penghuni kelas ini? WA admin kelas untuk mendapatkan akun khusus Siswa/i.
         </p>
       </form>
     </AuthFrame>

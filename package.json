@@ -12,11 +12,15 @@
     "db:migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --env-file-if-exists=atlas-credentials.env scripts/migrate-legacy.js",
     "db:teachers:migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --env-file-if-exists=atlas-credentials.env scripts/migrate-teachers.js",
     "db:teachers:setup": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --env-file-if-exists=atlas-credentials.env scripts/setup-teachers.js",
+    "db:media:setup": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --env-file-if-exists=atlas-credentials.env scripts/migrate-media-schema.js",
+    "media:storage:setup": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --env-file-if-exists=atlas-credentials.env scripts/setup-media-storage.js",
+    "media:migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --env-file-if-exists=atlas-credentials.env scripts/migrate-media.js",
+    "media:cleanup": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --env-file-if-exists=atlas-credentials.env scripts/cleanup-media.js",
     "db:user:create-admin": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --env-file-if-exists=atlas-credentials.env scripts/create-admin.js",
     "db:user:create-student": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --env-file-if-exists=atlas-credentials.env scripts/create-student.js",
     "db:user:reset-password": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --env-file-if-exists=atlas-credentials.env scripts/reset-password.js",
     "db:user:set-active": "node --env-file-if-exists=.env --env-file-if-exists=.env.local --env-file-if-exists=atlas-credentials.env scripts/set-active.js",
-    "check:api": "node --test tests/api.test.js tests/mongo.test.js tests/admin-users.test.js tests/cards.test.js tests/profiles.test.js tests/admin-data.test.js tests/admin-comments.test.js",
+    "check:api": "node --test tests/api.test.js tests/mongo.test.js tests/admin-users.test.js tests/cards.test.js tests/profiles.test.js tests/admin-data.test.js tests/admin-comments.test.js tests/media.test.js",
     "check:runtime": "node scripts/runtime-check.js",
     "check:browser": "node scripts/puppeteer-check.js",
     "check": "npm run lint && npm run check:api && npm run check:runtime && npm run check:browser"
@@ -40,6 +44,7 @@
     "mongodb": "^7.8.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "sharp": "^0.35.5",
     "zod": "^4.6.7"
   },
   "devDependencies": {

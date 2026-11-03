@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // Gelar seperti "S.Pd", "S.Kom", "M.PdI", atau awalan "Dr.", "Drs.", "H.". Singkatan nama ("Muh.") tidak ikut dibuang.
 const TITLE_PATTERN = /^(?:[A-Za-z]{1,4}\.[A-Za-z]+\.?|(?:Dr|Drs|Ir|Prof|H|Hj)\.)$/;
@@ -26,6 +26,7 @@ export function hasRealPhoto(src) {
  */
 export function Avatar({ name, src, size = 64, round = false }) {
   const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [src]);
   const showPhoto = hasRealPhoto(src) && !failed;
 
   return (

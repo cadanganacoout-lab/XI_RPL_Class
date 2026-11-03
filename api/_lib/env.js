@@ -58,6 +58,12 @@ const envSchema = z.object({
     })
     .optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().trim().min(1).optional(),
+  SUPABASE_SECRET_KEY: z.string().trim().min(1).optional(),
+  SUPABASE_AVATAR_BUCKET: z.string().trim().min(1).max(100).optional(),
+  SUPABASE_BACKGROUND_BUCKET: z.string().trim().min(1).max(100).optional(),
+  SUPABASE_GALLERY_BUCKET: z.string().trim().min(1).max(100).optional(),
+  SUPABASE_STAGING_BUCKET: z.string().trim().min(1).max(100).optional(),
+  SUPABASE_ENVIRONMENT: z.enum(["development", "preview", "production"]).optional(),
   MONGODB_ENVIRONMENT: z.enum(["development", "preview", "production"]).optional(),
   SESSION_COOKIE_NAME: z
     .string()
@@ -101,14 +107,21 @@ function requireSupabaseServiceConfig(source = process.env) {
   if (!env.SUPABASE_URL) {
     throw new Error("Missing required server environment variable: SUPABASE_URL");
   }
-  if (!env.SUPABASE_SERVICE_ROLE_KEY) {
+  const serviceKey = env.SUPABASE_SECRET_KEY || env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!serviceKey) {
     throw new Error(
-      "Missing required server environment variable: SUPABASE_SERVICE_ROLE_KEY",
+      "Missing required server environment variable: SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY",
     );
   }
   return {
     url: env.SUPABASE_URL,
-    serviceRoleKey: env.SUPABASE_SERVICE_ROLE_KEY,
+    serviceRoleKey: serviceKey,
+    buckets: {
+      avatar: env.SUPABASE_AVATAR_BUCKET || "avatars",
+      background: env.SUPABASE_BACKGROUND_BUCKET || "card-backgrounds",
+      gallery: env.SUPABASE_GALLERY_BUCKET || "gallery",
+      staging: env.SUPABASE_STAGING_BUCKET || "media-staging",
+    },
   };
 }
 

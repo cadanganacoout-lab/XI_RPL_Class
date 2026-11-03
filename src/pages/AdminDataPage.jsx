@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { MediaUploader } from "../components/MediaUploader.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 import { apiRequest } from "../lib/api.js";
 
 const EMPTY_STUDENT = {
@@ -37,6 +39,7 @@ function getFields(kind) {
 }
 
 export function AdminDataPage() {
+  const { user } = useAuth();
   const [kind, setKind] = useState("students");
   const [records, setRecords] = useState([]);
   const [status, setStatus] = useState("loading");
@@ -49,6 +52,8 @@ export function AdminDataPage() {
   const [revision, setRevision] = useState(0);
   const fields = getFields(kind);
   const isNew = editingId === "new";
+  const canManageMedia = user?.role === "admin" && user?.username === "admin";
+  const editingRecord = records.find(record => record.id === editingId);
 
   useEffect(() => {
     let active = true;
@@ -243,6 +248,9 @@ export function AdminDataPage() {
           {editingId && (
             <form className="admin-data-form" onSubmit={saveRecord}>
               <h2>{isNew ? `Tambah ${kind === "students" ? "siswa" : "guru"}` : "Edit data"}</h2>
+              {canManageMedia && !isNew && (
+                <p className="admin-data-status">Mode Admin — mengelola media milik record ini.</p>
+              )}
               {fields.map(([name, label, type]) => (
                 <label key={name}>
                   {label}
@@ -275,6 +283,35 @@ export function AdminDataPage() {
                   )}
                 </label>
               ))}
+              {canManageMedia && !isNew && (
+                <>
+                  <MediaUploader
+                    targetType={kind}
+                    targetId={editingId}
+                    mediaType="avatar"
+                    currentUrl={editingRecord?.avatar?.url || editingRecord?.foto || ""}
+                    removable={Boolean(editingRecord?.avatar)}
+                    onChanged={media => setRecords(current => current.map(record =>
+                      record.id === editingId ? { ...record, avatar: media } : record
+                    ))}
+                  />
+                  <MediaUploader
+                    targetType={kind}
+                    targetId={editingId}
+                    mediaType="background"
+                    currentUrl={editingRecord?.background?.url || ""}
+                    removable={Boolean(editingRecord?.background)}
+                    onChanged={media => setRecords(current => current.map(record =>
+                      record.id === editingId ? { ...record, background: media } : record
+                    ))}
+                  />
+                </>
+              )}
+              {canManageMedia && isNew && (
+                <p className="admin-data-status">
+                  Simpan data terlebih dahulu, lalu pilih Edit untuk menambahkan foto.
+                </p>
+              )}
               <div className="admin-data-form-actions">
                 <button className="button-primary" type="submit" disabled={saving}>
                   {saving ? "Menyimpan…" : "Simpan"}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Avatar } from "../components/Avatar.jsx";
+import { MediaUploader } from "../components/MediaUploader.jsx";
 import { StudentCard } from "../components/StudentCard.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { apiRequest } from "../lib/api.js";
@@ -157,7 +158,7 @@ export function ProfilePage({ username }) {
       <header className="profile-header">
         <Avatar
           name={profileUser.displayName}
-          src={profile.card?.foto}
+          src={profile.card?.avatar?.url || profile.card?.foto}
           size={96}
           round
         />
@@ -178,6 +179,22 @@ export function ProfilePage({ username }) {
             <div><dt>Username</dt><dd>@{profileUser.username}</dd></div>
             <div><dt>Bergabung</dt><dd>{joinedText}</dd></div>
           </dl>
+
+          {owner && profileUser.role === "student" && profile.card && (
+            <div className="profile-media-tools">
+              <MediaUploader
+                targetType="students"
+                targetId={profile.card.id}
+                mediaType="avatar"
+                currentUrl={profile.card.avatar?.url || profile.card.foto}
+                removable={Boolean(profile.card.avatar)}
+                onChanged={media => setProfile(current => ({
+                  ...current,
+                  card: { ...current.card, avatar: media },
+                }))}
+              />
+            </div>
+          )}
 
           {owner && (
             <div className="profile-actions">
