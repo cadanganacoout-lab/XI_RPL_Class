@@ -80,7 +80,7 @@ async function runMigration({
 
   const db = await getDatabase();
   const validatorsUpdated = [];
-  for (const name of ["cards", "teachers"]) {
+  for (const name of ["cards", "teachers", "media_audit"]) {
     if (await updateExistingValidator(db, name)) validatorsUpdated.push(name);
   }
   const indexes = await setupMediaCollections(db);

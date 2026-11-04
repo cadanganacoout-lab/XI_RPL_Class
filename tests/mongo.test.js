@@ -7,6 +7,7 @@ const {
 } = require("../api/_lib/repos/cards");
 const { findPublicUserByUsername } = require("../api/_lib/repos/users");
 const { COLLECTION_SCHEMAS } = require("../api/_lib/collection-schemas");
+const { updateExistingValidator } = require("../scripts/migrate-media-schema");
 const {
   toPublicCard,
   toPublicUser,
@@ -413,4 +414,28 @@ test("index setup refuses to silently reuse collections with a different schema"
     ensureCollection(db, "cards", COLLECTION_SCHEMAS.cards),
     /Collection schema requires review: cards/,
   );
+});
+
+test("media schema migration updates an existing audit validator", async () => {
+  let command;
+  const db = {
+    listCollections() {
+      return {
+        async toArray() {
+          return [{ name: "media_audit" }];
+        },
+      };
+    },
+    async command(value) {
+      command = value;
+    },
+  };
+
+  assert.equal(await updateExistingValidator(db, "media_audit"), true);
+  assert.deepEqual(command, {
+    collMod: "media_audit",
+    validator: { $jsonSchema: COLLECTION_SCHEMAS.media_audit },
+    validationLevel: "strict",
+    validationAction: "error",
+  });
 });

@@ -6,6 +6,7 @@ const { ObjectId } = require("mongodb");
 const apiHandler = require("../api/[...path].js");
 const { createHandler } = apiHandler;
 const { hashSessionToken, getCookieName } = require("../api/_lib/session");
+const { COLLECTION_SCHEMAS } = require("../api/_lib/collection-schemas");
 const { encodeWebp } = require("../api/_lib/media-image");
 const { createSignedUpload } = require("../api/_lib/media-storage");
 const { updateStudentSchema, updateTeacherSchema } = require("../api/_routes/admin-data");
@@ -183,6 +184,15 @@ function createDatabase({ user, token, card, galleryPhotos = [] }) {
       }
       if (name === "gallery_photos") {
         return {
+          async findOne(filter) {
+            return galleryPhotos.find(photo => matches(photo, filter)) || null;
+          },
+          async updateOne(filter, update) {
+            const photo = galleryPhotos.find(candidate => matches(candidate, filter));
+            if (!photo) return { matchedCount: 0 };
+            Object.assign(photo, update.$set);
+            return { matchedCount: 1 };
+          },
           find(filter = {}) {
             let sortSpec = {};
             const cursor = {
@@ -476,6 +486,49 @@ test("main admin can reorder the complete active gallery without accepting stora
     requestedOrder,
   );
   assert.equal(db.audits[0].action, "gallery-order");
+});
+
+test("main admin can update a gallery caption with a 24-character audit target ID", async t => {
+  const previousOrigin = process.env.APP_ORIGIN;
+  process.env.APP_ORIGIN = APP_ORIGIN;
+  t.after(() => {
+    if (previousOrigin === undefined) delete process.env.APP_ORIGIN;
+    else process.env.APP_ORIGIN = previousOrigin;
+  });
+  const token = "D".repeat(43);
+  const user = {
+    _id: new ObjectId(),
+    username: "admin",
+    displayName: "Admin utama",
+    role: "admin",
+    cardId: null,
+    isActive: true,
+    mustChangePassword: false,
+  };
+  const photo = {
+    _id: new ObjectId(),
+    caption: "Deskripsi lama",
+    url: "https://media-project.supabase.co/photo.webp",
+    path: "photo.webp",
+    sortOrder: 1,
+    isPublished: true,
+    storageDeleted: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+  const db = createDatabase({ user, token, card: null, galleryPhotos: [photo] });
+  const handler = createHandler({ getDatabase: async () => db });
+  const response = createResponse();
+  await handler(
+    createRequest("PATCH", `/api/admin/gallery/${photo._id}`, { caption: "Deskripsi baru" }, token),
+    response,
+  );
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(photo.caption, "Deskripsi baru");
+  assert.equal(db.audits[0].action, "gallery-caption");
+  assert.equal(db.audits[0].targetId, photo._id.toString());
+  assert.equal(COLLECTION_SCHEMAS.media_audit.properties.targetId.maxLength, 24);
 });
 
 test("admin data APIs cannot mass-assign media URLs or storage paths", () => {

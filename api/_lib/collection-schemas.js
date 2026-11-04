@@ -247,7 +247,7 @@ const mediaAuditJsonSchema = {
       ],
     },
     targetType: { enum: ["student", "teacher", "gallery"] },
-    targetId: { bsonType: "string", minLength: 1, maxLength: 20 },
+    targetId: { bsonType: "string", minLength: 1, maxLength: 24 },
     mediaType: { enum: ["avatar", "background", "gallery"] },
     createdAt: { bsonType: "date" },
   },
