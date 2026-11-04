@@ -23,8 +23,17 @@ const welcomePhotos = [...new Set(
 const photoHoldDuration = 4000;
 const photoTransitionDuration = 1100;
 
+function shufflePhotos(photos) {
+  const shuffled = [...photos];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+  return shuffled;
+}
+
 function WelcomeBackground() {
-  const [photos, setPhotos] = useState(welcomePhotos);
+  const [photos, setPhotos] = useState(() => shufflePhotos(welcomePhotos));
   const [images, setImages] = useState([null, null]);
   const [activeLayer, setActiveLayer] = useState(0);
   const [activePhotoIndex, setActivePhotoIndex] = useState(null);
@@ -35,12 +44,12 @@ function WelcomeBackground() {
     apiRequest("/api/gallery")
       .then(payload => {
         const urls = Array.isArray(payload.photos)
-          ? payload.photos.map(photo => photo.url).filter(url => typeof url === "string" && url)
+          ? [...new Set(payload.photos.map(photo => photo.url).filter(url => typeof url === "string" && url))]
           : [];
-        if (active && urls.length > 0) setPhotos(urls);
+        if (active && urls.length > 0) setPhotos(shufflePhotos(urls));
       })
       .catch(() => {
-        if (active) setPhotos(welcomePhotos);
+        if (active) setPhotos(shufflePhotos(welcomePhotos));
       });
     return () => {
       active = false;
