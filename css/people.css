@@ -53,7 +53,7 @@
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: color-mix(in srgb, var(--color-surface) 72%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 52%, transparent);
   content: "";
   pointer-events: none;
 }
