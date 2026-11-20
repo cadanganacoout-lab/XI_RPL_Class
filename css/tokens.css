@@ -1,60 +1,61 @@
 :root,
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --color-canvas: #0d0f12;
-  --gradient-canvas: linear-gradient(135deg, #090a0c 0%, #17191d 52%, #2b2e34 100%);
-  --color-surface: #121519;
+  --color-canvas: #080b10;
+  --gradient-canvas: linear-gradient(135deg, #080b10 0%, #0c1118 55%, #11100d 100%);
+  --color-surface: #10161d;
   --gradient-surface: linear-gradient(
     145deg,
-    rgb(26 28 32 / 78%) 0%,
-    rgb(32 35 40 / 66%) 52%,
-    rgb(42 45 51 / 62%) 100%
+    #151c24 0%,
+    #10161d 100%
   );
   --gradient-glass: linear-gradient(
     145deg,
-    rgb(255 255 255 / 7%) 0%,
-    rgb(255 255 255 / 3%) 48%,
-    rgb(0 0 0 / 12%) 100%
+    color-mix(in srgb, #ffffff 5%, #10161d) 0%,
+    color-mix(in srgb, #e5a84b 4%, #10161d) 48%,
+    #10161d 100%
   );
-  --color-surface-raised: #181c21;
+  --color-surface-raised: #171f28;
   --gradient-surface-raised: linear-gradient(
     145deg,
-    rgb(35 38 43 / 82%) 0%,
-    rgb(48 51 58 / 72%) 100%
+    #1b2530 0%,
+    #141b23 100%
   );
-  --color-surface-muted: #0a0c0f;
-  --color-text-primary: #eceff4;
-  --color-text-secondary: #a9b1bd;
-  --color-text-muted: #818a98;
-  --color-border: #242932;
-  --color-border-strong: #3a424e;
-  --color-accent: #6ea8ff;
-  --color-accent-strong: #9cc3ff;
-  --color-accent-soft: #14233b;
-  --color-accent-border: #26467a;
-  --color-action: #eceff4;
-  --color-on-action: #0d0f12;
-  --color-success: #5fd39a;
-  --color-warning: #e9c06a;
-  --color-danger: #ff8a94;
-  --color-focus: #9cc3ff;
+  --color-surface-muted: #0c1218;
+  --color-text-primary: #f4f3ef;
+  --color-text-secondary: #b0b7c1;
+  --color-text-muted: #8993a0;
+  --color-border: #28313b;
+  --color-border-strong: #3c4651;
+  --color-accent: #e5a84b;
+  --color-accent-strong: #ffc56c;
+  --color-accent-soft: #241a0c;
+  --color-accent-border: #6f4a1b;
+  --color-action: #ffc56c;
+  --color-on-action: #191208;
+  --color-success: #75d6a5;
+  --color-warning: #f2c56a;
+  --color-danger: #ff8691;
+  --color-focus: #ffd27b;
+  --color-play-button: #ffffff;
+  --color-play-icon: #080b10;
   --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
   --max-width: 1120px;
 
-  /* Tambahan token (palet bawaan di atas tidak diubah) */
-  --color-link: var(--color-accent);
-  --color-action-hover: var(--color-accent-strong);
-  --color-ring: rgb(110 168 255 / 28%);
-  --hue-1: #6ea8ff;
-  --hue-2: #60c6b0;
-  --hue-3: #b18aff;
-  --hue-4: #efb45e;
-  --hue-5: #f08a9d;
-  --hue-6: #84bd76;
-  --shadow-card: 0 1px 0 rgb(255 255 255 / 4%) inset, 0 12px 32px rgb(0 0 0 / 28%);
-  --shadow-lift: 0 1px 0 rgb(255 255 255 / 6%) inset, 0 18px 44px rgb(0 0 0 / 38%);
-  --shadow-pop: 0 24px 80px rgb(0 0 0 / 55%);
+  /* Token pendukung */
+  --color-link: #ffc56c;
+  --color-action-hover: #ffd27b;
+  --color-ring: color-mix(in srgb, #ffc56c 30%, transparent);
+  --hue-1: #f0ad4e;
+  --hue-2: #73c9b2;
+  --hue-3: #a795f5;
+  --hue-4: #e78ba1;
+  --hue-5: #8fc66f;
+  --hue-6: #6ea8ff;
+  --shadow-card: 0 1px 0 color-mix(in srgb, #ffffff 5%, transparent), 0 12px 32px color-mix(in srgb, #000000 35%, transparent);
+  --shadow-lift: 0 1px 0 color-mix(in srgb, #ffffff 8%, transparent), 0 18px 44px color-mix(in srgb, #000000 48%, transparent);
+  --shadow-pop: 0 24px 80px color-mix(in srgb, #000000 65%, transparent);
 }
 
 /* Token yang sama di kedua tema */
@@ -73,54 +74,56 @@
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --color-canvas: #f8f5ef;
-  --gradient-canvas: linear-gradient(135deg, #fff 0%, #f8f3eb 52%, #e8d8c5 100%);
-  --color-surface: #fff;
+  --color-canvas: #faf8f3;
+  --gradient-canvas: linear-gradient(135deg, #faf8f3 0%, #fffdfa 55%, #f2eee5 100%);
+  --color-surface: #ffffff;
   --gradient-surface: linear-gradient(
     145deg,
-    rgb(255 255 255 / 82%) 0%,
-    rgb(255 252 247 / 70%) 52%,
-    rgb(246 235 220 / 66%) 100%
+    #ffffff 0%,
+    #fffdf9 56%,
+    #f5f0e7 100%
   );
   --gradient-glass: linear-gradient(
     145deg,
-    rgb(255 255 255 / 82%) 0%,
-    rgb(255 255 255 / 64%) 52%,
-    rgb(248 239 226 / 72%) 100%
+    #ffffff 0%,
+    #fffdf9 56%,
+    #f5f0e7 100%
   );
-  --color-surface-raised: #f3ece2;
+  --color-surface-raised: #f7f2e9;
   --gradient-surface-raised: linear-gradient(
     145deg,
-    rgb(255 252 247 / 86%) 0%,
-    rgb(237 222 204 / 78%) 100%
+    #ffffff 0%,
+    #f3ede3 100%
   );
-  --color-surface-muted: #f1e9dd;
-  --color-text-primary: #14181f;
-  --color-text-secondary: #444d5b;
-  --color-text-muted: #5a6473;
-  --color-border: #dce0e7;
-  --color-border-strong: #b9c2cf;
-  --color-accent: #978b8b;
-  --color-accent-strong: #174ca8;
-  --color-accent-soft: #e6eefc;
-  --color-accent-border: #a9c2f0;
-  --color-action: #265fc4;
-  --color-on-action: #fff;
-  --color-success: #17704a;
-  --color-warning: #7e5710;
-  --color-danger: #b02f3f;
-  --color-focus: #1d5fd1;
+  --color-surface-muted: #f4f0e8;
+  --color-text-primary: #1a1b1e;
+  --color-text-secondary: #48505b;
+  --color-text-muted: #656e79;
+  --color-border: #e4ded4;
+  --color-border-strong: #c8c0b3;
+  --color-accent: #a7600a;
+  --color-accent-strong: #8a4b04;
+  --color-accent-soft: #fff2dd;
+  --color-accent-border: #eac994;
+  --color-action: #9a5000;
+  --color-on-action: #ffffff;
+  --color-success: #16734a;
+  --color-warning: #7d5100;
+  --color-danger: #b42332;
+  --color-focus: #8a4b04;
+  --color-play-button: #171f28;
+  --color-play-icon: #ffffff;
 
-  --color-link: var(--color-accent-strong);
-  --color-action-hover: var(--color-accent-strong);
-  --color-ring: rgb(29 95 209 / 24%);
-  --hue-1: #1d5fd1;
+  --color-link: #8a4b04;
+  --color-action-hover: #7c4000;
+  --color-ring: color-mix(in srgb, #8a4b04 24%, transparent);
+  --hue-1: #2459a6;
   --hue-2: #087e72;
   --hue-3: #7040c8;
-  --hue-4: #9a6200;
-  --hue-5: #bd4058;
+  --hue-4: #996000;
+  --hue-5: #b33d55;
   --hue-6: #38752d;
-  --shadow-card: 0 1px 2px rgb(70 50 25 / 6%), 0 12px 30px rgb(70 50 25 / 8%);
-  --shadow-lift: 0 2px 4px rgb(70 50 25 / 8%), 0 18px 40px rgb(70 50 25 / 14%);
-  --shadow-pop: 0 24px 70px rgb(40 30 15 / 30%);
+  --shadow-card: 0 1px 2px color-mix(in srgb, #000000 10%, transparent), 0 12px 30px color-mix(in srgb, #000000 12%, transparent);
+  --shadow-lift: 0 2px 4px color-mix(in srgb, #000000 12%, transparent), 0 18px 40px color-mix(in srgb, #000000 18%, transparent);
+  --shadow-pop: 0 24px 70px color-mix(in srgb, #000000 28%, transparent);
 }

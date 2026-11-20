@@ -262,7 +262,7 @@
 .comment-submit {
   background: var(--color-action);
   color: var(--color-on-action);
-  box-shadow: 0 1px 0 rgb(255 255 255 / 18%) inset, 0 6px 16px rgb(0 0 0 / 16%);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-on-action) 18%, transparent) inset, 0 6px 16px color-mix(in srgb, var(--color-canvas) 16%, transparent);
 }
 
 .button-secondary {

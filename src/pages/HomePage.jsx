@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  GALERI,
   GURU,
   GURU_JADWAL,
   HARI_AKTIF,
@@ -9,153 +8,251 @@ import {
   MOTIVASI,
   PIKET,
   SITE,
-  VIDEO,
+  UI,
 } from "../data/class-data.js";
-import { CommentsSection } from "./CommentsPage.jsx";
+import { HomeSpotlights } from "../components/HomeSpotlights.jsx";
 import { initialsOf } from "../components/Avatar.jsx";
 import { apiRequest } from "../lib/api.js";
+import "../../css/welcome-room.css";
 
-const welcomePhotos = [...new Set(
-  GALERI
-    .map(photo => typeof photo.foto === "string" ? photo.foto.trim() : "")
-    .filter(Boolean),
-)];
-const photoHoldDuration = 4000;
-const photoTransitionDuration = 1100;
+const GALLERY_SLICES = 16;
+const GALLERY_CAMERA = 1.6;
+const GALLERY_TILE_HEIGHT = 52;
+const GALLERY_TILE_WIDTH = 68;
+const GALLERY_ASPECT = 16 / 9;
+const GALLERY_GAP = 16;
+const GALLERY_CURVE = (80 * Math.PI) / 180;
+const GALLERY_SPEED = 5;
 
-function shufflePhotos(photos) {
-  const shuffled = [...photos];
-  for (let index = shuffled.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(Math.random() * (index + 1));
-    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
-  }
-  return shuffled;
+function galleryArc(bend) {
+  return (
+    (GALLERY_CAMERA - 1 + Math.cos(bend)) /
+    (2 * GALLERY_CAMERA * Math.sin(bend))
+  );
 }
 
-function WelcomeBackground() {
-  const [photos, setPhotos] = useState(() => shufflePhotos(welcomePhotos));
-  const [images, setImages] = useState([null, null]);
-  const [activeLayer, setActiveLayer] = useState(0);
-  const [activePhotoIndex, setActivePhotoIndex] = useState(null);
-  const [isTabVisible, setIsTabVisible] = useState(() => document.visibilityState !== "hidden");
+function measureGallery(width, height) {
+  const tileHeight = Math.min(
+    (GALLERY_TILE_HEIGHT / 100) * height,
+    ((GALLERY_TILE_WIDTH / 100) * width) / GALLERY_ASPECT,
+  );
+  const radius = width * galleryArc(GALLERY_CURVE);
+  if (!(tileHeight > 0) || !(radius > 0)) {
+    return { columns: 2, sweep: 0, unit: 0, limit: 0 };
+  }
+
+  const degrees = radians => (radians * 180) / Math.PI;
+  const unit = degrees(tileHeight / radius);
+  const pitch = (GALLERY_ASPECT + GALLERY_GAP / 100) * unit;
+  const limit = degrees(GALLERY_CURVE) + (GALLERY_ASPECT * unit) / 2;
+  const columns = Math.min(60, Math.max(2, Math.ceil((2 * limit) / pitch)));
+  const round = value => Number(value.toFixed(4));
+  const sweep = round((columns * pitch) / 2);
+
+  return {
+    columns,
+    sweep,
+    unit: round(unit),
+    limit: round(Math.min(sweep, limit)),
+  };
+}
+
+function WelcomeGallery({ photos, status }) {
+  const ref = useRef(null);
+  const id = React.useId().replace(/[^a-zA-Z0-9]/g, "");
+  const orbitClass = `welcome-gallery-orbit-${id}`;
+  const tileClass = `welcome-gallery-tile-${id}`;
+  const [layout, setLayout] = useState(() => measureGallery(1200, 360));
+  const [shownPhotos, setShownPhotos] = useState({});
+  const [loadedPhotos, setLoadedPhotos] = useState(() => new Set());
+  const [failedPhotos, setFailedPhotos] = useState(() => new Set());
 
   useEffect(() => {
-    let active = true;
-    apiRequest("/api/gallery")
-      .then(payload => {
-        const urls = Array.isArray(payload.photos)
-          ? [...new Set(payload.photos.map(photo => photo.url).filter(url => typeof url === "string" && url))]
-          : [];
-        if (active && urls.length > 0) setPhotos(shufflePhotos(urls));
-      })
-      .catch(() => {
-        if (active) setPhotos(shufflePhotos(welcomePhotos));
-      });
-    return () => {
-      active = false;
-    };
+    const element = ref.current;
+    if (!element || typeof ResizeObserver !== "function") return undefined;
+
+    const observer = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      const next = measureGallery(width, height);
+      setLayout(previous =>
+        previous.columns === next.columns &&
+        previous.sweep === next.sweep &&
+        previous.unit === next.unit
+          ? previous
+          : next
+      );
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
-
-    function loadNextPhoto(index) {
-      if (cancelled || index >= photos.length) return;
-      const image = new Image();
-      image.onload = () => {
-        if (cancelled) return;
-        const showPhoto = () => {
-          if (cancelled) return;
-          setImages([photos[index], null]);
-          setActivePhotoIndex(index);
-        };
-        if (typeof image.decode === "function") {
-          image.decode().then(showPhoto, () => loadNextPhoto(index + 1));
-        } else {
-          showPhoto();
-        }
-      };
-      image.onerror = () => loadNextPhoto(index + 1);
-      image.src = photos[index];
+    const gallery = ref.current;
+    const hero = gallery?.closest(".welcome-hero");
+    const room = hero?.querySelector(".welcome-room");
+    if (!gallery || !hero || typeof IntersectionObserver !== "function") {
+      return undefined;
     }
 
-    loadNextPhoto(0);
-    return () => {
-      cancelled = true;
-    };
-  }, [photos]);
-
-  useEffect(() => {
-    const updateVisibility = () => setIsTabVisible(document.visibilityState !== "hidden");
-
-    document.addEventListener("visibilitychange", updateVisibility);
-    return () => {
-      document.removeEventListener("visibilitychange", updateVisibility);
-    };
+    const observer = new IntersectionObserver(([entry]) => {
+      const paused = !entry.isIntersecting;
+      gallery.classList.toggle("is-paused", paused);
+      room?.classList.toggle("is-paused", paused);
+    });
+    observer.observe(hero);
+    return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (
-      !isTabVisible ||
-      activePhotoIndex === null ||
-      photos.length < 2
-    ) return undefined;
-
-    let cancelled = false;
-    let animationFrame;
-    let timeoutId;
-
-    function preloadNextPhoto(fromIndex, remaining) {
-      if (cancelled || remaining <= 0) return;
-      const nextIndex = (fromIndex + 1) % photos.length;
-      const image = new Image();
-      image.onload = () => {
-        if (cancelled) return;
-        const showPhoto = () => {
-          if (cancelled) return;
-          const nextLayer = 1 - activeLayer;
-          setImages(currentImages => currentImages.map((source, index) =>
-            index === nextLayer ? photos[nextIndex] : source
-          ));
-          animationFrame = window.requestAnimationFrame(() => {
-            if (cancelled) return;
-            setActiveLayer(nextLayer);
-            setActivePhotoIndex(nextIndex);
-          });
-        };
-        if (typeof image.decode === "function") {
-          image.decode().then(showPhoto, () => preloadNextPhoto(nextIndex, remaining - 1));
-        } else {
-          showPhoto();
-        }
-      };
-      image.onerror = () => preloadNextPhoto(nextIndex, remaining - 1);
-      image.src = photos[nextIndex];
-    }
-
-    timeoutId = window.setTimeout(
-      () => preloadNextPhoto(activePhotoIndex, photos.length - 1),
-      photoHoldDuration + photoTransitionDuration,
-    );
-    return () => {
-      cancelled = true;
-      window.clearTimeout(timeoutId);
-      if (animationFrame) window.cancelAnimationFrame(animationFrame);
-    };
-  }, [activeLayer, activePhotoIndex, isTabVisible, photos]);
+  const { columns, sweep, unit, limit } = layout;
+  const radius = `${Number((100 * galleryArc(GALLERY_CURVE)).toFixed(3))}cqw`;
+  const size = value =>
+    `calc(${Number(value.toFixed(4))} * min(${GALLERY_TILE_HEIGHT}cqh, ${Number(
+      (GALLERY_TILE_WIDTH / GALLERY_ASPECT).toFixed(4),
+    )}cqw))`;
+  const turn = degrees =>
+    `translateZ(${radius}) rotateY(${Number(degrees.toFixed(4))}deg) translateZ(-${radius})`;
+  const duration = columns * GALLERY_SPEED;
+  const hide = Number((((sweep - limit) / (2 * sweep || 1)) * 100).toFixed(4));
+  const animation = `@keyframes ${orbitClass}{from{transform:${turn(-sweep)}}to{transform:${turn(sweep)}}0%,${hide}%,${100 - hide}%,100%{visibility:hidden}${hide + 0.001}%,${100 - hide - 0.001}%{visibility:visible}}`;
 
   return (
-    <div className="welcome-background" aria-hidden="true">
-      {images.map((source, index) => source && (
-        <img
-          className={`welcome-background-image${index === activeLayer ? " is-active" : ""}`}
-          src={source}
-          alt=""
-          key={index}
-          fetchPriority={index === activeLayer ? "high" : "auto"}
-        />
-      ))}
-      <div className="welcome-overlay" />
+    <div
+      ref={ref}
+      className="welcome-gallery"
+      role="region"
+      aria-label="Foto kegiatan kelas XI RPL"
+      aria-busy={status === "loading"}
+      style={{ containerType: "size" }}
+    >
+      {status === "loading" ? (
+        <div className="welcome-gallery-loading" role="status">
+          {[0, 1, 2].map(position => (
+            <span
+              className={`home-photo-skeleton welcome-gallery-loading-card welcome-gallery-loading-card--${position}`}
+              key={position}
+              aria-hidden="true"
+            />
+          ))}
+          <span className="visually-hidden">Memuat foto kegiatan…</span>
+        </div>
+      ) : status === "error" || photos.length === 0 ? (
+        <p
+          className="welcome-gallery-message"
+          role={status === "error" ? "alert" : "status"}
+        >
+          {status === "error"
+            ? "Foto kegiatan belum dapat dimuat."
+            : "Belum ada foto kegiatan."}
+        </p>
+      ) : (
+        <>
+          <style>{animation}</style>
+          <div
+            className="welcome-gallery-stream"
+            style={{
+              perspective: `${Number((100 * galleryArc(GALLERY_CURVE) * GALLERY_CAMERA).toFixed(3))}cqw`,
+              perspectiveOrigin: "50% 50%",
+              maskImage: "linear-gradient(90deg, transparent, var(--color-canvas) 12%, var(--color-canvas) 88%, transparent)",
+              WebkitMaskImage: "linear-gradient(90deg, transparent, var(--color-canvas) 12%, var(--color-canvas) 88%, transparent)",
+            }}
+          >
+        {Array.from({ length: columns }, (_, tileIndex) => {
+          const firstPhoto = columns - 1 - tileIndex;
+          const photoIndex = (shownPhotos[tileIndex] ?? firstPhoto) % photos.length;
+          const photo = photos[photoIndex];
+          const imageReady = loadedPhotos.has(photo.url);
+          const imageFailed = failedPhotos.has(photo.url);
+
+          return (
+            <div
+              className={[
+                "welcome-gallery-tile",
+                tileClass,
+                imageReady && "is-image-ready",
+                imageFailed && "is-image-error",
+                !imageReady && !imageFailed && "is-image-loading",
+              ].filter(Boolean).join(" ")}
+              key={tileIndex}
+              role="img"
+              aria-label={photo.caption || "Kegiatan kelas XI RPL"}
+              style={{
+                left: `calc(50% - ${size(GALLERY_ASPECT / 2)})`,
+                top: `calc(50% - ${size(0.5)})`,
+                width: size(GALLERY_ASPECT),
+                height: size(1),
+                transformStyle: "preserve-3d",
+                animation: `${orbitClass} ${duration}s linear ${-tileIndex * GALLERY_SPEED}s infinite`,
+              }}
+              onAnimationIteration={event => {
+                const lap = Math.round(event.elapsedTime / duration);
+                const nextPhoto = lap * columns + firstPhoto;
+                setShownPhotos(previous =>
+                  previous[tileIndex] === nextPhoto
+                    ? previous
+                    : { ...previous, [tileIndex]: nextPhoto }
+                );
+              }}
+            >
+              <span className="home-photo-skeleton welcome-gallery-tile-skeleton" aria-hidden="true" />
+              {Array.from({ length: GALLERY_SLICES }, (_, sliceIndex) => {
+                const share = GALLERY_ASPECT / GALLERY_SLICES;
+                const radiusOffset =
+                  (GALLERY_ASPECT / 2 - (sliceIndex + 0.5) * share) * unit;
+
+                return (
+                  <div
+                    key={sliceIndex}
+                    className="welcome-gallery-slice"
+                    aria-hidden="true"
+                    style={{
+                      left: size((GALLERY_ASPECT - share) / 2),
+                      width: sliceIndex === GALLERY_SLICES - 1
+                        ? size(share)
+                        : `calc(${size(share)} + 1px)`,
+                      height: size(1),
+                      transform: turn(radiusOffset),
+                      borderRadius: sliceIndex === 0
+                        ? "10px 0 0 10px"
+                        : sliceIndex === GALLERY_SLICES - 1
+                          ? "0 10px 10px 0"
+                          : undefined,
+                    }}
+                  >
+                    <img
+                      src={photo.url}
+                      alt=""
+                      draggable={false}
+                      loading="eager"
+                      decoding="async"
+                      onLoad={() => {
+                        setLoadedPhotos(current => (
+                          current.has(photo.url)
+                            ? current
+                            : new Set(current).add(photo.url)
+                        ));
+                      }}
+                      onError={() => {
+                        setFailedPhotos(current => (
+                          current.has(photo.url)
+                            ? current
+                            : new Set(current).add(photo.url)
+                        ));
+                      }}
+                      style={{
+                        left: size(-sliceIndex * share),
+                        width: size(GALLERY_ASPECT),
+                        height: size(1),
+                      }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -364,7 +461,7 @@ function AgendaDashboard({ now }) {
       <div className="section-head agenda-heading">
         <div>
           <span className="route-label">AGENDA KELAS</span>
-          <h2 id="agenda-heading">Jadwal &amp; piket</h2>
+          <h2 id="agenda-heading" tabIndex="-1">Jadwal &amp; piket</h2>
           <p>Rencana belajar dan petugas kelas dalam satu tampilan.</p>
         </div>
         <div className="agenda-day-picker" aria-label="Pilih hari jadwal">
@@ -446,23 +543,38 @@ function Icon({ name, size = 22 }) {
   );
 }
 
-const exploreLinks = [
-  ["#/siswa", "Siswa", "Kenali teman sekelas", "users"],
-  ["#/guru", "Guru", "Pengajar & mata pelajaran", "book"],
-  ["#/galeri", "Galeri", `${GALERI.length} foto kegiatan`, "image"],
-  ["#/video", "Video", `${VIDEO.length} video kelas`, "play"],
-];
+const exploreLinks = UI.home.explore;
 
-export function HomePage({ route }) {
+export function HomePage() {
   const [motivationIndex, setMotivationIndex] = useState(0);
   const [now, setNow] = useState(() => new Date());
+  const [gallery, setGallery] = useState({ photos: [], status: "loading" });
   const dashboardRef = useRef(null);
 
   useEffect(() => {
-    if (route === "komentar") {
-      document.getElementById("diskusi")?.scrollIntoView({ block: "start" });
-    }
-  }, [route]);
+    let active = true;
+    apiRequest("/api/gallery")
+      .then(payload => {
+        if (!Array.isArray(payload?.photos)) {
+          throw new Error("Respons galeri tidak valid.");
+        }
+        const photos = payload.photos
+          .filter(photo => photo && typeof photo.url === "string" && photo.url.trim())
+          .map(photo => ({
+            id: typeof photo.id === "string" ? photo.id : photo.url.trim(),
+            url: photo.url.trim(),
+            caption: typeof photo.caption === "string" ? photo.caption.trim() : "",
+          }));
+        if (active) setGallery({ photos, status: "ready" });
+      })
+      .catch(error => {
+        console.error("Could not load gallery photos for the home page.", error);
+        if (active) setGallery({ photos: [], status: "error" });
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     const dashboard = dashboardRef.current;
@@ -497,69 +609,58 @@ export function HomePage({ route }) {
 
   return (
     <div className="home-unveil">
-      <section className="welcome-hero hero-beranda" aria-labelledby="welcome-title">
-        <WelcomeBackground />
-        <div className="welcome-content">
-          <span className="welcome-eyebrow"><i className="welcome-dot" aria-hidden="true" />WEBSITE · {SITE.className}</span>
-          <h1 id="welcome-title">WELCOME</h1>
-          <p className="welcome-slogan">RPL! JAYA JAYA JAYA</p>
-          <p className="welcome-class">{SITE.majorName} · {SITE.schoolShort}</p>
-          <div className="welcome-actions">
-            <a
-              className="hero-cta welcome-skip"
-              href="#dashboard"
-              onClick={event => {
-                event.preventDefault();
-                const dashboard = document.getElementById("dashboard");
-                dashboard?.scrollIntoView({ block: "start" });
-                dashboard?.focus({ preventScroll: true });
-              }}
-            >
-              Lihat agenda hari ini <span aria-hidden="true">↓</span>
-            </a>
-            <a className="welcome-ghost" href="#/siswa">Kenali teman sekelas</a>
-          </div>
+      <section id="home-hero" className="welcome-hero hero-beranda" aria-labelledby="welcome-title" tabIndex="-1">
+        <div className="welcome-room" aria-hidden="true">
+          <div className="welcome-room-ceiling" />
+          <div className="welcome-room-wall" />
+          <div className="welcome-room-side welcome-room-side--left" />
+          <div className="welcome-room-side welcome-room-side--right" />
+          <div className="welcome-room-floor" />
         </div>
-        <div className="welcome-footer">
-          <span className="welcome-scroll-cue">
-            <span aria-hidden="true">↓</span>
-            Scroll untuk melihat agenda
-          </span>
+        <div className="welcome-content">
+          <h1 id="welcome-title">{UI.home.welcomeTitle}</h1>
+        </div>
+        <WelcomeGallery photos={gallery.photos} status={gallery.status} />
+        <div className="welcome-tagline">
+          <p className="welcome-slogan">{UI.home.welcomeSlogan}</p>
+          <p className="welcome-class">{UI.home.welcomeDescription}</p>
         </div>
       </section>
+
+      <HomeSpotlights photos={gallery.photos} status={gallery.status} />
 
       <section className="dashboard-reveal" id="dashboard" ref={dashboardRef} tabIndex="-1">
         <div className="container">
           <AgendaDashboard now={now} />
 
-          <h2 className="group-title">Ringkasan kelas</h2>
+          <h2 className="group-title">{UI.home.summaryTitle}</h2>
           <div className="stat-row">
             <div className="stat-item stat-card">
               <span className="stat-icon"><Icon name="users" /></span>
               <div className="stat-body">
                 <span className="stat-value">{SITE.totalStudents}</span>
-                <span className="stat-label">Siswa</span>
+                <span className="stat-label">{UI.home.summary.studentLabel}</span>
               </div>
             </div>
             <div className="stat-item stat-card">
               <span className="stat-icon"><Icon name="book" /></span>
               <div className="stat-body">
                 <span className="stat-value">{SITE.totalTeachers}</span>
-                <span className="stat-label">Guru</span>
+                <span className="stat-label">{UI.home.summary.teacherLabel}</span>
               </div>
             </div>
             <div className="stat-item stat-card">
               <span className="stat-icon"><Icon name="badge" /></span>
               <div className="stat-body">
                 <span className="stat-value stat-value--name">{SITE.waliKelas}</span>
-                <span className="stat-label">Wali kelas</span>
+                <span className="stat-label">{UI.home.summary.homeroomLabel}</span>
               </div>
             </div>
           </div>
 
-          <h2 className="group-title">Jelajahi</h2>
-          <nav className="explore-grid" aria-label="Pintasan halaman">
-            {exploreLinks.map(([href, title, text, icon]) => (
+          <h2 className="group-title">{UI.home.exploreTitle}</h2>
+          <nav className="explore-grid" aria-label={UI.home.exploreAriaLabel}>
+            {exploreLinks.map(({ href, title, text, icon }) => (
               <a className="explore-card" href={href} key={href}>
                 <span className="explore-icon"><Icon name={icon} /></span>
                 <div className="explore-text">
@@ -571,8 +672,8 @@ export function HomePage({ route }) {
             ))}
           </nav>
 
-          <h2 className="group-title">Motivasi</h2>
-          <section className="home-motivation" aria-label="Motivasi kelas">
+          <h2 className="group-title">{UI.home.motivationTitle}</h2>
+          <section className="home-motivation" aria-label={UI.home.motivationAriaLabel}>
             <svg className="motivation-mark" width="96" height="96" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M9.6 6C6.5 7 4 9.8 4 13.6V18h6v-6H7c.1-2 1.2-3.4 3.3-4L9.6 6Zm9 0c-3.1 1-5.6 3.8-5.6 7.6V18h6v-6h-3c.1-2 1.2-3.4 3.3-4L18.6 6Z" />
             </svg>
@@ -598,7 +699,6 @@ export function HomePage({ route }) {
             </div>
           </section>
         </div>
-        <CommentsSection />
       </section>
     </div>
   );

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SITE, VIDEO } from "../data/class-data.js";
 
-function VideoPlayer({ video }) {
-  const [playing, setPlaying] = useState(false);
+function VideoPlayer({ video, autoplay = false }) {
+  const [playing, setPlaying] = useState(autoplay);
   const id = encodeURIComponent(video.youtubeId);
 
   return (
@@ -44,6 +44,22 @@ function VideoPlayer({ video }) {
 
 export function VideosPage() {
   const classLabel = SITE.className.split(" ")[0];
+  const query = window.location.hash.split("?")[1] || "";
+  const selectedVideoId = new URLSearchParams(query).get("id");
+  const selectedVideo = VIDEO.find(video => video.id === selectedVideoId);
+
+  useEffect(() => {
+    if (!selectedVideo) return undefined;
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById(`video-${selectedVideo.id}`)?.scrollIntoView({
+        block: "center",
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+      });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [selectedVideo]);
 
   return (
     <>
@@ -59,8 +75,12 @@ export function VideosPage() {
         <p className="video-count">{VIDEO.length} video untuk ditonton</p>
         <div className="video-grid">
           {VIDEO.map((video) => (
-            <article className="video-card" key={video.id}>
-              <VideoPlayer video={video} />
+            <article
+              className={`video-card${video.id === selectedVideoId ? " is-selected" : ""}`}
+              id={`video-${video.id}`}
+              key={video.id}
+            >
+              <VideoPlayer video={video} autoplay={video.id === selectedVideoId} />
               <div className="video-info">
                 <div className="video-avatar" aria-hidden="true">{classLabel}</div>
                 <div className="video-text">

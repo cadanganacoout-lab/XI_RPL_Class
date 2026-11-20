@@ -1,6 +1,7 @@
 node_modules/
 .agents/
 skills-lock.json
+design/
 
 # Build output and local deployment metadata
 dist/

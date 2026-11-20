@@ -34,10 +34,16 @@ const browserTeachers = loadLegacyTeachers().map((teacher, index) => ({
   ...teacher,
   sortOrder: index + 1
 }));
+const browserPhotos = Array.from({length: 10}, (_, index) => ({
+  id: `browser-photo-${index + 1}`,
+  caption: `Foto database ${index + 1}`,
+  url: `https://images.example.test/photos/${index + 1}.svg`,
+  sortOrder: index + 1
+}));
 
-async function mockSiteApi(page) {
+async function mockSiteApi(page, {includeGallery = false, galleryDelay = 0, imageDelay = 0} = {}) {
   await page.setRequestInterception(true);
-  page.on('request', request => {
+  page.on('request', async request => {
     const pathname = new URL(request.url()).pathname;
     if (pathname === '/api/auth/me') {
       return request.respond({
@@ -58,6 +64,23 @@ async function mockSiteApi(page) {
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify({teachers: browserTeachers})
+      });
+    }
+    if (pathname === '/api/gallery' && includeGallery) {
+      if (galleryDelay) await wait(galleryDelay);
+      return request.respond({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({photos: browserPhotos})
+      });
+    }
+    if (request.url().startsWith('https://images.example.test/photos/')) {
+      if (imageDelay) await wait(imageDelay);
+      const color = ['#e5a84b', '#73c9b2', '#a795f5', '#e78ba1'][Number(pathname.match(/\d+/)?.[0] || 1) % 4];
+      return request.respond({
+        status: 200,
+        contentType: 'image/svg+xml',
+        body: `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 16 9"><rect width="16" height="9" fill="${color}"/></svg>`
       });
     }
     return request.continue();
@@ -93,7 +116,12 @@ async function mockSiteApi(page) {
       if (!fs.existsSync(file)) continue;
       const page = await browser.newPage();
       const messages = [];
-      await mockSiteApi(page);
+      let stage = 'page load';
+      await mockSiteApi(page, {
+        includeGallery: route === 'beranda',
+        galleryDelay: route === 'beranda' ? 500 : 0,
+        imageDelay: route === 'beranda' ? 5000 : 0
+      });
 
       page.on('console', msg => {
         messages.push({type: 'console.'+msg.type(), text: msg.text()});
@@ -106,17 +134,27 @@ async function mockSiteApi(page) {
       });
 
       try {
-        const url = `http://127.0.0.1:${address.port}/index.html#/${route}`;
+        const routeHash = route === 'video' ? '/video?id=v02' : `/${route}`;
+        const url = `http://127.0.0.1:${address.port}/index.html#${routeHash}`;
         await page.goto(url, {waitUntil: 'domcontentloaded', timeout: 30000});
         await page.waitForSelector('#root > *', {timeout: 10000});
+        if (route === 'beranda') {
+          assert.ok(await page.$('.welcome-gallery-loading'), 'Welcome gallery shows skeletons while database photos load.');
+          assert.equal(
+            await page.$$eval('.gallery-highlight-card--skeleton', cards => cards.length),
+            8,
+            'Gallery spotlights reserve their layout while database photos load.'
+          );
+        }
         await wait(250);
+        stage = 'mobile touch-hover check';
         const mobileHoverTargets = {
-          beranda: '.hero-cta',
+          beranda: '.welcome-gallery',
           siswa: '.people-card',
           guru: '.people-card',
           galeri: '.gallery-item',
           video: '.video-card',
-          komentar: '.hero-cta'
+          komentar: 'textarea[maxlength="500"]'
         };
         const mobilePage = await browser.newPage();
         try {
@@ -147,12 +185,22 @@ async function mockSiteApi(page) {
           await mobilePage.close();
         }
         {
-          const navigationRoute = route === 'komentar' ? 'beranda' : route;
-          assert.equal(await page.$eval('.tab.active', tab => tab.dataset.page), navigationRoute);
-          assert.equal(
-            await page.$eval('.tab.active', tab => tab.getAttribute('href')),
-            `#/${navigationRoute}`
-          );
+          if (route === 'siswa' || route === 'guru') {
+            assert.equal(
+              await page.$eval('.nav-picker[data-group="pages"] .nav-picker-trigger.active', trigger => trigger.dataset.page),
+              route
+            );
+            assert.equal(
+              await page.$eval(`.nav-picker[data-group="pages"] .nav-picker-link[data-page="${route}"]`, link => link.getAttribute('href')),
+              `#/${route}`
+            );
+          } else {
+            assert.equal(
+              await page.$('.nav-picker[data-group="pages"] .nav-picker-trigger.active'),
+              null,
+              `${route} has no active explore navigation item.`
+            );
+          }
           if (route === 'siswa' || route === 'guru') {
           const expectedCount = await page.evaluate(() => {
             const data = window.XIRPL1_DATA;
@@ -162,7 +210,7 @@ async function mockSiteApi(page) {
           });
           assert.equal(await page.$$eval('.people-card', cards => cards.length), expectedCount);
           assert.equal(
-            await page.$eval('.tab.active', tab => tab.dataset.page),
+            await page.$eval('.nav-picker[data-group="pages"] .nav-picker-trigger.active', trigger => trigger.dataset.page),
             route
           );
 
@@ -203,19 +251,165 @@ async function mockSiteApi(page) {
             const count = await page.evaluate(() => window.XIRPL1_DATA.VIDEO.length);
             assert.equal((await page.$$('.video-card')).length, count);
             assert.ok(await page.$('.video-frame button.video-play[aria-label]'), 'Video players have accessible labels.');
+            assert.ok(await page.$('#video-v02.is-selected iframe[title]'), 'A selected highlight opens and plays its matching video.');
             await page.click('.video-play');
             assert.ok(await page.$('.video-frame iframe[title]'), 'Playing a video loads an embed with an accessible title.');
           } else if (route === 'beranda') {
+            stage = 'welcome and navbar checks';
             assert.ok(await page.$('.hero-beranda'), 'Home page renders the class hero.');
+            await page.waitForSelector(
+              '.welcome-gallery-tile.is-image-loading .welcome-gallery-tile-skeleton',
+              {timeout: 10000}
+            );
+            await page.waitForSelector('.gallery-highlight-card img', {timeout: 10000});
+            await page.evaluate(() => document.getElementById('gallery-spotlight').scrollIntoView({
+              block: 'center',
+              behavior: 'instant'
+            }));
+            await page.waitForSelector(
+              '.gallery-highlight-card.is-image-loading .home-photo-skeleton',
+              {timeout: 10000}
+            );
+            await page.evaluate(() => window.scrollTo({top: 0, behavior: 'instant'}));
+            assert.ok(await page.$('.welcome-gallery-tile img'), 'Welcome hero renders gallery photos.');
+            await page.waitForSelector('.welcome-gallery-tile.is-image-ready', {timeout: 10000});
+            assert.equal(await page.$('.welcome-actions'), null, 'Welcome hero has no action buttons.');
+            await page.waitForFunction(
+              () => getComputedStyle(document.querySelector('.site-header')).visibility === 'hidden',
+              {timeout: 5000}
+            );
+            assert.equal(
+              await page.$eval('.site-header', header => getComputedStyle(header).visibility),
+              'hidden',
+              'The main navigation stays hidden while the welcome hero is in view.'
+            );
+            const welcomeLayout = await page.evaluate(() => ({
+              title: document.querySelector('#welcome-title').getBoundingClientRect().top,
+              gallery: document.querySelector('.welcome-gallery').getBoundingClientRect().top,
+              slogan: document.querySelector('.welcome-tagline').getBoundingClientRect().top
+            }));
+            assert.ok(
+              welcomeLayout.title < welcomeLayout.gallery &&
+                welcomeLayout.gallery < welcomeLayout.slogan,
+              'Welcome title, photo arc, and class slogan appear in order.'
+            );
+            assert.equal(await page.$('.class-lineup'), null, 'Home page does not render the class structure section.');
+            const gallerySources = await page.$$eval(
+              '.gallery-highlight-card img',
+              images => images.map(image => image.getAttribute('src'))
+            );
+            assert.equal(gallerySources.length, 8, 'Home page renders eight landscape gallery highlights.');
+            assert.equal(new Set(gallerySources).size, 8, 'Gallery highlights use distinct photos.');
+            assert.ok(
+              gallerySources.every(source => browserPhotos.some(photo => photo.url === source)),
+              'Gallery highlights use only photos returned by the database API.'
+            );
+            const welcomeSources = await page.$$eval(
+              '.welcome-gallery-tile img',
+              images => [...new Set(images.map(image => image.getAttribute('src')))]
+            );
+            assert.ok(
+              welcomeSources.length > 0 &&
+                welcomeSources.every(source => browserPhotos.some(photo => photo.url === source)),
+              'Welcome hero uses only photos returned by the database API.'
+            );
+            assert.equal(await page.$('.gallery-highlight-stage .route-label'), null, 'Gallery highlights show only the section title.');
+            assert.equal(
+              await page.evaluate(() => {
+                const title = document.querySelector('#gallery-spotlight-title').getBoundingClientRect();
+                return [...document.querySelectorAll('.gallery-highlight-card')].some(card => {
+                  const bounds = card.getBoundingClientRect();
+                  return bounds.left < title.right && bounds.right > title.left &&
+                    bounds.top < title.bottom && bounds.bottom > title.top;
+                });
+              }),
+              false,
+              'Gallery photos stay clear of the section title.'
+            );
+            const videoCards = await page.$$eval('.video-highlight-card', cards => cards.map(card => ({
+              href: card.getAttribute('href'),
+              title: card.querySelector('strong')?.textContent.trim(),
+              poster: card.querySelector('img')?.getAttribute('src')
+            })));
+            assert.equal(videoCards.length, 9, 'Video spotlight shows nine representative thumbnails.');
+            assert.equal(
+              new Set(videoCards.map(card => card.href)).size,
+              9,
+              'Each video card links to a distinct video.'
+            );
+            assert.ok(
+              videoCards.every(card => card.href?.startsWith('#/video?id=') && card.title && card.poster),
+              'Video cards keep their titles, posters, and direct playback links.'
+            );
+            await page.emulateMediaFeatures([{name: 'prefers-reduced-motion', value: 'no-preference'}]);
+            assert.equal(
+              await page.$eval('.video-highlight-card', card => getComputedStyle(card).animationName),
+              'spotlight-card-enter',
+              'Spotlight cards use a staggered entrance animation.'
+            );
+            await page.emulateMediaFeatures([{name: 'prefers-reduced-motion', value: 'reduce'}]);
+            assert.equal(
+              await page.$eval('.video-highlight-card', card => getComputedStyle(card).animationName),
+              'none',
+              'Spotlight entrance motion respects reduced-motion preferences.'
+            );
+            await page.emulateMediaFeatures([{name: 'prefers-reduced-motion', value: 'no-preference'}]);
+            assert.deepEqual(
+              await page.$$eval('.nav-picker-trigger', triggers => triggers.map(trigger => trigger.textContent.trim())),
+              ['Home', 'Jelajahi'],
+              'The main navigation groups home links separately from page links.'
+            );
+            assert.deepEqual(
+              await page.$$eval('.nav-picker[data-group="home"] .nav-picker-link', links => links.map(link => link.textContent.trim())),
+              ['Beranda', 'Sorotan Galeri', 'Sorotan Video', 'Jadwal', 'Footer'],
+              'The home menu links to its sections and footer.'
+            );
+            assert.deepEqual(
+              await page.$$eval('.nav-picker[data-group="pages"] .nav-picker-link', links => links.map(link => link.textContent.trim())),
+              ['Siswa', 'Guru', 'Masuk', 'Daftar'],
+              'The explore menu includes students, teachers, login, and registration.'
+            );
+            await page.evaluate(() => {
+              const hero = document.querySelector('.welcome-hero');
+              window.scrollTo({
+                top: window.scrollY + hero.getBoundingClientRect().bottom + 1,
+                behavior: 'instant'
+              });
+            });
+            await page.waitForFunction(
+              () => getComputedStyle(document.querySelector('.site-header')).visibility === 'visible',
+              {timeout: 5000}
+            );
+            assert.equal(
+              await page.$eval('.site-header', header => getComputedStyle(header).visibility),
+              'visible',
+              'The main navigation appears after scrolling past the welcome hero.'
+            );
             assert.equal((await page.$$('.stat-card')).length, 3);
             assert.ok(await page.$('.agenda-card--schedule'), 'Home page renders the schedule dashboard.');
             assert.ok(await page.$('.agenda-card--duty'), 'Home page renders the duty dashboard.');
             assert.equal((await page.$$('.agenda-day-button')).length, 2);
             const currentDay = await page.$eval('.agenda-card--duty .agenda-eyebrow', node => node.textContent);
+            stage = 'agenda schedule button';
+            await page.$eval('.agenda-day-button:nth-child(2)', button => button.scrollIntoView({
+              block: 'center',
+              behavior: 'instant'
+            }));
+            await wait(50);
             await page.click('.agenda-day-button:nth-child(2)');
+            await page.waitForFunction(
+              () => document.querySelector('.agenda-day-button:nth-child(2)').getAttribute('aria-pressed') === 'true',
+              {timeout: 2000}
+            );
+            const tomorrowState = await page.evaluate(() => ({
+              pressed: document.querySelector('.agenda-day-button:nth-child(2)').getAttribute('aria-pressed'),
+              chatOpen: document.querySelector('#global-chat-dialog').open,
+              activeElement: document.activeElement.className
+            }));
             assert.equal(
-              await page.$eval('.agenda-day-button:nth-child(2)', button => button.getAttribute('aria-pressed')),
-              'true'
+              tomorrowState.pressed,
+              'true',
+              `Selecting tomorrow activates its schedule button: ${JSON.stringify(tomorrowState)}`
             );
             assert.notEqual(
               await page.$eval('.agenda-card--duty .agenda-eyebrow', node => node.textContent),
@@ -223,13 +417,120 @@ async function mockSiteApi(page) {
               'Selecting tomorrow updates the duty schedule.'
             );
             await page.click('.agenda-day-button:first-child');
+            stage = 'home navigation section link';
+            await page.click('.nav-picker[data-group="home"] summary');
+            await page.click('.nav-picker[data-group="home"] a[href*="section=video-spotlight"]');
+            stage = 'home navigation hash change';
+            await page.waitForFunction(
+              () => window.location.hash === '#/beranda?section=video-spotlight',
+              {timeout: 3000}
+            );
+            stage = 'home navigation focus target';
+            await page.waitForFunction(
+              () => document.activeElement.id === 'video-spotlight',
+              {timeout: 3000}
+            );
+            const footerLinks = await page.evaluate(() => {
+              const {UI} = window.XIRPL1_DATA;
+              return {
+                classWebsite: UI.links.class.website,
+                classSocial: [
+                  [UI.footer.youtubeLabel, UI.links.class.youtube],
+                  [UI.footer.tiktokLabel, UI.links.class.tiktok],
+                  [UI.footer.instagramLabel, UI.links.class.instagram]
+                ],
+                schoolWebsite: UI.links.school.website,
+                schoolSocial: [
+                  [UI.footer.schoolYoutubeLabel, UI.links.school.youtube],
+                  [UI.footer.schoolTiktokLabel, UI.links.school.tiktok],
+                  [UI.footer.schoolInstagramLabel, UI.links.school.instagram]
+                ]
+              };
+            });
+            assert.deepEqual(
+              await page.$$eval('.footer-link-group[data-group="class"] .footer-links a', links => (
+                links.map(link => [link.textContent.trim(), link.getAttribute('href')])
+              )),
+              [['Website Kelas', footerLinks.classWebsite]],
+              'The class footer group links only to the class website.'
+            );
+            assert.deepEqual(
+              await page.$$eval('.footer-link-group[data-group="class"] .footer-social-link', links => (
+                links.map(link => [link.getAttribute('aria-label'), link.getAttribute('href')])
+              )),
+              footerLinks.classSocial,
+              'The class footer group links to its social channels.'
+            );
+            assert.deepEqual(
+              await page.$$eval('.footer-link-group[data-group="school"] .footer-links a', links => (
+                links.map(link => [link.textContent.trim(), link.getAttribute('href')])
+              )),
+              [['Website sekolah', footerLinks.schoolWebsite]],
+              'The school website is separate from class links.'
+            );
+            assert.deepEqual(
+              await page.$$eval('.footer-link-group[data-group="school"] .footer-social-link', links => (
+                links.map(link => [link.getAttribute('aria-label'), link.getAttribute('href')])
+              )),
+              footerLinks.schoolSocial,
+              'The school footer group links to its social channels.'
+            );
+            await page.click('.nav-picker[data-group="home"] summary');
+            await page.click('.nav-picker[data-group="home"] a[href*="section=site-footer"]');
+            await page.waitForFunction(
+              () => window.location.hash === '#/beranda?section=site-footer' &&
+                document.activeElement.id === 'site-footer',
+              {timeout: 3000}
+            );
+            await page.waitForFunction(
+              () => document.querySelector('.footer-wordmark').classList.contains('is-revealed'),
+              {timeout: 3000}
+            );
+            assert.deepEqual(
+              await page.$eval('.footer-wordmark-letter', letter => {
+                const animation = getComputedStyle(letter);
+                return [animation.animationDuration, animation.animationIterationCount];
+              }),
+              ['6.62s', 'infinite'],
+              'The footer wordmark appears, holds for six seconds, then repeats.'
+            );
           } else if (route === 'komentar') {
+            assert.equal(
+              await page.$eval('#global-chat-dialog', dialog => dialog.open),
+              true,
+              'The legacy discussion route opens the global chat dialog.'
+            );
             assert.ok(await page.$('textarea[maxlength="500"]'), 'Comment form enforces the 500 character limit.');
             await page.type('#commentInput', 'Tes komentar');
             assert.equal(await page.$eval('.comment-form-footer span', node => node.textContent), '12/500');
           }
 
+          stage = 'global chat dialog';
+          assert.ok(await page.$('.global-chat-trigger'), 'The global chat trigger is available on every route.');
+          if (route !== 'komentar') {
+            await page.click('.global-chat-trigger');
+          }
+          await page.waitForFunction(() => document.querySelector('#global-chat-dialog').open);
+          await page.keyboard.press('Escape');
+          await page.waitForFunction(() => !document.querySelector('#global-chat-dialog').open);
+          assert.equal(
+            await page.evaluate(() => document.activeElement.classList.contains('global-chat-trigger')),
+            true,
+            'Closing the chat returns focus to its trigger.'
+          );
+
           await page.setViewport({width: 390, height: 844});
+          if (route === 'beranda') {
+            await page.evaluate(() => {
+              const hero = document.querySelector('.welcome-hero');
+              window.scrollTo({
+                top: window.scrollY + hero.getBoundingClientRect().bottom + 1,
+                behavior: 'instant'
+              });
+            });
+            await wait(100);
+          }
+          stage = 'mobile layout check';
           const overflowDetails = await page.evaluate(() => ({
             documentWidth: document.documentElement.scrollWidth,
             viewportWidth: window.innerWidth,
@@ -252,8 +553,13 @@ async function mockSiteApi(page) {
             overflowDetails.documentWidth <= overflowDetails.viewportWidth,
             `${route} should not overflow horizontally at mobile width: ${JSON.stringify(overflowDetails)}`
           );
+          stage = 'mobile navigation menu';
           await page.click('.menu-toggle');
-          assert.equal(await page.$eval('.menu-toggle', button => button.getAttribute('aria-expanded')), 'true');
+          assert.equal(
+            await page.$eval('.menu-toggle', button => button.getAttribute('aria-expanded')),
+            'true',
+            `${route} menu button should open the navigation.`
+          );
           assert.ok(await page.$eval('.tabbar', nav => nav.classList.contains('open')));
           await page.click('.menu-toggle');
           assert.equal(await page.$eval('.menu-toggle', button => button.getAttribute('aria-expanded')), 'false');
@@ -262,6 +568,7 @@ async function mockSiteApi(page) {
             '.site-footer',
             footer => getComputedStyle(footer).backgroundColor
           );
+          stage = 'theme toggle';
           await page.click('.theme-toggle');
           assert.notEqual(await page.$eval('.theme-toggle', button => button.getAttribute('aria-pressed')), previousTheme);
           assert.equal(
@@ -278,7 +585,7 @@ async function mockSiteApi(page) {
         await page.screenshot({path:ssPath, fullPage:false});
         results.push({file:route, messages, screenshot:ssPath});
       } catch (err) {
-        results.push({file:route, error: (err && err.message) || String(err), messages});
+        results.push({file:route, error: `${stage}: ${(err && err.message) || String(err)}`, messages});
       }
       await page.close();
     }
@@ -677,7 +984,7 @@ async function mockSiteApi(page) {
       await cardEditorPage.type('#card-hobi', 'Hobi yang diperbarui');
       await cardEditorPage.waitForSelector('.card-editor-unsaved');
       await wait(50);
-      await cardEditorPage.click('.tab[href="#/beranda"]');
+      await cardEditorPage.click('.brand[href="#/beranda"]');
       await wait(250);
       const restoredRoute = await cardEditorPage.evaluate(() => ({
         hash: window.location.hash,

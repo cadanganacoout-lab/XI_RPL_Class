@@ -50,7 +50,7 @@ export function CommentsSection() {
         <div className="section-head discussion-heading">
           <div>
           <span className="route-label">ruang kelas</span>
-          <h2>Ruang Diskusi</h2>
+          <h2 id="comments-title">Ruang Diskusi</h2>
           <p>Berbagi kabar dan ide secara anonim. Admin utama tampil dengan nama akun. Jangan bagikan informasi pribadi.</p>
           </div>
         </div>

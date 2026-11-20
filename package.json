@@ -41,6 +41,7 @@
   "homepage": "https://github.com/cadanganacoout-lab/new---class#readme",
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "gsap": "^3.15.1",
     "mongodb": "^7.8.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

@@ -7,6 +7,7 @@ if (!classData) {
 export const {
   SITE,
   MOTIVASI,
+  UI,
   HARI_LIST,
   HARI_AKTIF,
   GURU,

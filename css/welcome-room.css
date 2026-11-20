@@ -1,0 +1,161 @@
+.welcome-hero {
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    var(--color-canvas) 0%,
+    var(--color-canvas) 70%,
+    color-mix(in srgb, var(--color-canvas) 52%, transparent) 88%,
+    transparent 100%
+  );
+}
+
+.welcome-room {
+  --room-shadow-edge: color-mix(in srgb, var(--color-text-primary) 42%, transparent);
+  --room-shadow-side: color-mix(in srgb, var(--color-text-primary) 42%, transparent);
+  --room-shadow-soft: color-mix(in srgb, var(--color-text-primary) 18%, transparent);
+  --room-shadow-corner: color-mix(in srgb, var(--color-text-primary) 20%, transparent);
+  --room-shadow-wall: color-mix(in srgb, var(--color-text-primary) 8%, transparent);
+  --room-shadow-floor: color-mix(in srgb, var(--color-text-primary) 30%, transparent);
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  perspective: 1100px;
+  perspective-origin: 50% 45%;
+  -webkit-mask-image: linear-gradient(to bottom, var(--color-canvas) 0%, var(--color-canvas) 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, var(--color-canvas) 0%, var(--color-canvas) 72%, transparent 100%);
+}
+
+:root:not([data-theme="light"]) .welcome-room {
+  --room-shadow-edge: color-mix(in srgb, var(--color-text-primary) 12%, transparent);
+  --room-shadow-side: color-mix(in srgb, var(--color-text-primary) 8%, transparent);
+  --room-shadow-soft: color-mix(in srgb, var(--color-text-primary) 5%, transparent);
+  --room-shadow-corner: color-mix(in srgb, var(--color-text-primary) 5%, transparent);
+  --room-shadow-wall: color-mix(in srgb, var(--color-text-primary) 3%, transparent);
+  --room-shadow-floor: color-mix(in srgb, var(--color-text-primary) 9%, transparent);
+}
+
+.welcome-room::before {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 38% 6% at 50% 21%, var(--room-shadow-edge), transparent),
+    radial-gradient(ellipse 38% 6% at 50% 78%, var(--room-shadow-edge), transparent),
+    radial-gradient(ellipse 9% 30% at 24% 50%, var(--room-shadow-side), transparent),
+    radial-gradient(ellipse 9% 30% at 76% 50%, var(--room-shadow-side), transparent),
+    radial-gradient(ellipse at 50% 46%, transparent 45%, var(--room-shadow-soft));
+  content: "";
+}
+
+.welcome-room::after {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 0% 0%, var(--room-shadow-corner), transparent 42%),
+    radial-gradient(ellipse at 100% 0%, var(--room-shadow-corner), transparent 42%),
+    radial-gradient(ellipse at 0% 100%, var(--room-shadow-soft), transparent 42%),
+    radial-gradient(ellipse at 100% 100%, var(--room-shadow-soft), transparent 42%);
+  content: "";
+}
+
+.welcome-room-ceiling,
+.welcome-room-wall,
+.welcome-room-side,
+.welcome-room-floor {
+  position: absolute;
+  inset: 0;
+}
+
+.welcome-room-ceiling {
+  clip-path: polygon(0 0, 100% 0, 76% 21%, 24% 21%);
+  background: linear-gradient(
+    180deg,
+    var(--room-shadow-soft),
+    var(--room-shadow-wall) 12%,
+    transparent 21%
+  );
+}
+
+.welcome-room-wall {
+  clip-path: polygon(24% 21%, 76% 21%, 76% 78%, 24% 78%);
+  -webkit-mask-image: radial-gradient(ellipse 48% 62% at 50% 50%, var(--color-canvas) 42%, transparent 100%);
+  mask-image: radial-gradient(ellipse 48% 62% at 50% 50%, var(--color-canvas) 42%, transparent 100%);
+  background-image:
+    linear-gradient(
+      90deg,
+      transparent 18%,
+      color-mix(in srgb, var(--color-text-primary) 4%, transparent) 34%,
+      color-mix(in srgb, var(--color-text-primary) 4%, transparent) 66%,
+      transparent 82%
+    ),
+    linear-gradient(180deg, transparent 21%, var(--room-shadow-wall) 38%, var(--room-shadow-soft) 67%, transparent 78%);
+}
+
+.welcome-room-side--left {
+  clip-path: polygon(0 0, 24% 21%, 24% 78%, 0 100%);
+  background: linear-gradient(90deg, var(--room-shadow-side), transparent 24%);
+}
+
+.welcome-room-side--right {
+  clip-path: polygon(100% 0, 76% 21%, 76% 78%, 100% 100%);
+  background: linear-gradient(270deg, var(--room-shadow-side), transparent 24%);
+}
+
+.welcome-room-floor {
+  clip-path: polygon(24% 78%, 76% 78%, 100% 100%, 0 100%);
+  background:
+    radial-gradient(ellipse at 50% 78%, transparent, var(--room-shadow-wall)),
+    linear-gradient(180deg, transparent 78%, var(--room-shadow-floor));
+}
+
+.welcome-content,
+.welcome-gallery,
+.welcome-tagline {
+  position: relative;
+  z-index: 6;
+}
+
+@media (max-width: 640px) {
+  .welcome-room::before {
+    background:
+      radial-gradient(ellipse 42% 6% at 50% 18%, var(--room-shadow-edge), transparent),
+      radial-gradient(ellipse 42% 6% at 50% 80%, var(--room-shadow-edge), transparent),
+      radial-gradient(ellipse 7% 34% at 14% 49%, var(--room-shadow-side), transparent),
+      radial-gradient(ellipse 7% 34% at 86% 49%, var(--room-shadow-side), transparent),
+      radial-gradient(ellipse at 50% 46%, transparent 45%, var(--room-shadow-soft));
+  }
+
+  .welcome-room-ceiling {
+    clip-path: polygon(0 0, 100% 0, 86% 18%, 14% 18%);
+    background: linear-gradient(180deg, var(--room-shadow-soft), var(--room-shadow-wall) 10%, transparent 18%);
+  }
+
+  .welcome-room-wall {
+    clip-path: polygon(14% 18%, 86% 18%, 86% 80%, 14% 80%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 70% at 50% 50%, var(--color-canvas) 48%, transparent 100%);
+    mask-image: radial-gradient(ellipse 60% 70% at 50% 50%, var(--color-canvas) 48%, transparent 100%);
+    background-image:
+      linear-gradient(90deg, transparent 9%, color-mix(in srgb, var(--color-text-primary) 4%, transparent) 30%, color-mix(in srgb, var(--color-text-primary) 4%, transparent) 70%, transparent 91%),
+      linear-gradient(180deg, transparent 18%, var(--room-shadow-wall) 38%, var(--room-shadow-soft) 68%, transparent 80%);
+  }
+
+  .welcome-room-side--left {
+    clip-path: polygon(0 0, 14% 18%, 14% 80%, 0 100%);
+    background: linear-gradient(90deg, var(--room-shadow-side), transparent 14%);
+  }
+
+  .welcome-room-side--right {
+    clip-path: polygon(100% 0, 86% 18%, 86% 80%, 100% 100%);
+    background: linear-gradient(270deg, var(--room-shadow-side), transparent 14%);
+  }
+
+  .welcome-room-floor {
+    clip-path: polygon(14% 80%, 86% 80%, 100% 100%, 0 100%);
+    background:
+      radial-gradient(ellipse at 50% 80%, transparent, var(--room-shadow-wall)),
+      linear-gradient(180deg, transparent 80%, var(--room-shadow-floor));
+  }
+}

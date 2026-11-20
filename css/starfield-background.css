@@ -1,0 +1,104 @@
+.site-starfield-background {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+:root[data-theme="light"] .site-starfield-background {
+  opacity: 1;
+}
+
+.site-aurora-background {
+  --aurora-accent-mix: 15%;
+  --aurora-tint-mix: 12%;
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+:root[data-theme="light"] .site-aurora-background {
+  --aurora-accent-mix: 26%;
+  --aurora-tint-mix: 22%;
+}
+
+.site-aurora-background::before,
+.site-aurora-background::after {
+  position: absolute;
+  inset: -35% -25%;
+  content: "";
+}
+
+.site-aurora-background::before {
+  background:
+    linear-gradient(
+      112deg,
+      transparent 13%,
+      color-mix(in srgb, var(--color-accent) 7%, transparent) 24%,
+      color-mix(in srgb, var(--color-accent) var(--aurora-accent-mix), transparent) 31%,
+      transparent 42%,
+      color-mix(in srgb, var(--hue-1) var(--aurora-tint-mix), transparent) 53%,
+      transparent 67%
+    ),
+    radial-gradient(
+      ellipse 38% 72% at 25% 44%,
+      color-mix(in srgb, var(--color-accent) var(--aurora-accent-mix), transparent),
+      transparent 75%
+    ),
+    radial-gradient(
+      ellipse 34% 64% at 76% 38%,
+      color-mix(in srgb, var(--hue-1) var(--aurora-tint-mix), transparent),
+      transparent 74%
+    );
+  opacity: 0.62;
+  animation: site-aurora-drift 32s ease-in-out infinite alternate;
+}
+
+.site-aurora-background::after {
+  background:
+    linear-gradient(
+      76deg,
+      transparent 18%,
+      color-mix(in srgb, var(--hue-1) 8%, transparent) 35%,
+      color-mix(in srgb, var(--hue-1) var(--aurora-tint-mix), transparent) 43%,
+      transparent 57%,
+      color-mix(in srgb, var(--color-accent) var(--aurora-accent-mix), transparent) 70%,
+      transparent 82%
+    ),
+    radial-gradient(
+      ellipse 54% 60% at 52% 56%,
+      color-mix(in srgb, var(--color-accent) var(--aurora-accent-mix), transparent),
+      transparent 72%
+    );
+  opacity: 0.42;
+  animation: site-aurora-drift 44s ease-in-out -18s infinite alternate-reverse;
+}
+
+:root[data-theme="light"] .site-aurora-background::before {
+  opacity: 0.78;
+}
+
+:root[data-theme="light"] .site-aurora-background::after {
+  opacity: 0.62;
+}
+
+@keyframes site-aurora-drift {
+  from {
+    transform: translate3d(-2%, -1%, 0) rotate(-5deg) scale(1);
+    opacity: 0.36;
+  }
+  to {
+    transform: translate3d(2%, 1%, 0) rotate(-2deg) scale(1.05);
+    opacity: 0.68;
+  }
+}
+
+.site-foreground {
+  position: relative;
+  z-index: 1;
+}

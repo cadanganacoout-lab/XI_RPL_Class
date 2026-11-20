@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
-import { SiteFooter, SiteHeader } from "./components/SiteShell.jsx";
+import { GlobalChatWidget, SiteFooter, SiteHeader } from "./components/SiteShell.jsx";
+import StarfieldBackground from "./components/StarfieldBackground.jsx";
 import {
   AuthLoadingFallback,
   RequireAuth,
@@ -238,6 +239,25 @@ function SiteApplication() {
     previousPage.current = route.page;
   }, [route.page]);
 
+  useEffect(() => {
+    if (route.page !== "beranda") return undefined;
+    const section = new URLSearchParams(route.search).get("section");
+    if (!section) return undefined;
+
+    const frame = window.requestAnimationFrame(() => {
+      const target = document.getElementById(section);
+      if (!target) return;
+      target.focus({ preventScroll: true });
+      target.scrollIntoView({
+        block: "start",
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+      });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [route.page, route.search]);
+
   const activePage = route.page === "komentar"
     ? "beranda"
     : Object.hasOwn(pages, route.page)
@@ -246,26 +266,30 @@ function SiteApplication() {
 
   return (
     <>
-      <a
-        className="skip-link"
-        href="#main"
-        onClick={event => {
-          event.preventDefault();
-          const main = document.getElementById("main");
-          main?.focus({ preventScroll: true });
-          main?.scrollIntoView({ block: "start" });
-        }}
-      >
-        Lewati ke konten utama
-      </a>
-      <SiteHeader activePage={activePage} />
-      <AuthSessionStatus />
-      <main id="main" tabIndex={-1} key={route.key}>
-        <EnforcePasswordChange page={route.page}>
-          <RouteContent route={route} />
-        </EnforcePasswordChange>
-      </main>
-      <SiteFooter />
+      <StarfieldBackground />
+      <div className="site-foreground">
+        <a
+          className="skip-link"
+          href="#main"
+          onClick={event => {
+            event.preventDefault();
+            const main = document.getElementById("main");
+            main?.focus({ preventScroll: true });
+            main?.scrollIntoView({ block: "start" });
+          }}
+        >
+          Lewati ke konten utama
+        </a>
+        <SiteHeader activePage={activePage} introMode={route.page === "beranda"} />
+        <AuthSessionStatus />
+        <main id="main" tabIndex={-1} key={route.key}>
+          <EnforcePasswordChange page={route.page}>
+            <RouteContent route={route} />
+          </EnforcePasswordChange>
+        </main>
+        <SiteFooter isHome={route.page === "beranda"} />
+        <GlobalChatWidget routePage={route.page} />
+      </div>
     </>
   );
 }
