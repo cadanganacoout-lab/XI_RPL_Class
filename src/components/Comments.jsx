@@ -28,13 +28,40 @@ function formatCommentTime(value) {
 }
 
 export function CommentCard({ comment, onReply }) {
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportReason, setReportReason] = useState("");
+  const [reportNotice, setReportNotice] = useState("");
+  const [reporting, setReporting] = useState(false);
+  const [reported, setReported] = useState(false);
   const authorName = comment.author_name || "Anonim";
   const initials = comment.author_name
     ? authorName.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase()
     : "A";
 
+  async function submitReport(event) {
+    event.preventDefault();
+    try {
+      setReporting(true);
+      setReportNotice("Mengirim laporan...");
+      await apiRequest("/api/comments/report", {
+        method: "POST",
+        body: { comment_id: comment.id, reason: reportReason },
+      });
+      setReported(true);
+      setReportNotice("Laporan terkirim ke admin. Komentar tetap terlihat sampai ditinjau.");
+    } catch (error) {
+      setReportNotice(`Laporan gagal dikirim: ${error.message}`);
+    } finally {
+      setReporting(false);
+    }
+  }
+
   return (
-    <article className={`comment-card${comment.parent_id ? " comment-reply" : ""}`} data-comment-id={comment.id}>
+    <article
+      className={`comment-card${comment.parent_id ? " comment-reply" : ""}`}
+      data-comment-id={comment.id}
+      id={`comment-${comment.id}`}
+    >
       <span className={`comment-avatar${comment.author_name ? " comment-avatar--admin" : ""}`} aria-hidden="true">{initials}</span>
       <div className="comment-main">
         <div className="comment-card-head">
@@ -54,6 +81,15 @@ export function CommentCard({ comment, onReply }) {
                 Balas
               </button>
             )}
+            <button
+              className="comment-report-button"
+              type="button"
+              aria-expanded={reportOpen}
+              aria-controls={`report-comment-${comment.id}`}
+              onClick={() => setReportOpen(value => !value)}
+            >
+              Laporkan
+            </button>
           </div>
         </div>
         {comment.parent_id && (
@@ -66,6 +102,42 @@ export function CommentCard({ comment, onReply }) {
           </blockquote>
         )}
         <p className="comment-text">{comment.content}</p>
+        <form
+          className="comment-report-form"
+          id={`report-comment-${comment.id}`}
+          hidden={!reportOpen}
+          onSubmit={submitReport}
+        >
+          <label htmlFor={`report-reason-${comment.id}`}>Alasan laporan</label>
+          <select
+            id={`report-reason-${comment.id}`}
+            name="reason"
+            required
+            value={reportReason}
+            onChange={event => setReportReason(event.target.value)}
+          >
+            <option value="">Pilih alasan</option>
+            <option value="spam">Spam</option>
+            <option value="bullying">Perundungan atau bahasa tidak pantas</option>
+            <option value="personal_info">Informasi pribadi</option>
+            <option value="other">Lainnya</option>
+          </select>
+          <div className="comment-report-form-actions">
+            <button className="comment-submit" type="submit" disabled={reporting || reported}>
+              {reporting ? "Mengirim..." : reported ? "Sudah dilaporkan" : "Kirim laporan"}
+            </button>
+            <button className="reply-cancel" type="button" onClick={() => setReportOpen(false)}>
+              Tutup
+            </button>
+          </div>
+          <p
+            className={`comment-report-notice${/gagal/i.test(reportNotice) ? " is-error" : ""}`}
+            role="status"
+            aria-live="polite"
+          >
+            {reportNotice}
+          </p>
+        </form>
       </div>
     </article>
   );
@@ -162,6 +234,9 @@ export function useCommentFeed({ limit } = {}) {
           return limit ? updated.slice(0, limit) : updated;
         });
       })
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "comments" }, ({ old: row }) => {
+        setComments(current => current.filter(comment => comment.id !== row.id));
+      })
       .subscribe(state => {
         if (!active) return;
         if (state === "SUBSCRIBED") {
@@ -210,12 +285,10 @@ export function useCommentFeed({ limit } = {}) {
   }, [hasOlder, loadingOlder]);
 
   const insertComment = useCallback(async (content, parentId) => {
-    const client = clientRef.current;
-    if (!client) throw new Error("Komentar online belum siap. Periksa koneksi dan konfigurasi Supabase.");
-    const comment = { content };
-    if (parentId !== null) comment.parent_id = parentId;
-    const { error } = await client.from("comments").insert(comment);
-    if (error) throw error;
+    await apiRequest("/api/comments", {
+      method: "POST",
+      body: { content, parent_id: parentId },
+    });
   }, []);
 
   const insertAdminComment = useCallback(async (content, parentId) => {

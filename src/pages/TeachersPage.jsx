@@ -13,11 +13,10 @@ function TeacherCard({ teacher }) {
       background={teacher.background?.url}
       role={teacher.role}
       rows={[["Mapel", teacher.mapel]]}
-      emptyNote="Mata pelajaran belum diisi."
       action={
         isHttpUrl(linktree)
           ? { href: linktree, label: "Buka Linktree" }
-          : { disabledLabel: "Linktree belum tersedia", disabledAria: "Linktree guru belum tersedia" }
+          : null
       }
     />
   );
@@ -63,6 +62,7 @@ export function TeachersPage() {
         teacher.mapel.toLowerCase().includes(normalizedQuery),
     );
   }, [teachers, query]);
+  const hasMissingLinktree = teachers.some(teacher => !isHttpUrl(teacher.linktree));
 
   return (
     <>
@@ -85,6 +85,11 @@ export function TeachersPage() {
         )}
         {status === "ready" && (
           <>
+            {hasMissingLinktree && (
+              <p className="people-page-note">
+                Tautan tambahan belum tersedia untuk sebagian guru. Admin kelas dapat melengkapinya melalui Kelola Data.
+              </p>
+            )}
             <div className="toolbar-row">
               <div className="toolbar-main">
                 <label className="search-box">

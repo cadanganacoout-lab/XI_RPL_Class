@@ -61,6 +61,7 @@
 /* Token yang sama di kedua tema */
 :root {
   --header-h: 68px;
+  --color-text-on-image: #ffffff;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -111,8 +112,8 @@
   --color-warning: #7d5100;
   --color-danger: #b42332;
   --color-focus: #8a4b04;
-  --color-play-button: #171f28;
-  --color-play-icon: #ffffff;
+  --color-play-button: #ffffff;
+  --color-play-icon: #080b10;
 
   --color-link: #8a4b04;
   --color-action-hover: #7c4000;

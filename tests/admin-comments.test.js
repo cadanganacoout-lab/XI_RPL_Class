@@ -212,7 +212,7 @@ test("Supabase schema errors give safe actionable feedback without exposing its 
     const payload = JSON.parse(response.body);
     assert.equal(response.statusCode, 502);
     assert.equal(payload.error.code, "COMMENT_SCHEMA_MISSING");
-    assert.match(payload.error.message, /author_name column/);
+    assert.match(payload.error.message, /required comment column/);
     assert.doesNotMatch(response.body, /secret-value-must-not-escape/);
   } finally {
     console.warn = previousWarn;

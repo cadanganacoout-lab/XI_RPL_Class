@@ -151,6 +151,7 @@ export function GalleryPage() {
   const [error, setError] = useState("");
   const [retry, setRetry] = useState(0);
   const [reordering, setReordering] = useState(false);
+  const [adminMode, setAdminMode] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const openerRef = useRef(null);
   const closeButtonRef = useRef(null);
@@ -288,7 +289,23 @@ export function GalleryPage() {
       </section>
       <section className="container" aria-busy={status === "loading"}>
         {canManageMedia && (
-          <section className="gallery-admin-panel" aria-labelledby="gallery-admin-heading">
+          <button
+            className="button-secondary gallery-admin-toggle"
+            type="button"
+            aria-expanded={adminMode}
+            aria-controls="gallery-admin-panel"
+            onClick={() => setAdminMode(value => !value)}
+          >
+            {adminMode ? "Tutup pengelolaan galeri" : "Kelola galeri"}
+          </button>
+        )}
+        {canManageMedia && (
+          <section
+            className="gallery-admin-panel"
+            id="gallery-admin-panel"
+            aria-labelledby="gallery-admin-heading"
+            hidden={!adminMode}
+          >
             <h2 id="gallery-admin-heading">Kelola galeri</h2>
             <MediaUploader
               targetType="gallery"

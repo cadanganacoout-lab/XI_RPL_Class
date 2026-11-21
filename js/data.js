@@ -263,7 +263,7 @@ const SISWA = [
   {
     id: "s04",
     nama: "Alexa Aditya Cindra Dewi",
-    jabatan: "Seketaris",
+    jabatan: "Sekretaris",
     hobi: "-",
     catatan: "-",
     foto: "asset/profil/foto_awal/sementara.png",
@@ -271,7 +271,7 @@ const SISWA = [
   {
     id: "s05",
     nama: "Amanda Cinthya Kasih",
-    jabatan: "Seketaris dan presensi",
+    jabatan: "Sekretaris dan presensi",
     hobi: "-",
     catatan: "-",
     foto: "asset/profil/manda.jpeg",
@@ -499,7 +499,7 @@ const SISWA = [
   {
     id: "s33",
     nama: "Sultan Pasha Ibrahim Sukarno",
-    jabatan: "Seketaris",
+    jabatan: "Sekretaris",
     hobi: "-",
     catatan: "-",
     foto: "asset/profil/foto_awal/sementara.png",
@@ -507,24 +507,12 @@ const SISWA = [
 ];
 
 const PIKET = {
-  "Senin": [
-    "Tidak Ada Jadwal Piket, Dikarenakan Kelas XI RPL Sedang PKL"
-  ],
-  "Selasa": [
-    "Tidak Ada Jadwal Piket, Dikarenakan Kelas XI RPL Sedang PKL"
-  ],
-  "Rabu": [
-    "Tidak Ada Jadwal Piket, Dikarenakan Kelas XI RPL Sedang PKL"
-  ],
-  "Kamis": [
-    "Tidak Ada Jadwal Piket, Dikarenakan Kelas XI RPL Sedang  PKL"
-  ],
-  "Jumat": [
-    "Tidak Ada Jadwal Piket, Dikarenakan Kelas XI RPL Sedang PKL"
-  ],
-  "Sabtu": [
-    "Tidak Ada Jadwal Piket, Dikarenakan Kelas XI RPL Sedang PKL"
-  ]
+  "Senin": [],
+  "Selasa": [],
+  "Rabu": [],
+  "Kamis": [],
+  "Jumat": [],
+  "Sabtu": [],
 };
 const PIKET_LAMA = {
   "Senin": [

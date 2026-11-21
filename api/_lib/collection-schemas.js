@@ -135,6 +135,29 @@ const rateLimitJsonSchema = {
   },
 };
 
+const commentReportJsonSchema = {
+  bsonType: "object",
+  required: [
+    "commentId",
+    "reason",
+    "reportCount",
+    "status",
+    "createdAt",
+    "updatedAt",
+  ],
+  additionalProperties: false,
+  properties: {
+    _id: { bsonType: "objectId" },
+    commentId: { bsonType: ["int", "long"], minimum: 1 },
+    commentContent: { bsonType: "string", minLength: 1, maxLength: 500 },
+    reason: { enum: ["spam", "bullying", "personal_info", "other"] },
+    reportCount: { bsonType: "int", minimum: 1 },
+    status: { enum: ["pending", "reviewed", "removed"] },
+    createdAt: { bsonType: "date" },
+    updatedAt: { bsonType: "date" },
+  },
+};
+
 const galleryPhotoJsonSchema = {
   bsonType: "object",
   required: [
@@ -259,6 +282,7 @@ const COLLECTION_SCHEMAS = {
   cards: cardJsonSchema,
   teachers: teacherJsonSchema,
   rate_limits: rateLimitJsonSchema,
+  comment_reports: commentReportJsonSchema,
   gallery_photos: galleryPhotoJsonSchema,
   media_uploads: mediaUploadJsonSchema,
   media_cleanup: mediaCleanupJsonSchema,

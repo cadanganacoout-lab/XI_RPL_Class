@@ -317,6 +317,19 @@ function ScheduleList({ date, now, isToday, teachers }) {
     return <p className="empty-note">Tidak ada jadwal pelajaran untuk hari {day}.</p>;
   }
   const rows = JADWAL[parity][day] || [];
+  if (rows.length === 0) {
+    return <p className="empty-note">Tidak ada jadwal pelajaran untuk hari {day}.</p>;
+  }
+  if (rows.every(row => typeof row === "string")) {
+    const isPklMessage = rows.some(row => /\bPKL\b/i.test(row));
+    return (
+      <p className="empty-note">
+        {isPklMessage
+          ? "Tidak ada jadwal pelajaran selama kelas XI RPL menjalani PKL."
+          : rows[0]}
+      </p>
+    );
+  }
   const nowInMinutes = now.getHours() * 60 + now.getMinutes();
   const currentIndex = isToday
     ? rows.findIndex(row =>
@@ -393,8 +406,11 @@ function ScheduleList({ date, now, isToday, teachers }) {
 
 function DutyList({ date }) {
   const day = HARI_LIST[date.getDay()];
-  const names = HARI_AKTIF.includes(day) ? PIKET[day] : null;
+  const names = HARI_AKTIF.includes(day) ? PIKET[day] || [] : null;
   if (!names) return <p className="agenda-empty">Tidak ada jadwal piket untuk hari {day}.</p>;
+  if (names.length === 0) {
+    return <p className="agenda-empty">Tidak ada jadwal piket selama kelas XI RPL menjalani PKL.</p>;
+  }
   return (
     <ul className="duty-list piket-list">
       {names.map((name) => (
@@ -514,8 +530,8 @@ function AgendaDashboard({ now }) {
               <span className="agenda-eyebrow">{day}</span>
               <h3 id="duty-heading">Petugas piket</h3>
             </div>
-            {HARI_AKTIF.includes(day) && (
-              <span className="duty-count">{PIKET[day]?.length || 0} siswa</span>
+            {HARI_AKTIF.includes(day) && PIKET[day]?.length > 0 && (
+              <span className="duty-count">{PIKET[day].length} siswa</span>
             )}
           </header>
           <p className="duty-intro">Tim yang bertugas menjaga kelas tetap nyaman.</p>

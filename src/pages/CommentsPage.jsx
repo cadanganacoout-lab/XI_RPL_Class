@@ -1,6 +1,131 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { CommentCard, useCommentFeed } from "../components/Comments.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
+import { apiRequest } from "../lib/api.js";
+
+const REPORT_REASON_LABELS = {
+  spam: "Spam",
+  bullying: "Perundungan atau bahasa tidak pantas",
+  personal_info: "Informasi pribadi",
+  other: "Lainnya",
+};
+
+function AdminCommentReports() {
+  const { user } = useAuth();
+  const isMainAdmin = user?.role === "admin" && user?.username === "admin";
+  const [reports, setReports] = useState([]);
+  const [status, setStatus] = useState("Memuat antrean laporan...");
+  const [loading, setLoading] = useState(false);
+  const [reviewingId, setReviewingId] = useState("");
+  const [removingId, setRemovingId] = useState("");
+
+  const loadReports = useCallback(async () => {
+    if (!isMainAdmin) return;
+    setLoading(true);
+    try {
+      const payload = await apiRequest("/api/comments/reports");
+      setReports(payload.reports);
+      setStatus(payload.reports.length ? "" : "Belum ada laporan yang menunggu ditinjau.");
+    } catch (error) {
+      setStatus(`Antrean laporan gagal dimuat: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  }, [isMainAdmin]);
+
+  useEffect(() => {
+    loadReports();
+  }, [loadReports]);
+
+  async function markReviewed(reportId) {
+    try {
+      setReviewingId(reportId);
+      await apiRequest("/api/comments/reports/review", {
+        method: "POST",
+        body: { report_id: reportId },
+      });
+      setReports(current => current.filter(report => report.id !== reportId));
+      setStatus("Laporan ditandai sudah ditinjau; komentar tidak diubah.");
+    } catch (error) {
+      setStatus(`Laporan gagal diperbarui: ${error.message}`);
+    } finally {
+      setReviewingId("");
+    }
+  }
+
+  async function removeComment(report) {
+    if (!window.confirm(`Hapus komentar #${report.commentId}? Balasan pada komentar ini juga akan terhapus.`)) {
+      return;
+    }
+    try {
+      setRemovingId(report.id);
+      await apiRequest("/api/comments/reports/remove", {
+        method: "POST",
+        body: { report_id: report.id },
+      });
+      setReports(current => current.filter(item => item.id !== report.id));
+      setStatus(`Komentar #${report.commentId} dan balasannya telah dihapus.`);
+    } catch (error) {
+      setStatus(`Komentar gagal dihapus: ${error.message}`);
+    } finally {
+      setRemovingId("");
+    }
+  }
+
+  if (!isMainAdmin) return null;
+
+  return (
+    <section className="container comment-report-queue" aria-labelledby="comment-reports-heading">
+      <div className="comment-report-queue-heading">
+        <div>
+          <span className="route-label">admin</span>
+          <h2 id="comment-reports-heading">Antrean laporan komentar</h2>
+        </div>
+        <button className="button-secondary" type="button" onClick={loadReports} disabled={loading}>
+          {loading ? "Memuat..." : "Muat ulang"}
+        </button>
+      </div>
+      {status && <p className="comment-report-queue-status" role="status">{status}</p>}
+      {reports.length > 0 && (
+        <ol className="comment-report-list">
+          {reports.map(report => (
+            <li className="panel comment-report-item" key={report.id}>
+              <div className="comment-report-item-heading">
+                <strong>Komentar #{report.commentId}</strong>
+                <time dateTime={report.createdAt}>
+                  {new Date(report.createdAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" })}
+                </time>
+              </div>
+              <p><strong>Alasan:</strong> {REPORT_REASON_LABELS[report.reason] || "Lainnya"}</p>
+              <p><strong>Laporan:</strong> {report.reportCount}</p>
+              <blockquote>{report.commentContent}</blockquote>
+              <div className="comment-report-item-actions">
+                <button
+                  className="button-secondary"
+                  type="button"
+                  aria-label={`Tandai ditinjau, komentar nomor ${report.commentId}`}
+                  disabled={reviewingId === report.id || removingId === report.id}
+                  onClick={() => markReviewed(report.id)}
+                >
+                  {reviewingId === report.id ? "Menyimpan..." : "Tandai ditinjau"}
+                </button>
+                <button
+                  className="button-secondary comment-report-delete"
+                  type="button"
+                  aria-label={`Hapus komentar nomor ${report.commentId}`}
+                  disabled={reviewingId === report.id || removingId === report.id}
+                  onClick={() => removeComment(report)}
+                >
+                  {removingId === report.id ? "Menghapus..." : "Hapus komentar"}
+                </button>
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
+    </section>
+  );
+}
 
 export function CommentsSection() {
   const feed = useCommentFeed();
@@ -46,6 +171,7 @@ export function CommentsSection() {
   }
 
   return (
+    <>
       <section className="container home-discussion" id="diskusi">
         <div className="section-head discussion-heading">
           <div>
@@ -150,6 +276,8 @@ export function CommentsSection() {
           </div>
         </div>
       </section>
+      <AdminCommentReports />
+    </>
   );
 }
 
