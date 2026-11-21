@@ -128,7 +128,7 @@ function VideoHighlights() {
         <div className="video-highlight-grid">
           {VIDEO_HIGHLIGHTS.map((video, index) => (
             <a
-              className={`video-highlight-card${index === 0 ? " video-highlight-card--featured" : ""}`}
+              className="video-highlight-card"
               href={`#/video?id=${encodeURIComponent(video.id)}`}
               key={video.id}
               style={{ "--spotlight-index": index }}
@@ -147,9 +147,6 @@ function VideoHighlights() {
                 </span>
               </span>
               <span className="video-highlight-info">
-                <span className="video-highlight-index" aria-hidden="true">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
                 <strong>{video.judul}</strong>
               </span>
             </a>
