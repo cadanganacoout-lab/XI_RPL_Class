@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SITE, VIDEO } from "../data/class-data.js";
+import { apiRequest } from "../lib/api.js";
 
 function VideoPlayer({ video, autoplay = false }) {
   const [playing, setPlaying] = useState(autoplay);
@@ -46,7 +47,25 @@ export function VideosPage() {
   const classLabel = SITE.className.split(" ")[0];
   const query = window.location.hash.split("?")[1] || "";
   const selectedVideoId = new URLSearchParams(query).get("id");
-  const selectedVideo = VIDEO.find(video => video.id === selectedVideoId);
+  const [videos, setVideos] = useState(VIDEO);
+
+  useEffect(() => {
+    let active = true;
+    apiRequest("/api/videos")
+      .then(payload => {
+        if (active && Array.isArray(payload.videos)) {
+          setVideos(payload.videos.length ? payload.videos : VIDEO);
+        }
+      })
+      .catch(() => {
+        if (active) setVideos(VIDEO);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const selectedVideo = videos.find(video => video.id === selectedVideoId);
 
   useEffect(() => {
     if (!selectedVideo) return undefined;
@@ -72,9 +91,9 @@ export function VideosPage() {
         </p>
       </section>
       <section className="container">
-        <p className="video-count">{VIDEO.length} video untuk ditonton</p>
+        <p className="video-count">{videos.length} video untuk ditonton</p>
         <div className="video-grid">
-          {VIDEO.map((video) => (
+          {videos.map((video) => (
             <article
               className={`video-card${video.id === selectedVideoId ? " is-selected" : ""}`}
               id={`video-${video.id}`}
