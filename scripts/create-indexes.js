@@ -30,6 +30,10 @@ const INDEXES = {
   rate_limits: [
     [{ expiresAt: 1 }, { expireAfterSeconds: 0, name: "rate_limit_expiry_ttl" }],
   ],
+  comment_reports: [
+    [{ status: 1, createdAt: -1 }, { name: "comment_reports_review_queue" }],
+    [{ commentId: 1, reason: 1 }, { unique: true, name: "comment_report_identity_unique" }],
+  ],
   gallery_photos: [
     [{ legacyId: 1 }, { unique: true, partialFilterExpression: { legacyId: { $type: "string" } }, name: "gallery_legacy_id_unique" }],
     [{ isPublished: 1, sortOrder: 1 }, { name: "gallery_public_order" }],

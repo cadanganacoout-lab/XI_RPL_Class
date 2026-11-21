@@ -30,7 +30,6 @@ export function PersonCard({
   role,
   lead = false,
   rows,
-  emptyNote,
   action,
 }) {
   const visibleRows = rows.filter(([, value]) => filledValue(value));
@@ -56,19 +55,17 @@ export function PersonCard({
         </div>
       </div>
       <div className="people-body">
-        <div className="people-meta">
-          {visibleRows.length > 0 ? (
-            visibleRows.map(([label, value]) => (
+        {visibleRows.length > 0 && (
+          <div className="people-meta">
+            {visibleRows.map(([label, value]) => (
               <div className="row" key={label}>
                 <b>{label}</b>
                 <span>{filledValue(value)}</span>
               </div>
-            ))
-          ) : (
-            <p className="people-empty">{emptyNote}</p>
-          )}
-        </div>
-        {action.href ? (
+            ))}
+          </div>
+        )}
+        {action?.href && (
           <a
             className="portfolio-link button-secondary"
             href={action.href}
@@ -78,15 +75,6 @@ export function PersonCard({
             {action.label}
             <ExternalIcon />
           </a>
-        ) : (
-          <button
-            className="portfolio-link button-secondary"
-            type="button"
-            aria-label={action.disabledAria}
-            disabled
-          >
-            {action.disabledLabel}
-          </button>
         )}
       </div>
     </article>

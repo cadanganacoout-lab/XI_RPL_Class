@@ -44,7 +44,7 @@ function upstreamFailure(response, code) {
     "23514",
   ]);
   const safeCode = knownCodes.has(code) ? code : "UNKNOWN";
-  console.warn("Admin comment request rejected by Supabase.", {
+  console.warn("Supabase comment request rejected.", {
     status: response.status,
     code: safeCode,
   });
@@ -53,7 +53,7 @@ function upstreamFailure(response, code) {
     return new ApiError(
       502,
       "COMMENT_SCHEMA_MISSING",
-      "Supabase is missing the author_name column. Apply supabase/comments.sql to this project.",
+      "Supabase is missing a required comment column. Apply supabase/comments.sql to this project.",
     );
   }
   if (code === "PGRST205") {
@@ -94,7 +94,7 @@ function upstreamFailure(response, code) {
   return new ApiError(
     502,
     "COMMENT_SERVICE_ERROR",
-    `Supabase could not save the comment (HTTP ${response.status}). Check the server logs for the safe error code.`,
+    `Supabase could not complete the comment request (HTTP ${response.status}). Check the server logs for the safe error code.`,
   );
 }
 

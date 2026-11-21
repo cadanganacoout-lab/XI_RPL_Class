@@ -77,7 +77,7 @@ export async function apiRequest(path, { method = "GET", body, signal } = {}) {
   if (!response.ok) {
     const message =
       response.status === 429
-        ? "Terlalu banyak percobaan, coba lagi nanti."
+        ? payload?.error?.message || "Terlalu banyak percobaan, coba lagi nanti."
         : payload?.error?.message || "Permintaan tidak dapat diproses.";
     throw new ApiRequestError(
       message,

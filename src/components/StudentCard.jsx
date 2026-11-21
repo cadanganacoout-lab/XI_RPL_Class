@@ -20,14 +20,10 @@ export function StudentCard({ student }) {
         ["Hobi", student.hobi],
         ["Catatan", student.catatan],
       ]}
-      emptyNote="Profil belum dilengkapi."
       action={
         isHttpUrl(portfolio)
           ? { href: portfolio, label: "Buka portofolio" }
-          : {
-              disabledLabel: "Portofolio belum tersedia",
-              disabledAria: "Portofolio belum tersedia",
-            }
+          : null
       }
     />
   );

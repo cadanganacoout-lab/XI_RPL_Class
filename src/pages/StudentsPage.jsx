@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { apiRequest } from "../lib/api.js";
 import { isClassOfficer, StudentCard } from "../components/StudentCard.jsx";
+import { filledValue, isHttpUrl } from "../components/PersonCard.jsx";
 
 function StudentListLoading() {
   return (
@@ -63,6 +64,11 @@ export function StudentsPage() {
           student.jabatan.toLowerCase().includes(normalizedQuery)),
     );
   }, [students, query, onlyOfficers]);
+  const hasIncompleteProfiles = students.some(student =>
+    !filledValue(student.hobi) ||
+    !filledValue(student.catatan) ||
+    !isHttpUrl(student.portfolio),
+  );
 
   return (
     <>
@@ -91,6 +97,11 @@ export function StudentsPage() {
         )}
         {status === "ready" && students.length > 0 && (
           <>
+            {hasIncompleteProfiles && (
+              <p className="people-page-note">
+                <a href="#/login?next=%2Fcard-saya">Lengkapi profil dan portofolio melalui menu Edit Card setelah masuk.</a>
+              </p>
+            )}
             <div className="toolbar-row">
               <div className="toolbar-main">
                 <label className="search-box">

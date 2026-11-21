@@ -16,10 +16,11 @@ alter table public.comments
 alter table public.comments enable row level security;
 
 revoke all on public.comments from anon, authenticated;
+revoke insert (content, parent_id) on public.comments from anon, authenticated;
 revoke insert (author_name) on public.comments from anon, authenticated;
 grant select on public.comments to anon, authenticated;
-grant insert (content, parent_id) on public.comments to anon, authenticated;
 grant select, insert (content, parent_id, author_name) on public.comments to service_role;
+grant delete on public.comments to service_role;
 grant usage, select on sequence public.comments_id_seq to service_role;
 
 drop policy if exists "Comments are visible to everyone" on public.comments;
@@ -30,11 +31,6 @@ create policy "Comments are visible to everyone"
   using (true);
 
 drop policy if exists "Visitors can post comments" on public.comments;
-create policy "Visitors can post comments"
-  on public.comments
-  for insert
-  to anon, authenticated
-  with check (char_length(trim(content)) between 1 and 500);
 
 do $$
 begin

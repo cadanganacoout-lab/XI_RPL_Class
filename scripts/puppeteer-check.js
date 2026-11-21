@@ -41,7 +41,13 @@ const browserPhotos = Array.from({length: 10}, (_, index) => ({
   sortOrder: index + 1
 }));
 
-async function mockSiteApi(page, {includeGallery = false, galleryDelay = 0, imageDelay = 0} = {}) {
+async function mockSiteApi(page, {
+  includeGallery = false,
+  includeComments = false,
+  user = null,
+  galleryDelay = 0,
+  imageDelay = 0
+} = {}) {
   await page.setRequestInterception(true);
   page.on('request', async request => {
     const pathname = new URL(request.url()).pathname;
@@ -49,7 +55,31 @@ async function mockSiteApi(page, {includeGallery = false, galleryDelay = 0, imag
       return request.respond({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify({user: null})
+        body: JSON.stringify({user})
+      });
+    }
+    if (pathname === '/api/comments/report' && includeComments) {
+      return request.respond({
+        status: 201,
+        contentType: 'application/json',
+        body: JSON.stringify({ok: true})
+      });
+    }
+    if (pathname === '/api/comments/reports' && includeComments) {
+      return request.respond({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          reports: [{
+            id: 'a'.repeat(24),
+            commentId: 17,
+            commentContent: 'Komentar untuk ditinjau admin',
+            reason: 'spam',
+            reportCount: 1,
+            status: 'pending',
+            createdAt: new Date().toISOString()
+          }]
+        })
       });
     }
     if (pathname === '/api/cards') {
@@ -72,6 +102,53 @@ async function mockSiteApi(page, {includeGallery = false, galleryDelay = 0, imag
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify({photos: browserPhotos})
+      });
+    }
+    if (includeComments && pathname.endsWith('/supabase-config.js')) {
+      return request.respond({
+        status: 200,
+        contentType: 'application/javascript',
+        body: `window.SUPABASE_CONFIG = {url: 'https://supabase.example.test', anonKey: 'browser-test-key'};`
+      });
+    }
+    if (includeComments && request.url().includes('@supabase/supabase-js')) {
+      return request.respond({
+        status: 200,
+        contentType: 'application/javascript',
+        body: `window.supabase = {
+          createClient() {
+            const rows = [{
+              id: 17,
+              content: 'Komentar yang bisa dilaporkan',
+              parent_id: null,
+              created_at: new Date().toISOString(),
+              author_name: null
+            }];
+            return {
+              from() {
+                return {
+                  select() {
+                    return {
+                      order() {
+                        return {limit: async () => ({data: rows, error: null})};
+                      }
+                    };
+                  }
+                };
+              },
+              channel() {
+                return {
+                  on() { return this; },
+                  subscribe(callback) {
+                    setTimeout(() => callback('SUBSCRIBED'), 0);
+                    return this;
+                  }
+                };
+              },
+              removeChannel() {}
+            };
+          }
+        };`
       });
     }
     if (request.url().startsWith('https://images.example.test/photos/')) {
@@ -119,6 +196,10 @@ async function mockSiteApi(page, {includeGallery = false, galleryDelay = 0, imag
       let stage = 'page load';
       await mockSiteApi(page, {
         includeGallery: route === 'beranda',
+        includeComments: route === 'komentar',
+        user: route === 'komentar'
+          ? {username: 'admin', displayName: 'Admin Utama', role: 'admin'}
+          : null,
         galleryDelay: route === 'beranda' ? 500 : 0,
         imageDelay: route === 'beranda' ? 5000 : 0
       });
@@ -209,6 +290,9 @@ async function mockSiteApi(page, {includeGallery = false, galleryDelay = 0, imag
               : data.SISWA.length;
           });
           assert.equal(await page.$$eval('.people-card', cards => cards.length), expectedCount);
+          assert.equal((await page.$$('.people-empty')).length, 0, 'Profile cards do not repeat incomplete-profile placeholders.');
+          assert.equal((await page.$$('.portfolio-link[disabled]')).length, 0, 'Unavailable portfolio links are omitted.');
+          assert.ok((await page.$$('.people-page-note')).length <= 1, 'Incomplete profile guidance appears at most once per page.');
           assert.equal(
             await page.$eval('.nav-picker[data-group="pages"] .nav-picker-trigger.active', trigger => trigger.dataset.page),
             route
@@ -257,6 +341,18 @@ async function mockSiteApi(page, {includeGallery = false, galleryDelay = 0, imag
           } else if (route === 'beranda') {
             stage = 'welcome and navbar checks';
             assert.ok(await page.$('.hero-beranda'), 'Home page renders the class hero.');
+            assert.equal(await page.$('.agenda-card--duty .duty-count'), null, 'Empty duty schedules do not show a student count.');
+            assert.equal(await page.$('.agenda-card--duty .duty-list'), null, 'PKL messages are not rendered as duty names.');
+            assert.match(
+              await page.$eval('.agenda-card--duty .agenda-empty', message => message.textContent),
+              /PKL|Tidak ada jadwal piket/,
+              'No-duty state is announced without showing an incorrect student count.'
+            );
+            assert.match(
+              await page.$eval('.agenda-card--schedule .empty-note', message => message.textContent),
+              /PKL|Tidak ada jadwal pelajaran/,
+              'Empty schedule state remains clear.'
+            );
             await page.waitForSelector(
               '.welcome-gallery-tile.is-image-loading .welcome-gallery-tile-skeleton',
               {timeout: 10000}
@@ -503,6 +599,21 @@ async function mockSiteApi(page, {includeGallery = false, galleryDelay = 0, imag
             assert.ok(await page.$('textarea[maxlength="500"]'), 'Comment form enforces the 500 character limit.');
             await page.type('#commentInput', 'Tes komentar');
             assert.equal(await page.$eval('.comment-form-footer span', node => node.textContent), '12/500');
+              await page.waitForSelector('.comment-card');
+              await page.click('.comment-report-button');
+              assert.equal(
+                await page.$eval('.comment-report-form', form => form.hidden),
+                false,
+                'The report button reveals its labeled form.'
+              );
+              await page.select('#report-reason-17', 'spam');
+              await page.click('#report-comment-17 button[type="submit"]');
+              await page.waitForFunction(
+                () => document.querySelector('.comment-report-notice')?.textContent.includes('Laporan terkirim'),
+                {timeout: 3000}
+              );
+              await page.waitForSelector('.comment-report-queue');
+              assert.ok(await page.$('.comment-report-item blockquote'), 'The admin report queue includes the reported comment.');
           }
 
           stage = 'global chat dialog';

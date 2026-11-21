@@ -11,6 +11,7 @@ const {
   handleAdminCommentRoute,
   isAdminCommentRoute,
 } = require("./_routes/admin-comments");
+const { handleCommentRoute, isCommentRoute } = require("./_routes/comments");
 const { handleVideosRoute, isVideoRoute } = require("./_routes/videos");
 
 function createHandler({
@@ -81,6 +82,19 @@ function createHandler({
           db,
           fetchImpl,
           getSupabaseConfig: getSupabaseConfig || requireSupabaseServiceConfig,
+        });
+        return;
+      }
+
+      if (isCommentRoute(route)) {
+        const db = await getDatabase();
+        await handleCommentRoute({
+          request,
+          response,
+          route,
+          db,
+          fetchImpl,
+          ...(getSupabaseConfig ? { getSupabaseConfig } : {}),
         });
         return;
       }

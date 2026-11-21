@@ -440,8 +440,18 @@
   transition: transform 180ms ease-out;
 }
 
+.video-highlight-media::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: rgb(0 0 0 / 0.24);
+  content: "";
+  pointer-events: none;
+}
+
 .video-highlight-play-icon {
   position: absolute;
+  z-index: 2;
   right: 14px;
   bottom: 14px;
   display: grid;
