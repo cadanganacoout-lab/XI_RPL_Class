@@ -624,6 +624,10 @@ async function mockSiteApi(page, {
           await page.waitForFunction(() => document.querySelector('#global-chat-dialog').open);
           await page.keyboard.press('Escape');
           await page.waitForFunction(() => !document.querySelector('#global-chat-dialog').open);
+          await page.waitForFunction(() => (
+            !document.querySelector('#global-chat-dialog').open &&
+            document.activeElement === document.querySelector('.global-chat-trigger')
+          ), {timeout: 3000});
           assert.equal(
             await page.evaluate(() => document.activeElement.classList.contains('global-chat-trigger')),
             true,
