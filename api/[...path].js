@@ -11,6 +11,7 @@ const {
   handleAdminCommentRoute,
   isAdminCommentRoute,
 } = require("./_routes/admin-comments");
+const { handleVideosRoute, isVideoRoute } = require("./_routes/videos");
 
 function createHandler({
   getDatabase = getDb,
@@ -60,6 +61,13 @@ function createHandler({
         if (route !== "teachers" && request.method !== "GET") requireSameOrigin(request);
         const db = await getDatabase();
         await handleAdminDataRoute({ request, response, route, db });
+        return;
+      }
+
+      if (isVideoRoute(route)) {
+        if (route !== "videos" && request.method !== "GET") requireSameOrigin(request);
+        const db = await getDatabase();
+        await handleVideosRoute({ request, response, route, db });
         return;
       }
 

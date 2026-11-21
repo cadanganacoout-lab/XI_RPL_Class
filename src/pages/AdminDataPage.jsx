@@ -18,24 +18,37 @@ const EMPTY_TEACHER = {
   foto: "",
   linktree: "",
 };
+const EMPTY_VIDEO = {
+  judul: "",
+  deskripsi: "",
+  youtubeUrl: "",
+};
 
 function getFields(kind) {
-  return kind === "students"
-    ? [
+  if (kind === "students") {
+    return [
         ["nama", "Nama siswa", "text"],
         ["jabatan", "Jabatan", "text"],
         ["hobi", "Hobi", "text"],
         ["catatan", "Catatan", "textarea"],
         ["foto", "Foto (path asset/ atau URL HTTPS)", "text"],
         ["portfolio", "URL portfolio (opsional)", "url"],
-      ]
-    : [
+      ];
+  }
+  if (kind === "teachers") {
+    return [
         ["nama", "Nama guru", "text"],
         ["mapel", "Mata pelajaran", "text"],
         ["role", "Role guru", "select"],
         ["foto", "Foto (path asset/ atau URL HTTPS)", "text"],
         ["linktree", "URL Linktree (opsional)", "url"],
       ];
+  }
+  return [
+    ["judul", "Judul video", "text"],
+    ["deskripsi", "Deskripsi", "textarea"],
+    ["youtubeUrl", "URL YouTube atau ID video", "text"],
+  ];
 }
 
 export function AdminDataPage() {
@@ -82,7 +95,7 @@ export function AdminDataPage() {
   const filteredRecords = useMemo(() => {
     const normalized = query.trim().toLowerCase();
     return records.filter(record =>
-      `${record.nama} ${record.jabatan || record.mapel || ""}`
+      `${record.nama || record.judul || ""} ${record.jabatan || record.mapel || record.deskripsi || ""}`
         .toLowerCase()
         .includes(normalized),
     );
@@ -92,14 +105,14 @@ export function AdminDataPage() {
     setKind(nextKind);
     setQuery("");
     setEditingId(null);
-    setForm(nextKind === "students" ? EMPTY_STUDENT : EMPTY_TEACHER);
+    setForm(nextKind === "students" ? EMPTY_STUDENT : nextKind === "teachers" ? EMPTY_TEACHER : EMPTY_VIDEO);
     setError("");
     setNotice("");
   }
 
   function startCreate() {
     setEditingId("new");
-    setForm(kind === "students" ? EMPTY_STUDENT : EMPTY_TEACHER);
+    setForm(kind === "students" ? EMPTY_STUDENT : kind === "teachers" ? EMPTY_TEACHER : EMPTY_VIDEO);
     setError("");
     setNotice("");
   }
@@ -116,12 +129,18 @@ export function AdminDataPage() {
             foto: record.foto,
             portfolio: record.portfolio || "",
           }
-        : {
+        : kind === "teachers"
+          ? {
             nama: record.nama,
             mapel: record.mapel,
             role: record.role,
             foto: record.foto,
             linktree: record.linktree || "",
+          }
+          : {
+            judul: record.judul,
+            deskripsi: record.deskripsi || "",
+            youtubeUrl: record.youtubeId,
           },
     );
     setError("");
@@ -143,7 +162,7 @@ export function AdminDataPage() {
         { method: isNew ? "POST" : "PATCH", body: payload },
       );
       setEditingId(null);
-      setForm(kind === "students" ? EMPTY_STUDENT : EMPTY_TEACHER);
+      setForm(kind === "students" ? EMPTY_STUDENT : kind === "teachers" ? EMPTY_TEACHER : EMPTY_VIDEO);
       setNotice(isNew ? "Data berhasil ditambahkan." : "Perubahan berhasil disimpan.");
       setRevision(value => value + 1);
     } catch (requestError) {
@@ -160,7 +179,7 @@ export function AdminDataPage() {
       await apiRequest(`/api/admin/${kind}/${encodeURIComponent(record.id)}`, {
         method: active ? "PATCH" : "DELETE",
         ...(active
-          ? { body: kind === "students" ? { isPublished: true } : { isActive: true } }
+          ? { body: kind === "students" ? { isPublished: true } : kind === "teachers" ? { isActive: true } : { isActive: true } }
           : {}),
       });
       setNotice(active ? "Data berhasil dipulihkan." : "Data diarsipkan dan tidak tampil di halaman publik.");
@@ -175,7 +194,7 @@ export function AdminDataPage() {
       <section className="container page-hero">
         <span className="route-label">/admin/data</span>
         <h1>Kelola Data</h1>
-        <p>Kelola informasi siswa dan guru yang ditampilkan di website kelas.</p>
+        <p>Kelola informasi siswa, guru, dan video yang ditampilkan di website kelas.</p>
       </section>
       <section className="container admin-data-page" aria-busy={status === "loading" || saving}>
         <div className="admin-data-tabs" role="group" aria-label="Jenis data">
@@ -185,6 +204,9 @@ export function AdminDataPage() {
           <button type="button" className="button-secondary" aria-pressed={kind === "teachers"} onClick={() => chooseKind("teachers")}>
             Data guru
           </button>
+          <button type="button" className="button-secondary" aria-pressed={kind === "videos"} onClick={() => chooseKind("videos")}>
+            Video
+          </button>
         </div>
 
         {notice && <p className="admin-data-notice" role="status">{notice}</p>}
@@ -193,13 +215,13 @@ export function AdminDataPage() {
         <div className="admin-data-layout">
           <section className="admin-data-list" aria-labelledby="admin-records-heading">
             <div className="admin-data-list-heading">
-              <h2 id="admin-records-heading">{kind === "students" ? "Daftar siswa" : "Daftar guru"}</h2>
+              <h2 id="admin-records-heading">{kind === "students" ? "Daftar siswa" : kind === "teachers" ? "Daftar guru" : "Daftar video"}</h2>
               <button type="button" className="button-primary" onClick={startCreate}>
-                Tambah {kind === "students" ? "siswa" : "guru"}
+                Tambah {kind === "students" ? "siswa" : kind === "teachers" ? "guru" : "video"}
               </button>
             </div>
             <label className="admin-data-search">
-              Cari {kind === "students" ? "siswa" : "guru"}
+              Cari {kind === "students" ? "siswa" : kind === "teachers" ? "guru" : "video"}
               <input value={query} onChange={event => setQuery(event.target.value)} type="search" />
             </label>
             {status === "loading" && <p role="status">Memuat data…</p>}
@@ -215,11 +237,13 @@ export function AdminDataPage() {
                   return (
                     <li key={record.id} className={!active ? "is-archived" : ""}>
                       <div>
-                        <strong>{record.nama}</strong>
+                        <strong>{record.nama || record.judul}</strong>
                         <span>
                           {kind === "students"
                             ? record.jabatan
-                            : `${record.mapel} · ${record.role}`}
+                            : kind === "teachers"
+                              ? `${record.mapel} · ${record.role}`
+                              : record.deskripsi || record.youtubeId}
                         </span>
                         <small>{active ? "Tampil publik" : "Diarsipkan"} · {record.id}</small>
                       </div>
@@ -247,7 +271,7 @@ export function AdminDataPage() {
 
           {editingId && (
             <form className="admin-data-form" onSubmit={saveRecord}>
-              <h2>{isNew ? `Tambah ${kind === "students" ? "siswa" : "guru"}` : "Edit data"}</h2>
+              <h2>{isNew ? `Tambah ${kind === "students" ? "siswa" : kind === "teachers" ? "guru" : "video"}` : "Edit data"}</h2>
               {canManageMedia && !isNew && (
                 <p className="admin-data-status">Mode Admin — mengelola media milik record ini.</p>
               )}
@@ -260,7 +284,7 @@ export function AdminDataPage() {
                       value={form[name]}
                       onChange={event => setForm(current => ({ ...current, [name]: event.target.value }))}
                       rows={3}
-                      maxLength={500}
+                      maxLength={name === "catatan" ? 500 : 500}
                     />
                   ) : type === "select" ? (
                     <select
@@ -278,7 +302,7 @@ export function AdminDataPage() {
                       type={type}
                       value={form[name]}
                       onChange={event => setForm(current => ({ ...current, [name]: event.target.value }))}
-                      required={!["portfolio", "linktree"].includes(name)}
+                      required={!["portfolio", "linktree", "deskripsi"].includes(name)}
                     />
                   )}
                 </label>

@@ -16,6 +16,11 @@ const {
   updateStudentSchema,
   updateTeacherSchema,
 } = require("../api/_routes/admin-data");
+const {
+  extractYouTubeId,
+  createVideoSchema,
+  updateVideoSchema,
+} = require("../api/_routes/videos");
 
 function createResponse() {
   return {
@@ -73,6 +78,7 @@ function createDatabase(role, { mutable = false } = {}) {
   };
   const teachers = [];
   const students = [];
+  const videos = [];
   let rateCount = 0;
   return {
     token,
@@ -153,6 +159,34 @@ function createDatabase(role, { mutable = false } = {}) {
           },
         };
       }
+      if (name === "videos") {
+        return {
+          find(filter = {}) {
+            return {
+              async toArray() {
+                return videos.filter(record => !filter.isActive || record.isActive);
+              },
+              sort() {
+                return this;
+              },
+            };
+          },
+          async findOne(filter) {
+            return videos.find(record => record.id === filter.id) || null;
+          },
+          async insertOne(record) {
+            videos.push(record);
+            return { insertedId: new ObjectId() };
+          },
+          async updateOne(filter, update) {
+            const record = videos.find(item => item.id === filter.id);
+            if (!record) return { matchedCount: 0 };
+            Object.assign(record, update.$set);
+            for (const field of Object.keys(update.$unset || {})) delete record[field];
+            return { matchedCount: 1 };
+          },
+        };
+      }
       if (name === "rate_limits") {
         return {
           async findOneAndUpdate() {
@@ -217,6 +251,83 @@ test("admin record schemas reject unsafe URLs and fields outside the editor", ()
     false,
   );
   assert.equal(updateTeacherSchema.safeParse({ isActive: true }).success, true);
+});
+
+test("video schemas accept YouTube URLs and IDs but reject invalid hosts", () => {
+  assert.equal(extractYouTubeId("dQw4w9WgXcQ"), "dQw4w9WgXcQ");
+  assert.equal(extractYouTubeId("https://youtu.be/dQw4w9WgXcQ"), "dQw4w9WgXcQ");
+  assert.equal(extractYouTubeId("https://www.youtube.com/watch?v=dQw4w9WgXcQ"), "dQw4w9WgXcQ");
+  assert.throws(
+    () => extractYouTubeId("https://example.com/video/dQw4w9WgXcQ"),
+    error => error instanceof Error,
+  );
+
+  assert.equal(createVideoSchema.safeParse({
+    judul: "Kegiatan Kelas",
+    deskripsi: "Dokumentasi",
+    youtubeUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+  }).success, true);
+  assert.equal(updateVideoSchema.safeParse({ isActive: true }).success, true);
+});
+
+test("admin can create, edit, archive, and restore videos", async () => {
+  const previousOrigin = process.env.APP_ORIGIN;
+  process.env.APP_ORIGIN = "https://class.example";
+  const db = createDatabase("admin", { mutable: true });
+  const handler = apiHandler.createHandler({ getDatabase: async () => db });
+  const headers = {
+    cookie: `${getCookieName()}=${db.token}`,
+    origin: "https://class.example",
+    "x-requested-with": "fetch",
+  };
+  try {
+    const createdResponse = createResponse();
+    await handler(createRequest(
+      "POST",
+      "/api/admin/videos",
+      headers,
+      {
+        judul: "Kegiatan Kelas",
+        deskripsi: "Dokumentasi",
+        youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      },
+    ), createdResponse);
+    assert.equal(createdResponse.statusCode, 201);
+    assert.equal(JSON.parse(createdResponse.body).video.youtubeId, "dQw4w9WgXcQ");
+
+    const publicResponse = createResponse();
+    await handler(createRequest("GET", "/api/videos"), publicResponse);
+    assert.equal(publicResponse.statusCode, 200);
+    assert.equal(JSON.parse(publicResponse.body).videos.length, 1);
+
+    const updatedResponse = createResponse();
+    await handler(createRequest(
+      "PATCH",
+      "/api/admin/videos/v01",
+      headers,
+      { judul: "Kegiatan Terbaru" },
+    ), updatedResponse);
+    assert.equal(updatedResponse.statusCode, 200);
+    assert.equal(JSON.parse(updatedResponse.body).video.judul, "Kegiatan Terbaru");
+
+    const archivedResponse = createResponse();
+    await handler(createRequest("DELETE", "/api/admin/videos/v01", headers), archivedResponse);
+    assert.equal(archivedResponse.statusCode, 200);
+    assert.equal(JSON.parse(archivedResponse.body).isActive, false);
+
+    const restoredResponse = createResponse();
+    await handler(createRequest(
+      "PATCH",
+      "/api/admin/videos/v01",
+      headers,
+      { isActive: true },
+    ), restoredResponse);
+    assert.equal(restoredResponse.statusCode, 200);
+    assert.equal(JSON.parse(restoredResponse.body).video.isActive, true);
+  } finally {
+    if (previousOrigin === undefined) delete process.env.APP_ORIGIN;
+    else process.env.APP_ORIGIN = previousOrigin;
+  }
 });
 
 test("public teacher list is readable while non-admin users cannot read admin data", async () => {

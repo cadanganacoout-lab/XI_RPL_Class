@@ -1,12 +1,15 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { VIDEO, UI } from "../data/class-data.js";
+import { apiRequest } from "../lib/api.js";
 
 const VIDEO_HIGHLIGHT_COUNT = 9;
-const VIDEO_HIGHLIGHTS = VIDEO.length <= VIDEO_HIGHLIGHT_COUNT
-  ? VIDEO
-  : Array.from({ length: VIDEO_HIGHLIGHT_COUNT }, (_, index) => (
-    VIDEO[Math.round(index * (VIDEO.length - 1) / (VIDEO_HIGHLIGHT_COUNT - 1))]
-  ));
+function selectVideoHighlights(videos) {
+  return videos.length <= VIDEO_HIGHLIGHT_COUNT
+    ? videos
+    : Array.from({ length: VIDEO_HIGHLIGHT_COUNT }, (_, index) => (
+      videos[Math.round(index * (videos.length - 1) / (VIDEO_HIGHLIGHT_COUNT - 1))]
+    ));
+}
 
 function createGalleryHighlights(photos) {
   const galleryPhotoPool = photos
@@ -116,6 +119,26 @@ function GalleryHighlights({ photos, status }) {
 }
 
 function VideoHighlights() {
+  const [videos, setVideos] = useState(VIDEO);
+
+  useEffect(() => {
+    let active = true;
+    apiRequest("/api/videos")
+      .then(payload => {
+        if (active && Array.isArray(payload.videos)) {
+          setVideos(payload.videos.length ? payload.videos : VIDEO);
+        }
+      })
+      .catch(() => {
+        if (active) setVideos(VIDEO);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const videoHighlights = selectVideoHighlights(videos);
+
   return (
     <section id="video-spotlight" className="home-spotlight home-video-spotlight" aria-labelledby="video-spotlight-title" tabIndex="-1">
       <div className="video-spotlight-layout">
@@ -126,7 +149,7 @@ function VideoHighlights() {
           <a className="spotlight-link" href={UI.spotlights.videoLink}>{UI.spotlights.videoLinkLabel}</a>
         </div>
         <div className="video-highlight-grid">
-          {VIDEO_HIGHLIGHTS.map((video, index) => (
+          {videoHighlights.map((video, index) => (
             <a
               className="video-highlight-card"
               href={`#/video?id=${encodeURIComponent(video.id)}`}
